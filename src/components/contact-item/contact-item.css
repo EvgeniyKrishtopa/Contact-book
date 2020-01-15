@@ -1,0 +1,58 @@
+.contact-item {
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+  min-height: 60px;
+  list-style: none;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  width: 90%;
+  margin: 0 auto 20px;
+}
+
+.contact-item.inactive {
+  background: rgba(175, 47, 47, 0.15);
+}
+
+.visible {
+  display: block;
+}
+
+.inVisible {
+  display: none;
+}
+
+.item-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons {
+  padding: 30px 0 0;
+}
+
+.buttons span {
+  margin: 0 10px;
+}
+
+.fa-check-circle {
+  color: green;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.inactive .fa-check-circle {
+  color: #ccc;
+}
+
+.fa-times {
+  color: red;
+  cursor: pointer;
+  text-decoration: none;
+}
+

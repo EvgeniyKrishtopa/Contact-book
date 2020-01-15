@@ -1,0 +1,131 @@
+.contact-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+              0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.contact-input-wrapper {
+  position: relative;
+  border-bottom: 1px solid #ededed;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.contact-input {
+  font-family: 'Indie Flower', cursive;
+  padding: 16px 16px 16px 60px;
+  border: none;
+  background: rgba(0, 0, 0, 0.003);
+  width: 80%;
+  display: block;
+  margin: 20px auto 0;
+  box-sizing: border-box;
+  font-size: 28px;
+  font-style: italic;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.fa-plus {
+  position: absolute;
+  font-size: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20px;
+}
+
+.contact-input::-webkit-input-placeholder {
+  font-family: 'Indie Flower', cursive;
+  color: #000;
+}
+.contact-input::-moz-placeholder {
+  font-family: 'Indie Flower', cursive;
+  color: #000;
+}
+.contact-input:-moz-placeholder {
+  font-family: 'Indie Flower', cursive;
+  color: #000;
+}
+.contact-input:-ms-input-placeholder {
+  font-family: 'Indie Flower', cursive;
+  color: #000;
+}
+
+.btn-submit[disabled] {
+  color:#6c757d;
+  background-color:#e7e7e7;
+  }
+
+  .btn-submit {
+    color:#6c757d;
+    background-color:rgba(175, 47, 47, 0.35);
+    border: 0;
+    display: block;
+    margin: 0 auto;
+    border-radius: 6px;
+    padding: .8rem 2rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  .footer {
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+        padding: 0 6px 0 21px;
+    justify-content: space-between;
+  }
+  
+  .amount {
+    font-size: 13.3333px;
+  }
+  
+  .btn-group {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .filter-btn {
+    margin: 3px;
+    padding: 3px 7px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .filter-btn:hover,
+  .filter-btn.active {
+    border-color: rgba(175, 47, 47, 0.2);
+  }
+  
+  .footer:before {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 50px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+                  0 8px 0 -3px #f6f6f6,
+                  0 9px 1px -3px rgba(0, 0, 0, 0.2),
+                  0 16px 0 -6px #f6f6f6,
+                  0 17px 2px -6px rgba(0, 0, 0, 0.2);
+  }
+
+.notification {
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+h3 {
+  text-align: center;
+}
+
+select.contact-input {
+  margin-bottom: 40px;
+}
