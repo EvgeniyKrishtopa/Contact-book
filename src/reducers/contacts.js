@@ -31,7 +31,6 @@ const contacts = (state=CONTACTLIST, { type, id, statusFilter, result }) => {
         })]
       }
 
-    
     case FILTER_CONTACT_STATUS :
         if(statusFilter === 'All') {
           return {
@@ -68,13 +67,13 @@ const contacts = (state=CONTACTLIST, { type, id, statusFilter, result }) => {
             })]
           }
         }
-
+    break
     case FETCH_CONTACTS :
         return {
             ...state, 
             loading: true
         } 
-
+        
     case FETCH_CONTACTS_SUCCESS :
         return {
           ...state, 
