@@ -56,7 +56,6 @@ class Book extends Component {
     this.props.filterStatus(event.target.textContent);
   }
 
-
   handleChangeInput = event => {
     
     if(event.target.type === "text") {
@@ -88,9 +87,24 @@ class Book extends Component {
     return (
       <div className="contact-wrapper">
           <form className="contact-input-wrapper" onSubmit={this.handleSubmitContact}>
-            <InputWrapper  placeholder="Name" type="text" value={name} onChange={this.handleChangeInput}/>
-            <InputWrapper  placeholder="Phone" type="tel" value={tel} onChange={this.handleChangeInput}/>
-            <InputWrapper  placeholder="Email" type="email" value={email} onChange={this.handleChangeInput}/>
+            <InputWrapper  
+              placeholder="Name" 
+              type="text" 
+              value={name} 
+              onChange={this.handleChangeInput}
+            />
+            <InputWrapper  
+              placeholder="Phone" 
+              type="tel" 
+              value={tel} 
+              onChange={this.handleChangeInput}
+            />
+            <InputWrapper  
+              placeholder="Email" 
+              type="email" 
+              value={email} 
+              onChange={this.handleChangeInput}
+            />
             <br/>
             <ButtonWrapper type="submit" className="btn-submit">Add New Contact</ButtonWrapper>
             <br/>
@@ -112,7 +126,10 @@ class Book extends Component {
               removeContact={asyncDeleteContact} 
               statusSwitch={statusSwitch}
             />
-            <Footer contactsData={contactsData.contactItems} filterList={this.filterList}/>
+            <Footer 
+              contactsData={contactsData.contactItems} 
+              filterList={this.filterList}
+            />
           </div>
           }
       </div>

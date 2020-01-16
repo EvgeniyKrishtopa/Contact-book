@@ -1,9 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Button = ({ className, type, children}) => {
+const Button = props => {
   return(
-    <button className={className} type={type}>{children}</button>
+    <button {...props}>{props.children}</button>
   )
+}
+
+Button.propTypes = {
+  className: PropTypes.string,
+  type: PropTypes.string,
+  children: PropTypes.string
 }
 
 export default Button

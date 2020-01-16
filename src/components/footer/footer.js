@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ButtonWrapperFilter from '../hoc/buttonWrapperFilter';
                   
 const Footer = ({contactsData, filterList}) => {
 
@@ -7,9 +8,9 @@ const Footer = ({contactsData, filterList}) => {
   <div className="footer">
     <span className="amount">{`${contactsData.length} Contacts left`}</span>
     <div className="btn-group">
-      <button onClick={filterList} className="filter-btn">All</button>
-      <button onClick={filterList} className="filter-btn">Active</button>
-      <button onClick={filterList} className="filter-btn">Inactive</button>
+      <ButtonWrapperFilter onClick={filterList} className="filter-btn" type="button">All</ButtonWrapperFilter>
+      <ButtonWrapperFilter onClick={filterList} className="filter-btn" type="button">Active</ButtonWrapperFilter>
+      <ButtonWrapperFilter onClick={filterList} className="filter-btn" type="button">Inactive</ButtonWrapperFilter>
     </div>
   </div>
   )

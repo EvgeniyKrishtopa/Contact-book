@@ -8,7 +8,9 @@ const Input = ({ value, type, onChange, placeholder }) => {
 }
 
 Input.propTypes = {
-  name: PropTypes.string,
+  value: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
   onChange: PropTypes.func
 }
 
