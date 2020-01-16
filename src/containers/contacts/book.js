@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { asyncAddContact, asyncDeleteContact, selectContact, statusSwitch, filterStatus, asyncFetchData } from '../../actions/actionCreator';
 import ContactList from '../../components/contact-list/contact-list';
+import Select from '../../components/form/select';
+import InputWrapper from '../../components/hoc/inputWrapper';
+import ButtonWrapper from '../../components/hoc/buttonWrapper';
+import Footer from '../../components/footer/footer';
 import Loader from '../../components/loader/loader';
 import './book.css';
 
@@ -84,11 +88,11 @@ class Book extends Component {
     return (
       <div className="contact-wrapper">
           <form className="contact-input-wrapper" onSubmit={this.handleSubmitContact}>
-            <input className="contact-input"  value={name} type="text" placeholder="Name" onChange={this.handleChangeInput}/>
-            <input className="contact-input"  value={tel} type="tel" placeholder="Phone" onChange={this.handleChangeInput}/>
-            <input className="contact-input"  value={email} type="email" placeholder="Email" onChange={this.handleChangeInput}/>
+            <InputWrapper  placeholder="Name" type="text" value={name} onChange={this.handleChangeInput}/>
+            <InputWrapper  placeholder="Phone" type="tel" value={tel} onChange={this.handleChangeInput}/>
+            <InputWrapper  placeholder="Email" type="email" value={email} onChange={this.handleChangeInput}/>
             <br/>
-            <button type="submit" className="btn-submit">Add New Contact</button>
+            <ButtonWrapper type="submit" className="btn-submit">Add New Contact</ButtonWrapper>
             <br/>
           </form>
           <br/>
@@ -98,32 +102,17 @@ class Book extends Component {
           :contactsData.contactItems.length && 
           <div className="contacts-infro">
             <h3>Select contact</h3>
-            <select className="contact-input" onChange={this.handleChangeSelect}>
-                {
-                  contactsData.contactItems.map((item,index) => {
-                    return <option 
-                            key={index} 
-                            value={item.id}
-                            >
-                            {item.name}
-                            </option>
-                  })
-                }
-            </select>
-
+            <Select 
+              onChange={this.handleChangeSelect} 
+              className="contact-input" 
+              contactsData={contactsData.contactItems}
+            />
             <ContactList
               contacts={contactsData.contactItems} 
               removeContact={asyncDeleteContact} 
               statusSwitch={statusSwitch}
             />
-            <div className="footer">
-              <span className="amount">{`${contactsData.contactItems.length} Contacts left`}</span>
-              <div className="btn-group">
-                <button onClick={this.filterList} className="filter-btn">All</button>
-                <button onClick={this.filterList} className="filter-btn">Active</button>
-                <button onClick={this.filterList} className="filter-btn">Inactive</button>
-              </div>
-            </div>
+            <Footer contactsData={contactsData.contactItems} filterList={this.filterList}/>
           </div>
           }
       </div>
