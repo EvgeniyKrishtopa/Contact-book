@@ -7,6 +7,7 @@ import InputWrapper from '../../components/hoc/inputWrapper';
 import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import Footer from '../../components/footer/footer';
 import Loader from '../../components/loader/loader';
+import {ContextContactItem} from '../../context/context';
 import './book.css';
 
 function validateEmail(email) {
@@ -121,11 +122,11 @@ class Book extends Component {
               className="contact-input" 
               contactsData={contactsData.contactItems}
             />
-            <ContactList
-              contacts={contactsData.contactItems} 
-              removeContact={asyncDeleteContact} 
-              statusSwitch={statusSwitch}
-            />
+            <ContextContactItem.Provider value={{asyncDeleteContact,statusSwitch}}>
+              <ContactList
+                contacts={contactsData.contactItems} 
+              />
+            </ContextContactItem.Provider>
             <Footer 
               contactsData={contactsData.contactItems} 
               filterList={this.filterList}

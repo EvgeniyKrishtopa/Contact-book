@@ -4,7 +4,7 @@ import ContactItem from '../contact-item/contact-item';
 
 import './contact-list.css';
 
-const ContactList = ({ contacts, removeContact, statusSwitch }) => (
+const ContactList = ({ contacts }) => (
 
   <ul className="contact-list">
     {
@@ -14,8 +14,6 @@ const ContactList = ({ contacts, removeContact, statusSwitch }) => (
           name={item.name}
           id={item.id}
           tel={item.tel}
-          removeContact={removeContact}
-          statusSwitch={statusSwitch}
           email={item.email}
           status={item.status}
           itemVisibility={item.itemVisibility}
@@ -26,15 +24,11 @@ const ContactList = ({ contacts, removeContact, statusSwitch }) => (
 );
 
 ContactList.propTypes = {
-  contacts: PropTypes.array,
-  removeContact: PropTypes.func,
-  statusSwitch: PropTypes.func
+  contacts: PropTypes.array
 }
 
 ContactList.defaultProps = {
-  contacts: [],
-  removeContact: () => {},
-  statusSwitch: () => {}
+  contacts: []
 }
 
 export default ContactList;

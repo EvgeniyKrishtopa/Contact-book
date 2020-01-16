@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {ContextContactItem} from '../../context/context';
 import PropTypes from 'prop-types';
 
 import './contact-item.css';
 
-const ContactItem = ({ name, tel, email, id, removeContact, statusSwitch, status, itemVisibility }) => (
+const ContactItem = ({ name, tel, email, id, status, itemVisibility }) => {
+  
+  const {asyncDeleteContact,statusSwitch} = useContext(ContextContactItem);
+
+  return (
   <li className={itemVisibility
     ? "visible"
     : "inVisible"
@@ -31,11 +36,11 @@ const ContactItem = ({ name, tel, email, id, removeContact, statusSwitch, status
     </div>
     <div className="buttons">
       <span onClick={() => statusSwitch(id)} className="far fa-check-circle"></span>
-      <span onClick={() => removeContact(id)} className="fas fa-times"></span>
+      <span onClick={() => asyncDeleteContact(id)} className="fas fa-times"></span>
     </div>
     </div>
   </li>
-);
+)};
 
 ContactItem.propTypes = {
   name: PropTypes.string,
@@ -43,8 +48,6 @@ ContactItem.propTypes = {
   email: PropTypes.string,
   status: PropTypes.bool,
   itemVisibility: PropTypes.bool,
-  removeContact: PropTypes.func,
-  statusSwitch: PropTypes.func,
   id: PropTypes.string,
 }
 
@@ -54,8 +57,6 @@ ContactItem.defaultProps = {
   email: '',
   status: true,
   itemVisibility: true,
-  removeContact: () => {},
-  statusSwitch: () => {},
   id: 0,
 }
 
