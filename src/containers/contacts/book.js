@@ -8,6 +8,7 @@ import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import Footer from '../../components/footer/footer';
 import Loader from '../../components/loader/loader';
 import {ContextContactItem} from '../../context/context';
+import firebase from '../../firebase';
 import './book.css';
 
 function validateEmail(email) {
@@ -27,29 +28,64 @@ class Book extends Component {
       tel: '',
       email: '',
       status: true,
-      itemVisibility: true
+      itemVisibility: true,
+      userId: ''
   }
 
   componentDidMount() {
-    this.props.asyncFetchData();
+    firebase.auth().onAuthStateChanged(user => {
+
+      if (user) {
+      const userId = user.uid;
+
+      this.setState({
+        userId
+      })
+
+       this.props.asyncFetchData(userId);
+
+       firebase
+          .firestore()
+          .collection('users')
+          .doc(userId)
+          .get()
+          .then(response => response.data().userName)
+          .then(currentUserName => {
+            const userName = document.getElementById("userName");
+            userName.innerText = currentUserName;
+          })
+        } 
+
+      else {
+        const notification = document.querySelector('.notification');
+        notification.classList.remove('hidden');
+
+        const logOut = document.querySelector('.btn-logout');
+        logOut.style.display = 'none';
+
+        const btnSubmit = document.querySelector('.btn-submit');
+        btnSubmit.disabled = true;
+      }
+    });
   }
 
   handleSubmitContact = event => {
     event.preventDefault();
 
-    const { name, tel, email, status, itemVisibility } = this.state;
+    const { name, tel, email, status, itemVisibility, userId } = this.state;
 
-    if(validateEmail(email) && validatePhone(tel)) {
-      this.props.asyncAddContact(name, tel, email, status, itemVisibility);
+      if(validateEmail(email) && validatePhone(tel)) {
 
-      this.setState({
-        name: '',
-        tel: '',
-        email: '',
-        status: true,
-        itemVisibility: true
-      })
-    }
+        this.props.asyncAddContact(name, tel, email, status, itemVisibility, userId);
+        
+        this.setState({
+          name: '',
+          tel: '',
+          email: '',
+          status: true,
+          itemVisibility: true
+        })
+      }
   }
 
 
@@ -81,12 +117,21 @@ class Book extends Component {
     this.props.selectContact(event.target.value);
   }
 
+  signOut = () => {
+    firebase.auth().signOut();
+    this.props.history.push('/login');
+  }
+
   render() {
     const { contactsData, asyncDeleteContact, statusSwitch } = this.props;
     const { name, email, tel } = this.state;
 
     return (
       <div className="contact-wrapper">
+          <button className="btn-logout" onClick={this.signOut}>
+            Log out     
+          </button>
+          <h1>Hello, <strong id="userName">User</strong>! Here is your contact book!</h1>
           <form className="contact-input-wrapper" onSubmit={this.handleSubmitContact}>
             <InputWrapper  
               placeholder="Name" 
@@ -110,28 +155,42 @@ class Book extends Component {
             <ButtonWrapper type="submit" className="btn-submit">Add New Contact</ButtonWrapper>
             <br/>
           </form>
+          <div className="notification hidden">
+            <p>Log in please!</p>
+            <button className="btn-login" onClick={() => {this.props.history.push('/login')}}>Log in</button>
+          </div>
           <br/>
           {
-          this.props.loading
-          ?<Loader/>
-          :contactsData.contactItems.length && 
-          <div className="contacts-infro">
-            <h3>Select contact</h3>
-            <Select 
-              onChange={this.handleChangeSelect} 
-              className="contact-input" 
-              contactsData={contactsData.contactItems}
-            />
-            <ContextContactItem.Provider value={{asyncDeleteContact,statusSwitch}}>
-              <ContactList
-                contacts={contactsData.contactItems} 
-              />
-            </ContextContactItem.Provider>
-            <Footer 
-              contactsData={contactsData.contactItems} 
-              filterList={this.filterList}
-            />
-          </div>
+            this.props.loading
+            ?<Loader/>
+            :contactsData.contactItems.length !== 0 && 
+            <div className="contacts-infro">
+              {
+                contactsData.contactItems.length > 1
+                ?<div>
+                  <h3>Select contact</h3>
+                  <Select 
+                    onChange={this.handleChangeSelect} 
+                    className="contact-input" 
+                    contactsData={contactsData.contactItems}
+                  />
+                </div>
+                :null
+              }
+              <ContextContactItem.Provider value={{asyncDeleteContact,statusSwitch}}>
+                <ContactList
+                  contacts={contactsData.contactItems} 
+                />
+              </ContextContactItem.Provider>
+              {
+                contactsData.contactItems.length > 1
+                ?<Footer 
+                  contactsData={contactsData.contactItems} 
+                  filterList={this.filterList}
+                />
+                :null
+              }
+            </div>
           }
       </div>
     );

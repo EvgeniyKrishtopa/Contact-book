@@ -1,0 +1,11 @@
+.btn-signup, .btn-login {
+  border: 0;
+  background: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.notification.hidden {
+  display: none;
+}

@@ -17,6 +17,7 @@ const ContactList = ({ contacts }) => (
           email={item.email}
           status={item.status}
           itemVisibility={item.itemVisibility}
+          userId={item.userId}
         />
       ))
     }

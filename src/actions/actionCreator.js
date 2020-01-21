@@ -1,6 +1,7 @@
 import firebase from '../firebase';
 import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS } from '../constants';
 
+
 export const statusSwitch = id => ({
   type: CONTACT_STATUS_SWITCHER,
   id
@@ -29,44 +30,54 @@ export function fetchContactsSuccess(result) {
   }
 }
 
-export const asyncFetchData = () => {
+export const asyncFetchData = userId => {
   return async dispatch => {
     dispatch(fetchContactsStart());
 
     firebase
       .firestore()
+      .collection ('users')
+      .doc(userId)
       .collection('contacts')
       .onSnapshot(snapshot => {
         const contactItems = snapshot.docs.map(item => {
+    
           const contact = item.data();
           contact.id = item.id;
           return contact;
-        })
+        });
+
         dispatch(fetchContactsSuccess(contactItems));
       })
   }
 }
 
-export const asyncAddContact = (name, tel, email, status, itemVisibility) => {
+export const asyncAddContact = (name, tel, email, status, itemVisibility, userId) => {
   return async dispatch => {
     firebase
       .firestore()
+      .collection ('users')
+      .doc(userId)
       .collection('contacts')
       .add({
         name, 
         tel, 
         email, 
         status, 
-        itemVisibility
+        itemVisibility,
+        userId
       })
   }
 }
 
-export const asyncDeleteContact = id => {
+export const asyncDeleteContact = (id, userId) => {
+
   return async dispatch => {
 
     firebase
       .firestore()
+      .collection ('users')
+      .doc(userId)
       .collection('contacts')
       .doc(id)
       .delete()

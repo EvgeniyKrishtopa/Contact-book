@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import './contact-item.css';
 
-const ContactItem = ({ name, tel, email, id, status, itemVisibility }) => {
+const ContactItem = ({ name, tel, email, id, status, itemVisibility, userId }) => {
   
   const {asyncDeleteContact,statusSwitch} = useContext(ContextContactItem);
 
@@ -36,7 +36,7 @@ const ContactItem = ({ name, tel, email, id, status, itemVisibility }) => {
     </div>
     <div className="buttons">
       <span onClick={() => statusSwitch(id)} className="far fa-check-circle"></span>
-      <span onClick={() => asyncDeleteContact(id)} className="fas fa-times"></span>
+      <span onClick={() => asyncDeleteContact(id, userId)} className="fas fa-times"></span>
     </div>
     </div>
   </li>
