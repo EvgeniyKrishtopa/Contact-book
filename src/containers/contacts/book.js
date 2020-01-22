@@ -29,7 +29,8 @@ class Book extends Component {
       email: '',
       status: true,
       itemVisibility: true,
-      userId: ''
+      userId: '',
+      isDisabled: true
   }
 
   componentDidMount() {
@@ -44,27 +45,8 @@ class Book extends Component {
 
        this.props.asyncFetchData(userId);
 
-       firebase
-          .firestore()
-          .collection('users')
-          .doc(userId)
-          .get()
-          .then(response => response.data().userName)
-          .then(currentUserName => {
-            const userName = document.getElementById("userName");
-            userName.innerText = currentUserName;
-          })
-        } 
-
-      else {
-        const notification = document.querySelector('.notification');
-        notification.classList.remove('hidden');
-
-        const logOut = document.querySelector('.btn-logout');
-        logOut.style.display = 'none';
-
-        const btnSubmit = document.querySelector('.btn-submit');
-        btnSubmit.disabled = true;
+       const btnSubmit = document.querySelector('.btn-submit');
+        btnSubmit.disabled = false;
       }
     });
   }
@@ -87,7 +69,6 @@ class Book extends Component {
         })
       }
   }
-
 
   filterList = event => {
     this.props.filterStatus(event.target.textContent);
@@ -117,21 +98,13 @@ class Book extends Component {
     this.props.selectContact(event.target.value);
   }
 
-  signOut = () => {
-    firebase.auth().signOut();
-    this.props.history.push('/login');
-  }
-
   render() {
     const { contactsData, asyncDeleteContact, statusSwitch } = this.props;
-    const { name, email, tel } = this.state;
+    const { name, email, tel, isDisabled } = this.state;
 
     return (
       <div className="contact-wrapper">
-          <button className="btn-logout" onClick={this.signOut}>
-            Log out     
-          </button>
-          <h1>Hello, <strong id="userName">User</strong>! Here is your contact book!</h1>
+          <h1>Contact Book</h1>
           <form className="contact-input-wrapper" onSubmit={this.handleSubmitContact}>
             <InputWrapper  
               placeholder="Name" 
@@ -152,13 +125,9 @@ class Book extends Component {
               onChange={this.handleChangeInput}
             />
             <br/>
-            <ButtonWrapper type="submit" className="btn-submit">Add New Contact</ButtonWrapper>
+            <ButtonWrapper type="submit" disabled={isDisabled} className="btn-submit">Add New Contact</ButtonWrapper>
             <br/>
           </form>
-          <div className="notification hidden">
-            <p>Log in please!</p>
-            <button className="btn-login" onClick={() => {this.props.history.push('/login')}}>Log in</button>
-          </div>
           <br/>
           {
             this.props.loading

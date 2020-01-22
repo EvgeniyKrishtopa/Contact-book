@@ -1,29 +1,22 @@
-import React from 'react';
-import firebase from '../../firebase';
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { createUser } from '../../actions/actionCreator';
 import './auth.css';
 
-const Signup = ({ history }) => {
+class Signup extends Component {
 
-  const handleSignUp = event => {
+  handleSignUp = event => {
     event.preventDefault();
+
     const { email,password, name } = event.target.elements;
-    
-    firebase.auth()
-            .createUserWithEmailAndPassword(email.value, password.value)
-            .then(
-              response => {
-                return firebase.firestore().collection('users').doc(response.user.uid).set({
-                  userName: name.value
-                });
-              }
-            )
-            .then( email.value = '', password.value = '')
-            .then(setTimeout(() => history.push('/'), 1000))
+    this.props.createUser(email.value,password.value, name.value);
+    this.props.history.push('/');
   }
 
-    return(
+    render () {
+      return(
       <div className="contact-wrapper">
-        <form className="contact-input-wrapper" onSubmit={handleSignUp}>
+        <form className="contact-input-wrapper" onSubmit={this.handleSignUp}>
           <h1>Sign Up</h1>
           <input className="contact-input" name="name" type="text" placeholder="name"/> 
           <input className="contact-input" name="email" type="email" placeholder="email"/>
@@ -32,7 +25,11 @@ const Signup = ({ history }) => {
           <button type="submit" className="btn-submit">SignUp</button>
         </form>
       </div>
-    )
+      )
+    }
 }
 
-export default Signup;
+export default connect(
+  null,
+  { createUser }
+)(Signup);  

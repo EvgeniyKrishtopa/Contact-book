@@ -1,44 +1,37 @@
-import React from 'react';
-import firebase from '../../firebase';
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/actionCreator';
 
 import './auth.css';
 
-const Login = ({ history }) => {
-
-  const handleLogIn = event => {
+class Login extends Component {
+  
+  handleLogIn = event => {
     event.preventDefault();
-
     const { email,password } = event.target.elements;
-
-    firebase.auth()
-            .signInWithEmailAndPassword(email.value, password.value)
-            .then(() => history.push('/'), 1000)
-            .catch(
-              () => {
-                const notification = document.querySelector('.notification');
-                notification.classList.remove('hidden');
-                email.value ='';
-                password.value = '';
-              }
-            )
-    //если такого юзера нет, появляется уведомление и кнопка регистрации
+    this.props.loginUser(email, password);
+    this.props.history.push('/');
   }
+  render() {
 
-    return( 
+    return(
       <div className="contact-wrapper">
-        <h1>Log in</h1>
-        <form className="contact-input-wrapper" onSubmit={handleLogIn}>
+        <h1>Log In</h1>
+        <form className="contact-input-wrapper" onSubmit={this.handleLogIn}>
           <input className="contact-input" name="email" type="email" placeholder="email"/>
           <input className="contact-input" name="password" type="password" placeholder="password"/>
           <br/>
           <button type="submit" className="btn-submit">LogIn</button>
         </form>
-        <div className="notification hidden">
-          <p>Your email or password incorrect! You can signup here</p>
-        </div>
       </div>
     )
+  }
 }
 
-export default Login;
+export default connect(
+  null,
+  { loginUser }
+)(Login);  
+
+
 

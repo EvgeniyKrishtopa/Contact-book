@@ -1,5 +1,5 @@
 import firebase from '../firebase';
-import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS } from '../constants';
+import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER } from '../constants';
 
 
 export const statusSwitch = id => ({
@@ -70,8 +70,8 @@ export const asyncAddContact = (name, tel, email, status, itemVisibility, userId
   }
 }
 
-export const asyncDeleteContact = (id, userId) => {
 
+export const asyncDeleteContact = (id, userId) => {
   return async dispatch => {
 
     firebase
@@ -81,8 +81,53 @@ export const asyncDeleteContact = (id, userId) => {
       .collection('contacts')
       .doc(id)
       .delete()
-      .then(function() {
-        console.log("Document successfully deleted!");
-    })
-    
   }}
+
+
+
+
+  export const createUser = (email, password, name) => {
+    return async dispatch => {
+      firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(response => {dispatch(createNewUser(response.user))})
+      }
+    }
+
+   export function createNewUser(newUserData) {
+    return {
+      type: CREATE_USER,
+      newUserData
+    }
+  }
+
+
+
+  export const loginUser = (email,password) => {
+    return async dispatch => {
+  
+      firebase.auth()
+              .signInWithEmailAndPassword(email.value, password.value)
+              .then(response => dispatch(fetchLoginUser(response.user)));
+    }
+  }
+
+  export function fetchLoginUser(currentUserData) {
+    return {
+      type: LOGIN_USER,
+      currentUserData
+    }
+  }
+
+
+
+
+  
+  export const signOutUser = () => {
+     firebase.auth().signOut();
+
+    return {
+      type: SIGNOUT_USER,
+      isUserLogged: null
+    }
+  }
