@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ContactItem from '../contact-item/contact-item';
 
-import './contact-list.css';
+import './contact-list.scss';
 
 const ContactList = ({ contacts }) => (
 

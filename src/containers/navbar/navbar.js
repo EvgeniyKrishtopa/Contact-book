@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import {NavLink} from "react-router-dom";
 import { connect } from 'react-redux';
-import { signOutUser } from '../../actions/actionCreator';
 import firebase from '../../firebase';
+import { signOutUser } from '../../actions/actionCreator';
 import './navbar.scss';
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    user: ''
+    this.state = {
+      user: props.user
+    };
   }
 
   logOut = () => {
     this.props.signOutUser();
     
     this.setState({
-      user: ''
-    })  
+      user: null
+    })
   }
 
   componentDidMount() {
@@ -25,16 +28,22 @@ class Navbar extends Component {
         
         this.setState({
           user
-        })        
+        })   
+      }
+
+      else {
+        this.setState({
+          user: null
+        })   
       }
     })
+
   }
 
   render() {
     return(
     <nav className="navbar">
-      {
-        this.state.user 
+      { this.state.user
         ?<div className="container">
             <strong className="userName">{this.state.user.email}</strong>
             <button className="logOut" onClick={this.logOut}>
@@ -53,7 +62,13 @@ class Navbar extends Component {
   }
 }
 
+const mapStateToProps = store => {
+  return {
+    user: store.users.user
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { signOutUser }
 )(Navbar);  

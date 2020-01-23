@@ -1,10 +1,11 @@
-import {LOGIN_USER, CREATE_USER, SIGNOUT_USER} from '../constants';
+import {LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR} from '../constants';
 
 const USER = {
-    user: {}
+    user: {},
+    errorNotification:''
 };
 
-const users = (state=USER, { type, currentUserData, newUserData, isUserLogged}) => {
+const users = (state=USER, { type, currentUserData, newUserData, isUserLogged, errorInfo}) => {
   switch(type) {
     case LOGIN_USER :
       return {
@@ -17,7 +18,11 @@ const users = (state=USER, { type, currentUserData, newUserData, isUserLogged}) 
     case SIGNOUT_USER :
       return {
         ...state, user: isUserLogged
-      } 
+      }
+    case LOGIN_ERROR : 
+      return {
+        ...state,errorNotification: errorInfo
+      }
 
     default:
         return state;

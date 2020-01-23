@@ -9,7 +9,7 @@ import Footer from '../../components/footer/footer';
 import Loader from '../../components/loader/loader';
 import {ContextContactItem} from '../../context/context';
 import firebase from '../../firebase';
-import './book.css';
+import './book.scss';
 
 function validateEmail(email) {
   const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -23,6 +23,12 @@ function validatePhone(tel) {
 
 class Book extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this._isMounted = false;
+  }
+
   state = {
       name: '',
       tel: '',
@@ -34,7 +40,10 @@ class Book extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
+    this._isMounted = true;
+
+    if(this._isMounted) {
+     firebase.auth().onAuthStateChanged(user => {
 
       if (user) {
       const userId = user.uid;
@@ -49,6 +58,11 @@ class Book extends Component {
         btnSubmit.disabled = false;
       }
     });
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = true;
   }
 
   handleSubmitContact = event => {
@@ -132,7 +146,7 @@ class Book extends Component {
           {
             this.props.loading
             ?<Loader/>
-            :contactsData.contactItems.length !== 0 && 
+            :contactsData.contactItems.length !== 0 &&
             <div className="contacts-infro">
               {
                 contactsData.contactItems.length > 1
@@ -172,6 +186,7 @@ const mapStateToProps = store => {
     loading: store.contacts.loading
   }
 }
+
 
 export default connect(
   mapStateToProps,

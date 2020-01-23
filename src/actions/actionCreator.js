@@ -1,6 +1,5 @@
 import firebase from '../firebase';
-import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER } from '../constants';
-
+import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR } from '../constants';
 
 export const statusSwitch = id => ({
   type: CONTACT_STATUS_SWITCHER,
@@ -84,9 +83,7 @@ export const asyncDeleteContact = (id, userId) => {
   }}
 
 
-
-
-  export const createUser = (email, password, name) => {
+  export const createUser = (email, password ) => {
     return async dispatch => {
       firebase.auth()
       .createUserWithEmailAndPassword(email, password)
@@ -102,13 +99,13 @@ export const asyncDeleteContact = (id, userId) => {
   }
 
 
-
   export const loginUser = (email,password) => {
     return async dispatch => {
   
       firebase.auth()
               .signInWithEmailAndPassword(email.value, password.value)
-              .then(response => dispatch(fetchLoginUser(response.user)));
+              .then(response => dispatch(fetchLoginUser(response.user)))
+              .catch(error => dispatch(errorLogin(error.message)))
     }
   }
 
@@ -119,12 +116,16 @@ export const asyncDeleteContact = (id, userId) => {
     }
   }
 
+ export function errorLogin(errorInfo) {
+   return {
+     type: LOGIN_ERROR,
+     errorInfo
+   }
+ }
 
 
-
-  
   export const signOutUser = () => {
-     firebase.auth().signOut();
+    firebase.auth().signOut();
 
     return {
       type: SIGNOUT_USER,

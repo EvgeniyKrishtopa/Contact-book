@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {ContextContactItem} from '../../context/context';
 import PropTypes from 'prop-types';
 
-import './contact-item.css';
+import './contact-item.scss';
 
 const ContactItem = ({ name, tel, email, id, status, itemVisibility, userId }) => {
   

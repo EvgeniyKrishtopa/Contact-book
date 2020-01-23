@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import firebase from '../../firebase';
 import { loginUser } from '../../actions/actionCreator';
 
-import './auth.css';
+import './auth.scss';
 
 class Login extends Component {
   
@@ -10,10 +11,17 @@ class Login extends Component {
     event.preventDefault();
     const { email,password } = event.target.elements;
     this.props.loginUser(email, password);
-    this.props.history.push('/');
   }
-  render() {
 
+  componentDidUpdate() {
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) { 
+        this.props.history.push('/');
+      }
+    })
+  }
+
+  render() {
     return(
       <div className="contact-wrapper">
         <h1>Log In</h1>
@@ -23,13 +31,27 @@ class Login extends Component {
           <br/>
           <button type="submit" className="btn-submit">LogIn</button>
         </form>
+        {
+          this.props.errorLogin
+          ? <div className="notification center">
+              <p>{`${this.props.errorLogin} Or you may register your profile.`}</p>
+            </div>
+          :null
+        }
       </div>
     )
   }
 }
 
+const mapStateToProps = store => {
+  return {
+    user: store.users.user,
+    errorLogin: store.users.errorNotification
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { loginUser }
 )(Login);  
 

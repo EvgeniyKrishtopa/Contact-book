@@ -7,3 +7,4 @@ export const FETCH_CONTACTS_SUCCESS = 'FETCH_CONTACTS_SUCCESS';
 export const LOGIN_USER = 'LOGIN_USER';
 export const CREATE_USER = 'CREATE_USER';
 export const SIGNOUT_USER = 'SIGNOUT_USER';
+export const LOGIN_ERROR = 'LOGIN_ERROR';

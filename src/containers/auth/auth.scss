@@ -6,6 +6,8 @@
   text-decoration: underline;
 }
 
-.notification.hidden {
-  display: none;
+.notification.center {
+  text-align: center;
+  padding: 30px 20px;
+  color: red;
 }
