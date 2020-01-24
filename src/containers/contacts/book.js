@@ -8,7 +8,6 @@ import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import Footer from '../../components/footer/footer';
 import Loader from '../../components/loader/loader';
 import {ContextContactItem} from '../../context/context';
-import firebase from '../../firebase';
 import './book.scss';
 
 function validateEmail(email) {
@@ -27,42 +26,44 @@ class Book extends Component {
     super(props);
 
     this._isMounted = false;
-  }
 
-  state = {
+    this.state = {
       name: '',
       tel: '',
       email: '',
       status: true,
       itemVisibility: true,
       userId: '',
+      userEmail: '',
       isDisabled: true
+    }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const data = JSON.parse(localStorage.getItem('user'));
+
+    if(data !== null) {
+      return  {
+        userId: data.uid,
+        isDisabled: false
+      }
+    }
+
+    return null
   }
 
   componentDidMount() {
     this._isMounted = true;
 
     if(this._isMounted) {
-     firebase.auth().onAuthStateChanged(user => {
-
-      if (user) {
-      const userId = user.uid;
-
-      this.setState({
-        userId
-      })
-
-       this.props.asyncFetchData(userId);
-
-       const btnSubmit = document.querySelector('.btn-submit');
-        btnSubmit.disabled = false;
+      if(this.state.userId) {
+        this.props.asyncFetchData(this.state.userId)
       }
-    });
     }
   }
 
   componentWillUnmount() {
-    this._isMounted = true;
+    this._isMounted = false;
   }
 
   handleSubmitContact = event => {
@@ -71,7 +72,7 @@ class Book extends Component {
     const { name, tel, email, status, itemVisibility, userId } = this.state;
 
       if(validateEmail(email) && validatePhone(tel)) {
-
+  
         this.props.asyncAddContact(name, tel, email, status, itemVisibility, userId);
         
         this.setState({
@@ -183,10 +184,10 @@ class Book extends Component {
 const mapStateToProps = store => {
   return {
     contactsData: store.contacts,
-    loading: store.contacts.loading
+    loading: store.contacts.loading,
+    user: store.users.user
   }
 }
-
 
 export default connect(
   mapStateToProps,

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { createUser } from '../../actions/actionCreator';
+import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import './auth.scss';
 
 function validateEmail(email) {
@@ -29,7 +30,7 @@ class Signup extends Component {
           <input className="contact-input" name="email" type="email" placeholder="email"/>
           <input className="contact-input" name="password" type="password" placeholder="password"/>
           <br/>
-          <button type="submit" className="btn-submit">SignUp</button>
+          <ButtonWrapper type="submit"  className="btn-submit">SignUp</ButtonWrapper>
         </form>
       </div>
       )

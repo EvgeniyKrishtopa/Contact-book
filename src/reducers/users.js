@@ -1,7 +1,7 @@
 import {LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR} from '../constants';
 
 const USER = {
-    user: {},
+    user: null,
     errorNotification:''
 };
 

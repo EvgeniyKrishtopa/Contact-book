@@ -52,6 +52,7 @@ export const asyncFetchData = userId => {
 }
 
 export const asyncAddContact = (name, tel, email, status, itemVisibility, userId) => {
+
   return async dispatch => {
     firebase
       .firestore()

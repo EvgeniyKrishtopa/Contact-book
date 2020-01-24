@@ -1,43 +1,43 @@
 import React, { Component } from 'react';
 import {NavLink} from "react-router-dom";
 import { connect } from 'react-redux';
-import firebase from '../../firebase';
 import { signOutUser } from '../../actions/actionCreator';
 import './navbar.scss';
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      user: props.user
-    };
+  state = {
+    user: null
   }
 
   logOut = () => {
     this.props.signOutUser();
-    
+
     this.setState({
       user: null
     })
+
+    localStorage.setItem('user', null)
   }
 
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if(user) {
-        
-        this.setState({
-          user
-        })   
-      }
+  UNSAFE_componentWillMount(){
+    const data = JSON.parse(localStorage.getItem('user'))
 
-      else {
-        this.setState({
-          user: null
-        })   
-      }
-    })
+    if(data !== null) {
+      this.setState({
+        user: data
+      })
+    }
+  }
 
+  componentDidUpdate(prevProps) {
+    if(this.props.user !== prevProps.user) {
+      localStorage.setItem('user', JSON.stringify(this.props.user))
+      
+      this.setState({
+        user: this.props.user
+      })
+    }
   }
 
   render() {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import firebase from '../../firebase';
+import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import { loginUser } from '../../actions/actionCreator';
 
 import './auth.scss';
@@ -29,7 +30,7 @@ class Login extends Component {
           <input className="contact-input" name="email" type="email" placeholder="email"/>
           <input className="contact-input" name="password" type="password" placeholder="password"/>
           <br/>
-          <button type="submit" className="btn-submit">LogIn</button>
+          <ButtonWrapper type="submit"  className="btn-submit">LogIn</ButtonWrapper>
         </form>
         {
           this.props.errorLogin
