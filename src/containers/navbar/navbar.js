@@ -10,17 +10,7 @@ class Navbar extends Component {
     user: null
   }
 
-  logOut = () => {
-    this.props.signOutUser();
-
-    this.setState({
-      user: null
-    })
-
-    localStorage.setItem('user', null)
-  }
-
-  UNSAFE_componentWillMount(){
+  componentDidMount(){
     const data = JSON.parse(localStorage.getItem('user'))
 
     if(data !== null) {
@@ -39,6 +29,17 @@ class Navbar extends Component {
       })
     }
   }
+
+  logOut = () => {
+    this.props.signOutUser();
+
+    this.setState({
+      user: null
+    })
+
+    localStorage.setItem('user', null)
+  }
+  
 
   render() {
     return(

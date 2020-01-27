@@ -39,31 +39,44 @@ class Book extends Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const data = JSON.parse(localStorage.getItem('user'));
+  componentDidUpdate(prevProps) {
+    if(this.props.user !== prevProps.user) {
+      localStorage.setItem('user', JSON.stringify(this.props.user))
 
-    if(data !== null) {
-      return  {
-        userId: data.uid,
+      this.setState({
+        userId: this.props.user.uid,
         isDisabled: false
-      }
-    }
+      })
 
-    return null
+      this.props.asyncFetchData(this.props.user.uid);
+    }
   }
+
 
   componentDidMount() {
     this._isMounted = true;
 
     if(this._isMounted) {
-      if(this.state.userId) {
-        this.props.asyncFetchData(this.state.userId)
-      }
+      this.userData();
     }
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.props.contactsData.contactItems.length = 0;
+  }
+
+  userData() {
+    const data = JSON.parse(localStorage.getItem('user'));
+
+    if(this._isMounted && data !== null) {
+      this.setState({
+        userId: data.uid,
+        isDisabled: false
+    })
+
+    this.props.asyncFetchData(data.uid);
+    }
   }
 
   handleSubmitContact = event => {
