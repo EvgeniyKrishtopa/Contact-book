@@ -1,4 +1,4 @@
-import {  CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS } from '../constants';
+import {  CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, ADD_CONTACT, DELETE_CONTACT, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS } from '../constants';
 
 const CONTACTLIST = {
   contactItems: [],
@@ -30,6 +30,16 @@ const contacts = (state=CONTACTLIST, { type, id, statusFilter, result }) => {
           return item;
         })]
       }
+
+    case ADD_CONTACT :
+        return {
+          ...state
+        }
+
+    case DELETE_CONTACT :
+        return {
+          ...state
+        }
 
     case FILTER_CONTACT_STATUS :
         if(statusFilter === 'All') {

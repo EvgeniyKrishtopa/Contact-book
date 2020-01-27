@@ -1,5 +1,5 @@
 import firebase from '../firebase';
-import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR } from '../constants';
+import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR } from '../constants';
 
 export const statusSwitch = id => ({
   type: CONTACT_STATUS_SWITCHER,
@@ -25,7 +25,7 @@ export function fetchContactsStart() {
 export function fetchContactsSuccess(result) {
   return {
     type: FETCH_CONTACTS_SUCCESS,
-    result,
+    result
   }
 }
 
@@ -67,13 +67,20 @@ export const asyncAddContact = (name, tel, email, status, itemVisibility, userId
         itemVisibility,
         userId
       })
+      .then(()=> dispatch(addContact()))
+  }
+}
+
+export function addContact(){
+  return {
+    type: ADD_CONTACT
   }
 }
 
 
 export const asyncDeleteContact = (id, userId) => {
+  debugger
   return async dispatch => {
-
     firebase
       .firestore()
       .collection ('users')
@@ -81,10 +88,17 @@ export const asyncDeleteContact = (id, userId) => {
       .collection('contacts')
       .doc(id)
       .delete()
+      .then(()=> dispatch(deleteContact()))
   }}
 
+export function deleteContact () {
+  return {
+    type: DELETE_CONTACT
+  }
+}
 
-  export const createUser = (email, password ) => {
+
+  export const createUser = (email, password) => {
     return async dispatch => {
       firebase.auth()
       .createUserWithEmailAndPassword(email, password)
@@ -98,7 +112,6 @@ export const asyncDeleteContact = (id, userId) => {
       newUserData
     }
   }
-
 
   export const loginUser = (email,password) => {
     return async dispatch => {
