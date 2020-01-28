@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import firebase from '../../firebase';
 import ButtonWrapper from '../../components/hoc/buttonWrapper';
 import { loginUser } from '../../actions/actionCreator';
 
@@ -10,16 +9,9 @@ class Login extends Component {
   
   handleLogIn = event => {
     event.preventDefault();
+    const history = this.props.history;
     const { email,password } = event.target.elements;
-    this.props.loginUser(email, password);
-  }
-
-  componentDidUpdate() {
-    firebase.auth().onAuthStateChanged(user => {
-      if(user) { 
-        this.props.history.push('/');
-      }
-    })
+    this.props.loginUser(email, password, history);
   }
 
   render() {

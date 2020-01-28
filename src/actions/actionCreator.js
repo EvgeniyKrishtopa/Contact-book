@@ -79,7 +79,7 @@ export function addContact(){
 
 
 export const asyncDeleteContact = (id, userId) => {
-  debugger
+
   return async dispatch => {
     firebase
       .firestore()
@@ -113,12 +113,13 @@ export function deleteContact () {
     }
   }
 
-  export const loginUser = (email,password) => {
+  export const loginUser = (email,password, history) => {
     return async dispatch => {
   
       firebase.auth()
               .signInWithEmailAndPassword(email.value, password.value)
               .then(response => dispatch(fetchLoginUser(response.user)))
+              .then(() => history.push('/'))
               .catch(error => dispatch(errorLogin(error.message)))
     }
   }
