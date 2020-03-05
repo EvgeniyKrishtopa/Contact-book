@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ContextContactItem} from '../../context/context';
+import {ContextContactItem} from '../../context/contextContactItem';
 import PropTypes from 'prop-types';
 
 import './contact-item.scss';
@@ -23,16 +23,16 @@ const ContactItem = ({ name, tel, email, id, status, itemVisibility, userId }) =
       : <p>Inactive contact</p>
       }
     <div className="item-data">
-      <span className="name">Name:</span>
-        <span>{name}</span>
+      <span>Name:</span>
+      <span className="item-data__name">{name}</span>
     </div>
     <div className="item-data">
-      <span className="phone">Phone:</span>
-        <span>{tel}</span>
+      <span>Phone:</span>
+      <span>{tel}</span>
     </div>
     <div className="item-data">
-      <span className="email">Email:</span>
-        <span>{email}</span>
+      <span>Email:</span>
+      <span>{email}</span>
     </div>
     <div className="buttons">
       <span onClick={() => statusSwitch(id)} className="far fa-check-circle"></span>

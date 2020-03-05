@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContactItem from '../contact-item/contact-item';
+import ContactItem from '../contact-item/contactItem';
 
 import './contact-list.scss';
 
@@ -8,9 +8,9 @@ const ContactList = ({ contacts }) => (
 
   <ul className="contact-list">
     {
-      contacts.map((item, index) => (
+      contacts.map(item => (
         <ContactItem
-          key={index}
+          key={item.id}
           name={item.name}
           id={item.id}
           tel={item.tel}

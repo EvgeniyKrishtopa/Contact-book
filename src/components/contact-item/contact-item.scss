@@ -30,6 +30,10 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  &__name {
+    text-transform: capitalize;
+  }
 }
 
 .buttons {

@@ -4,13 +4,14 @@ import 'firebase/auth';
 
   // Your web app's Firebase configuration
   var firebaseConfig = {
-    apiKey: "AIzaSyDFDjNeUh_QkS6Zz_kUWxodchtXKMAGT2w",
-    authDomain: "contact-book-32fc4.firebaseapp.com",
-    databaseURL: "https://contact-book-32fc4.firebaseio.com",
-    projectId: "contact-book-32fc4",
-    storageBucket: "contact-book-32fc4.appspot.com",
-    messagingSenderId: "108838424394",
-    appId: "1:108838424394:web:f60fc2ebb793177825bbb3"
+    apiKey: "AIzaSyD8HSI8eD9HdEGtFtZCdQayV4qTDLi6oH4",
+    authDomain: "contact-book-refactored.firebaseapp.com",
+    databaseURL: "https://contact-book-refactored.firebaseio.com",
+    projectId: "contact-book-refactored",
+    storageBucket: "contact-book-refactored.appspot.com",
+    messagingSenderId: "809880163120",
+    appId: "1:809880163120:web:37ebdcacba3eb613212ef5",
+    measurementId: "G-EJZWLE5Y7B"  
   };
   // Initialize Firebase
   

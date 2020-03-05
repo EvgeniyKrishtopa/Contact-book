@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import { Redirect } from "react-router-dom";
+import FormAuth from '../forms/formAuth';
 import { connect } from 'react-redux';
-import { createUser } from '../../actions/actionCreator';
-import ButtonWrapper from '../../components/hoc/buttonWrapper';
-import './auth.scss';
+import { createUser } from '../actions/actionCreator';
+import './styles/auth.scss';
 
 function validateEmail(email) {
   const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -18,26 +19,32 @@ class Signup extends Component {
     
     if(validateEmail(email.value)) {
       this.props.createUser(email.value,password.value);
-      this.props.history.push('/');
     }
   }
 
     render () {
       return(
       <div className="contact-wrapper">
-        <form className="contact-input-wrapper" onSubmit={this.handleSignUp}>
-          <h1>Sign Up</h1>
-          <input className="contact-input" name="email" type="email" placeholder="email"/>
-          <input className="contact-input" name="password" type="password" placeholder="password"/>
-          <br/>
-          <ButtonWrapper type="submit"  className="btn-submit">SignUp</ButtonWrapper>
-        </form>
+        {
+          this.props.user
+          ?<Redirect to={"/"}/>
+          :<div>
+            <h1>Sign Up</h1>
+            <FormAuth onSubmit={this.handleSignUp}/>
+          </div>
+        }
       </div>
       )
     }
 }
 
+const mapStateToProps = store => {
+  return {
+    user: store.users.user
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { createUser }
 )(Signup);  

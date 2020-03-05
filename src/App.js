@@ -1,19 +1,19 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.scss';
+import Navbar from './components/navbar/navbar';
+import MainPage from './pages/main';
+import Loader from './components/loader/loader';
 
-import Navbar from './containers/navbar/navbar';
-import ContactBook from './containers/contacts/book';
-import Login from './containers/auth/login';
-import Signup from './containers/auth/signup';
-
+const Login = React.lazy(() => import('./pages/login'));
+const Signup = React.lazy(() => import('./pages/auth'));
 
 const App = () => (
     <Router>
         <Navbar/>
-        <Route path="/signup" component={Signup}/>
-        <Route path="/login" component={Login}/>
-        <Route exact path="/" component={ContactBook}/>
+        <Route path="/signup" render={() => <Suspense fallback={<Loader/>}><Signup/></Suspense>}/>
+        <Route path="/login" render={() => <Suspense fallback={<Loader/>}><Login/></Suspense>}/>
+        <Route exact path="/" render={() => <Suspense fallback={<Loader/>}><MainPage/></Suspense>}/>
     </Router>
 )
 

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { asyncAddContact, asyncDeleteContact, selectContact, statusSwitch, filterStatus, asyncFetchData } from '../../actions/actionCreator';
-import ContactList from '../../components/contact-list/contact-list';
-import Select from '../../components/form/select';
-import InputWrapper from '../../components/hoc/inputWrapper';
-import ButtonWrapper from '../../components/hoc/buttonWrapper';
-import Footer from '../../components/footer/footer';
-import Loader from '../../components/loader/loader';
-import {ContextContactItem} from '../../context/context';
-import './book.scss';
+import { asyncAddContact, asyncDeleteContact, selectContact, statusSwitch, filterStatus, asyncFetchData } from '../actions/actionCreator';
+import ContactList from '../components/contact-list/contactList';
+import FormContacts from '../forms/formContacts';
+import Select from '../components/select/select';
+import Footer from '../components/footer/footer';
+import Loader from '../components/loader/loader';
+import {ContextContactItem} from '../context/contextContactItem';
+import './styles/book.scss';
 
 function validateEmail(email) {
   const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -37,6 +36,10 @@ class Book extends Component {
       userEmail: '',
       isDisabled: true
     }
+
+    this.handleSubmitContact = this.handleSubmitContact.bind(this);
+    this.handleChangeInput = this.handleChangeInput.bind(this);
+    this.handleChangeSelect = this.handleChangeSelect.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -133,29 +136,14 @@ class Book extends Component {
     return (
       <div className="contact-wrapper">
           <h1>Contact Book</h1>
-          <form className="contact-input-wrapper" onSubmit={this.handleSubmitContact}>
-            <InputWrapper  
-              placeholder="Name" 
-              type="text" 
-              value={name} 
-              onChange={this.handleChangeInput}
-            />
-            <InputWrapper  
-              placeholder="Phone" 
-              type="tel" 
-              value={tel} 
-              onChange={this.handleChangeInput}
-            />
-            <InputWrapper  
-              placeholder="Email" 
-              type="email" 
-              value={email} 
-              onChange={this.handleChangeInput}
-            />
-            <br/>
-            <ButtonWrapper type="submit" disabled={isDisabled} className="btn-submit">Add New Contact</ButtonWrapper>
-            <br/>
-          </form>
+          <FormContacts 
+            onSubmit={this.handleSubmitContact} 
+            name={name} 
+            email={email} 
+            tel={tel}
+            isDisabled={isDisabled}
+            onChange={this.handleChangeInput}
+          />
           <br/>
           {
             this.props.loading

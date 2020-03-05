@@ -30,6 +30,7 @@ export function fetchContactsSuccess(result) {
 }
 
 export const asyncFetchData = userId => {
+
   return async dispatch => {
     dispatch(fetchContactsStart());
 
@@ -97,53 +98,51 @@ export function deleteContact () {
   }
 }
 
-
-  export const createUser = (email, password) => {
+export const createUser = (email, password) => {
     return async dispatch => {
       firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(response => {dispatch(createNewUser(response.user))})
-      }
     }
+}
 
-   export function createNewUser(newUserData) {
+export function createNewUser(newUserData) {
     return {
       type: CREATE_USER,
       newUserData
     }
-  }
+}
 
-  export const loginUser = (email,password, history) => {
+export const loginUser = (email,password) => {
     return async dispatch => {
-  
-      firebase.auth()
-              .signInWithEmailAndPassword(email.value, password.value)
-              .then(response => dispatch(fetchLoginUser(response.user)))
-              .then(() => history.push('/'))
-              .catch(error => dispatch(errorLogin(error.message)))
-    }
-  }
 
-  export function fetchLoginUser(currentUserData) {
+      firebase.auth()
+        .signInWithEmailAndPassword(email.value, password.value)
+        .then(response => dispatch(fetchLoginUser(response.user)))
+        .catch(error => dispatch(errorLogin(error.message)))
+    }
+}
+
+export function fetchLoginUser(currentUserData) {
     return {
       type: LOGIN_USER,
       currentUserData
     }
-  }
+}
 
- export function errorLogin(errorInfo) {
+export function errorLogin(errorInfo) {
    return {
      type: LOGIN_ERROR,
      errorInfo
    }
- }
+}
 
 
-  export const signOutUser = () => {
+export const signOutUser = () => {
     firebase.auth().signOut();
 
     return {
       type: SIGNOUT_USER,
       isUserLogged: null
     }
-  }
+}
