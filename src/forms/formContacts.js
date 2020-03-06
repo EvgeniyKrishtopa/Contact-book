@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormContacts = ({onSubmit,name,tel,email,isDisabled,onChange}) => {
+const FormContacts = React.memo(({onSubmit,name,tel,email,isDisabled,onChange}) => {
   return(
     <form className="contact-input-wrapper" onSubmit={onSubmit}>
       <input
@@ -29,6 +29,6 @@ const FormContacts = ({onSubmit,name,tel,email,isDisabled,onChange}) => {
       <br/>
     </form>
   )
-}
+})
 
 export default FormContacts;

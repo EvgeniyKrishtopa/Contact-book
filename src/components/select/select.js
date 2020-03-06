@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 const Select = ({ onChange, contactsData }) => {
   return(
     <select className="contact-input" onChange={onChange}>
-    {
-      contactsData.map((item,index) => {
-        return  <Option key={index} value={item.id}>{item.name}</Option>
-      })
-    }
-</select>
+      {
+        contactsData.map(item => {
+          return  <Option key={item.id} value={item.id}>{item.name}</Option>
+        })
+      }
+  </select>
   )
 }
 

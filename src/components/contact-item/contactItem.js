@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import './contact-item.scss';
 
-const ContactItem = ({ name, tel, email, id, status, itemVisibility, userId }) => {
-  
+const ContactItem = React.memo(({ name, tel, email, id, status, itemVisibility, userId }) => {
   const {asyncDeleteContact,statusSwitch} = useContext(ContextContactItem);
 
   return (
@@ -40,7 +39,7 @@ const ContactItem = ({ name, tel, email, id, status, itemVisibility, userId }) =
     </div>
     </div>
   </li>
-)};
+)});
 
 ContactItem.propTypes = {
   name: PropTypes.string,

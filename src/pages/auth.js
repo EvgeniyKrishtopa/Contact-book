@@ -3,7 +3,10 @@ import { Redirect } from "react-router-dom";
 import FormAuth from '../forms/formAuth';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/actionCreator';
+import { getCurrentUser } from '../selectors/index';
+
 import './styles/auth.scss';
+
 
 function validateEmail(email) {
   const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -40,11 +43,11 @@ class Signup extends Component {
 
 const mapStateToProps = store => {
   return {
-    user: store.users.user
+    user: getCurrentUser(store)
   }
 }
 
 export default connect(
   mapStateToProps,
-  { createUser }
+  {createUser}
 )(Signup);  

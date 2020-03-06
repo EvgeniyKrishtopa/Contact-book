@@ -1,9 +1,9 @@
 import React, {Suspense} from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import './App.scss';
 import Navbar from './components/navbar/navbar';
 import MainPage from './pages/main';
 import Loader from './components/loader/loader';
+import './App.scss';
 
 const Login = React.lazy(() => import('./pages/login'));
 const Signup = React.lazy(() => import('./pages/auth'));

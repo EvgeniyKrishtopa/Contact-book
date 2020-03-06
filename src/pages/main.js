@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { asyncAddContact, asyncDeleteContact, selectContact, statusSwitch, filterStatus, asyncFetchData } from '../actions/actionCreator';
 import ContactList from '../components/contact-list/contactList';
@@ -7,6 +7,7 @@ import Select from '../components/select/select';
 import Footer from '../components/footer/footer';
 import Loader from '../components/loader/loader';
 import {ContextContactItem} from '../context/contextContactItem';
+import {getContactItems, getLoading, getCurrentUser} from '../selectors/index';
 import './styles/book.scss';
 
 function validateEmail(email) {
@@ -19,7 +20,7 @@ function validatePhone(tel) {
   return re.test(String(tel).toLowerCase());
 }
 
-class Book extends Component {
+class Book extends PureComponent {
 
   constructor(props) {
     super(props);
@@ -148,29 +149,36 @@ class Book extends Component {
           {
             this.props.loading
             ?<Loader/>
-            :contactsData.contactItems.length !== 0 &&
+            :contactsData.length !== 0 &&
             <div className="contacts-infro">
               {
-                contactsData.contactItems.length > 1
+                contactsData.length > 1
                 ?<div>
                   <h3>Select contact</h3>
                   <Select 
                     onChange={this.handleChangeSelect} 
                     className="contact-input" 
-                    contactsData={contactsData.contactItems}
+                    contactsData={contactsData.map(item =>
+                      {
+                          return {
+                            name: item.name, 
+                            id: item.id
+                          }
+                        }
+                      )}
                   />
                 </div>
                 :null
               }
               <ContextContactItem.Provider value={{asyncDeleteContact,statusSwitch}}>
                 <ContactList
-                  contacts={contactsData.contactItems} 
+                  contacts={contactsData} 
                 />
               </ContextContactItem.Provider>
               {
-                contactsData.contactItems.length > 1
+                contactsData.length > 1
                 ?<Footer 
-                  contactsData={contactsData.contactItems} 
+                  contactsAmount={contactsData.length} 
                   filterList={this.filterList}
                 />
                 :null
@@ -184,9 +192,9 @@ class Book extends Component {
 
 const mapStateToProps = store => {
   return {
-    contactsData: store.contacts,
-    loading: store.contacts.loading,
-    user: store.users.user
+    contactsData: getContactItems(store),
+    loading: getLoading(store),
+    user: getCurrentUser(store)
   }
 }
 

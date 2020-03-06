@@ -40,7 +40,6 @@ class Navbar extends Component {
     localStorage.setItem('user', null)
   }
   
-
   render() {
     return(
     <nav className="navbar">

@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import FormLogin from '../forms/formLogin';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/actionCreator';
+import {getErrorNotification, getCurrentUser} from '../selectors/index';
 
 import './styles/auth.scss';
 
@@ -39,8 +40,8 @@ class Login extends Component {
 
 const mapStateToProps = store => {
   return {
-    user: store.users.user,
-    errorLogin: store.users.errorNotification
+    user: getCurrentUser(store),
+    errorLogin: getErrorNotification(store)
   }
 }
 
