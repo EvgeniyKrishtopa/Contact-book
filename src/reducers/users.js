@@ -1,27 +1,34 @@
-import {LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR} from '../constants';
+import {LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_USER_ERROR, CREATE_USER_ERROR} from '../actions/actionTypes';
 
 const USER = {
     user: null,
-    errorNotification:''
+    errorLoginNotification:'',
+    errorAuthNotification: ''
 };
 
 const users = (state=USER, { type, currentUserData, newUserData, isUserLogged, errorInfo}) => {
   switch(type) {
     case LOGIN_USER :
       return {
-        ...state, user: currentUserData
+        ...state, user: currentUserData, errorLoginNotification: ''
       }
+    
     case CREATE_USER :
       return {
-        ...state, user: newUserData
+        ...state, user: newUserData, errorAuthNotification: ''
       }
     case SIGNOUT_USER :
       return {
         ...state, user: isUserLogged
       }
-    case LOGIN_ERROR : 
+    case LOGIN_USER_ERROR : 
       return {
-        ...state,errorNotification: errorInfo
+        ...state,errorLoginNotification: errorInfo
+      }
+
+    case CREATE_USER_ERROR :
+      return {
+        ...state,errorAuthNotification: errorInfo
       }
 
     default:

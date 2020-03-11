@@ -9,4 +9,7 @@ export const DELETE_CONTACT = 'DELETE_CONTACT';
 export const LOGIN_USER = 'LOGIN_USER';
 export const CREATE_USER = 'CREATE_USER';
 export const SIGNOUT_USER = 'SIGNOUT_USER';
-export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+export const LOGIN_USER_ERROR = 'LOGIN_USER_ERROR';
+export const CREATE_USER_ERROR = 'AUTH_USER_ERROR';
+

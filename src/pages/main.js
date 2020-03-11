@@ -7,55 +7,29 @@ import Select from '../components/select/select';
 import Footer from '../components/footer/footer';
 import Loader from '../components/loader/loader';
 import {ContextContactItem} from '../context/contextContactItem';
-import {getContactItems, getLoading, getCurrentUser} from '../selectors/index';
-import './styles/book.scss';
-
-function validateEmail(email) {
-  const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
-
-function validatePhone(tel) {
-  const re = /^[\t+]?[(]?[0-9]{3}[)]?[-\s\t.]?[0-9]{3}[-\s\t.]?[0-9]{4,6}$/im;
-  return re.test(String(tel).toLowerCase());
-}
+import {getContactItems, getLoading, getCurrentUser, getContactFormValues} from '../selectors/index';
+import { validateEmail, validatePhone } from '../helpers/validation';
+import mainPageStyles from './pages.module.scss';
 
 class Book extends PureComponent {
-
   constructor(props) {
     super(props);
 
     this._isMounted = false;
 
     this.state = {
-      name: '',
-      tel: '',
-      email: '',
       status: true,
       itemVisibility: true,
-      userId: '',
-      userEmail: '',
       isDisabled: true
     }
-
-    this.handleSubmitContact = this.handleSubmitContact.bind(this);
-    this.handleChangeInput = this.handleChangeInput.bind(this);
-    this.handleChangeSelect = this.handleChangeSelect.bind(this);
   }
 
   componentDidUpdate(prevProps) {
     if(this.props.user !== prevProps.user) {
       localStorage.setItem('user', JSON.stringify(this.props.user))
-
-      this.setState({
-        userId: this.props.user.uid,
-        isDisabled: false
-      })
-
       this.props.asyncFetchData(this.props.user.uid);
     }
   }
-
 
   componentDidMount() {
     this._isMounted = true;
@@ -65,65 +39,39 @@ class Book extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-    this.props.contactsData.contactItems.length = 0;
-  }
-
   userData() {
     const data = JSON.parse(localStorage.getItem('user'));
 
     if(this._isMounted && data !== null) {
-      this.setState({
-        userId: data.uid,
-        isDisabled: false
-    })
+      this.props.asyncFetchData(data.uid);
 
-    this.props.asyncFetchData(data.uid);
+      this.setState({
+        isDisabled: false,
+        userId: data.uid
+      })
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleSubmitContact = event => {
     event.preventDefault();
+    console.log(event.target);
 
-    const { name, tel, email, status, itemVisibility, userId } = this.state;
+    const {email, name, phone} = this.props.formData.values;
+    const {status, itemVisibility, userId} = this.state;
 
-      if(validateEmail(email) && validatePhone(tel)) {
-  
-        this.props.asyncAddContact(name, tel, email, status, itemVisibility, userId);
-        
-        this.setState({
-          name: '',
-          tel: '',
-          email: '',
-          status: true,
-          itemVisibility: true
-        })
+      if(validateEmail(email) && validatePhone(phone)) {
+        this.props.asyncAddContact(name, phone, email, status, itemVisibility, userId);
       }
+    
+    event.target.reset();
   }
 
   filterList = event => {
     this.props.filterStatus(event.target.textContent);
-  }
-
-  handleChangeInput = event => {
-    
-    if(event.target.type === "text") {
-      this.setState({
-        name: event.target.value
-      })
-    }
-
-    if(event.target.type === "tel") {
-      this.setState({
-        tel: event.target.value
-      })
-    }
-    if(event.target.type === "email") {
-      this.setState({
-        email: event.target.value
-      })
-    }
   }
 
   handleChangeSelect = event => {
@@ -132,16 +80,13 @@ class Book extends PureComponent {
 
   render() {
     const { contactsData, asyncDeleteContact, statusSwitch } = this.props;
-    const { name, email, tel, isDisabled } = this.state;
+    const { isDisabled } = this.state;
 
     return (
-      <div className="contact-wrapper">
+      <div className={`${mainPageStyles.mainWrapper} ${mainPageStyles.mainPage}`}>
           <h1>Contact Book</h1>
           <FormContacts 
             onSubmit={this.handleSubmitContact} 
-            name={name} 
-            email={email} 
-            tel={tel}
             isDisabled={isDisabled}
             onChange={this.handleChangeInput}
           />
@@ -150,14 +95,14 @@ class Book extends PureComponent {
             this.props.loading
             ?<Loader/>
             :contactsData.length !== 0 &&
-            <div className="contacts-infro">
+            <div className="contacts-info">
               {
-                contactsData.length > 1
-                ?<div>
+                contactsData.length > 1 &&
+                <div>
                   <h3>Select contact</h3>
                   <Select 
                     onChange={this.handleChangeSelect} 
-                    className="contact-input" 
+                    className={mainPageStyles.contactInput} 
                     contactsData={contactsData.map(item =>
                       {
                           return {
@@ -168,7 +113,6 @@ class Book extends PureComponent {
                       )}
                   />
                 </div>
-                :null
               }
               <ContextContactItem.Provider value={{asyncDeleteContact,statusSwitch}}>
                 <ContactList
@@ -176,12 +120,12 @@ class Book extends PureComponent {
                 />
               </ContextContactItem.Provider>
               {
-                contactsData.length > 1
-                ?<Footer 
+                contactsData.length > 1 &&
+                <Footer 
                   contactsAmount={contactsData.length} 
                   filterList={this.filterList}
+                  mainPageStyles={mainPageStyles}
                 />
-                :null
               }
             </div>
           }
@@ -194,7 +138,8 @@ const mapStateToProps = store => {
   return {
     contactsData: getContactItems(store),
     loading: getLoading(store),
-    user: getCurrentUser(store)
+    user: getCurrentUser(store),
+    formData: getContactFormValues(store)
   }
 }
 

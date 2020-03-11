@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ContactItem from '../contact-item/contactItem';
 
-import './contact-list.scss';
-
 const ContactList = ({ contacts }) => (
-
-  <ul className="contact-list">
+  <ul>
     {
       contacts.map(item => (
         <ContactItem

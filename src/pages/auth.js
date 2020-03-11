@@ -3,15 +3,9 @@ import { Redirect } from "react-router-dom";
 import FormAuth from '../forms/formAuth';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/actionCreator';
-import { getCurrentUser } from '../selectors/index';
-
-import './styles/auth.scss';
-
-
-function validateEmail(email) {
-  const re = /^(([^<>()\t[\]\\.,;:\s@"]+(\.[^<>()\t[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
+import { getCurrentUser,getErrorAuthNotification } from '../selectors/index';
+import { validateEmail } from '../helpers/validation';
+import auth from './pages.module.scss';
 
 class Signup extends Component {
 
@@ -27,13 +21,19 @@ class Signup extends Component {
 
     render () {
       return(
-      <div className="contact-wrapper">
+      <div className={auth.mainWrapper}>
         {
           this.props.user
           ?<Redirect to={"/"}/>
           :<div>
             <h1>Sign Up</h1>
             <FormAuth onSubmit={this.handleSignUp}/>
+            {
+              this.props.errorAuth && 
+                <div className={auth.notification}>
+                    <p>{`${this.props.errorAuth}`}</p>
+                </div>
+              }
           </div>
         }
       </div>
@@ -43,7 +43,8 @@ class Signup extends Component {
 
 const mapStateToProps = store => {
   return {
-    user: getCurrentUser(store)
+    user: getCurrentUser(store),
+    errorAuth: getErrorAuthNotification(store)
   }
 }
 

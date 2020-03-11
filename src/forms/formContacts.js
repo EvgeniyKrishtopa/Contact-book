@@ -1,34 +1,41 @@
 import React from 'react';
+import form from './form.module.scss';
+import {Field, reduxForm} from 'redux-form';
 
-const FormContacts = React.memo(({onSubmit,name,tel,email,isDisabled,onChange}) => {
+let FormContacts = React.memo(({onSubmit,isDisabled}) => {
   return(
-    <form className="contact-input-wrapper" onSubmit={onSubmit}>
-      <input
-        placeholder="Name" 
-        type="text" 
-        value={name} 
-        onChange={onChange}
-        className="contact-input"
+    <form className={form.formWrapper} onSubmit={onSubmit}>
+      <Field
+        className={form.formInput}
+        placeholder="Name"
+        type="text"
+        component="input"
+        name="name"
       />
-      <input 
-        placeholder="Phone" 
-        type="tel" 
-        value={tel} 
-        onChange={onChange}
-        className="contact-input"
+      <Field
+        className={form.formInput}
+        placeholder="Phone"
+        type="tel"
+        component="input" 
+        name="phone"
       />
-      <input  
-        placeholder="Email" 
-        type="email" 
-        value={email} 
-        onChange={onChange}
-        className="contact-input"
+      <Field
+        className={form.formInput}
+        placeholder="Email"
+        type="email"
+        component="input"
+        name="email"  
       />
       <br/>
-      <button type="submit" disabled={isDisabled} className="btn-submit">Add New Contact</button>
+      <button type="submit" disabled={isDisabled} className={form.btnSubmit}>Add New Contact</button>
       <br/>
     </form>
   )
 })
+
+
+FormContacts = reduxForm ({
+  form: 'ContactForm',
+}) (FormContacts);
 
 export default FormContacts;

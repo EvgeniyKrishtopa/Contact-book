@@ -1,5 +1,8 @@
 import firebase from '../firebase';
-import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, ADD_CONTACT, DELETE_CONTACT, FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, CREATE_USER, SIGNOUT_USER, LOGIN_ERROR } from '../constants';
+import { CONTACT_STATUS_SWITCHER, SELECT_CONTACT, ADD_CONTACT, DELETE_CONTACT, 
+  FILTER_CONTACT_STATUS, FETCH_CONTACTS, FETCH_CONTACTS_SUCCESS, LOGIN_USER, 
+  CREATE_USER, SIGNOUT_USER, LOGIN_USER_ERROR, CREATE_USER_ERROR
+ } from './actionTypes';
 
 export const statusSwitch = id => ({
   type: CONTACT_STATUS_SWITCHER,
@@ -16,6 +19,8 @@ export const filterStatus = statusFilter => ({
   statusFilter
 });
 
+
+
 export function fetchContactsStart() {
  return {
    type: FETCH_CONTACTS
@@ -30,7 +35,6 @@ export function fetchContactsSuccess(result) {
 }
 
 export const asyncFetchData = userId => {
-
   return async dispatch => {
     dispatch(fetchContactsStart());
 
@@ -47,10 +51,12 @@ export const asyncFetchData = userId => {
           return contact;
         });
 
-        dispatch(fetchContactsSuccess(contactItems));
-      })
+          dispatch(fetchContactsSuccess(contactItems));
+        }
+      )
   }
 }
+
 
 export const asyncAddContact = (name, tel, email, status, itemVisibility, userId) => {
 
@@ -79,6 +85,7 @@ export function addContact(){
 }
 
 
+
 export const asyncDeleteContact = (id, userId) => {
 
   return async dispatch => {
@@ -98,11 +105,14 @@ export function deleteContact () {
   }
 }
 
+
+
 export const createUser = (email, password) => {
     return async dispatch => {
       firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(response => {dispatch(createNewUser(response.user))})
+      .catch(error => dispatch(errorAuth(error.message)))
     }
 }
 
@@ -112,6 +122,14 @@ export function createNewUser(newUserData) {
       newUserData
     }
 }
+
+export function errorAuth(errorInfo) {
+  return {
+    type: CREATE_USER_ERROR,
+    errorInfo
+  }
+}
+
 
 export const loginUser = (email,password) => {
     return async dispatch => {
@@ -132,7 +150,7 @@ export function fetchLoginUser(currentUserData) {
 
 export function errorLogin(errorInfo) {
    return {
-     type: LOGIN_ERROR,
+     type: LOGIN_USER_ERROR,
      errorInfo
    }
 }

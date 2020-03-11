@@ -3,9 +3,9 @@ import { Redirect } from "react-router-dom";
 import FormLogin from '../forms/formLogin';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/actionCreator';
-import {getErrorNotification, getCurrentUser} from '../selectors/index';
+import {getErrorLoginNotification, getCurrentUser} from '../selectors/index';
 
-import './styles/auth.scss';
+import login from './pages.module.scss';
 
 class Login extends Component {
   
@@ -17,7 +17,7 @@ class Login extends Component {
 
   render() {
     return(
-      <div className="contact-wrapper">
+      <div className={login.mainWrapper }>
         {
           this.props.user 
           ?<Redirect to = {"/"}/>
@@ -25,11 +25,10 @@ class Login extends Component {
             <h1>Log In</h1>
             <FormLogin onSubmit={this.handleLogIn}/>
               {
-                this.props.errorLogin
-                ? <div className="notification center">
-                    <p>{`${this.props.errorLogin} Or you may register your profile.`}</p>
-                  </div>
-                :null
+                this.props.errorLogin && 
+                <div className={login.notification}>
+                    <p>{`${this.props.errorLogin}`}</p>
+                </div>
               }
           </div>
         }
@@ -41,7 +40,7 @@ class Login extends Component {
 const mapStateToProps = store => {
   return {
     user: getCurrentUser(store),
-    errorLogin: getErrorNotification(store)
+    errorLogin: getErrorLoginNotification(store)
   }
 }
 

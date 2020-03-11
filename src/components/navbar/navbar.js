@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {NavLink} from "react-router-dom";
 import { connect } from 'react-redux';
 import { signOutUser } from '../../actions/actionCreator';
-import './navbar.scss';
+import navBar from'./navbar.module.scss';
 
 class Navbar extends Component {
 
@@ -11,7 +11,7 @@ class Navbar extends Component {
   }
 
   componentDidMount(){
-    const data = JSON.parse(localStorage.getItem('user'))
+    const data = JSON.parse(localStorage.getItem('user'));
 
     if(data !== null) {
       this.setState({
@@ -42,16 +42,17 @@ class Navbar extends Component {
   
   render() {
     return(
-    <nav className="navbar">
+    <nav className={navBar.navbar}>
       { this.state.user
-        ?<div className="container">
-            <strong className="userName">{this.state.user.email}</strong>
-            <button className="logOut" onClick={this.logOut}>
+        ?<div className={navBar.container}>
+            <strong className={navBar.userName}>{this.state.user.email}</strong>
+            <button className={navBar.logOut} onClick={this.logOut}>
               <NavLink to="/login">LogOut</NavLink>
             </button>
           </div>
-        :<div className="container">
-          <ul className="nav-menu">
+        :<div className={navBar.container}>
+          <strong>Hello! Register or Log-in, please!</strong>
+          <ul className={navBar.navMenu}>
             <NavLink to="/login">LogIn</NavLink>
             <NavLink to="/signup">SignUp</NavLink>
           </ul>
