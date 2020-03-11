@@ -7,7 +7,7 @@ import Select from '../components/select/select';
 import Footer from '../components/footer/footer';
 import Loader from '../components/loader/loader';
 import {ContextContactItem} from '../context/contextContactItem';
-import {getContactItems, getLoading, getCurrentUser, getContactFormValues} from '../selectors/index';
+import {getContactItems, getLoading, getCurrentUser} from '../selectors/index';
 import { validateEmail, validatePhone } from '../helpers/validation';
 import mainPageStyles from './pages.module.scss';
 
@@ -56,18 +56,14 @@ class Book extends PureComponent {
     this._isMounted = false;
   }
 
-  handleSubmitContact = event => {
-    event.preventDefault();
-    console.log(event.target);
+  handleSubmitContact = values => {
 
-    const {email, name, phone} = this.props.formData.values;
+    const {email, name, phone} = values;
     const {status, itemVisibility, userId} = this.state;
 
       if(validateEmail(email) && validatePhone(phone)) {
         this.props.asyncAddContact(name, phone, email, status, itemVisibility, userId);
       }
-    
-    event.target.reset();
   }
 
   filterList = event => {
@@ -138,8 +134,7 @@ const mapStateToProps = store => {
   return {
     contactsData: getContactItems(store),
     loading: getLoading(store),
-    user: getCurrentUser(store),
-    formData: getContactFormValues(store)
+    user: getCurrentUser(store)
   }
 }
 

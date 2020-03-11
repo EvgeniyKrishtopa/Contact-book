@@ -135,7 +135,7 @@ export const loginUser = (email,password) => {
     return async dispatch => {
 
       firebase.auth()
-        .signInWithEmailAndPassword(email.value, password.value)
+        .signInWithEmailAndPassword(email, password)
         .then(response => dispatch(fetchLoginUser(response.user)))
         .catch(error => dispatch(errorLogin(error.message)))
     }

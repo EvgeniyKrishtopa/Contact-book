@@ -2,9 +2,9 @@ import React from 'react';
 import {Field, reduxForm} from 'redux-form';
 import form from './form.module.scss';
 
-let FormAuth = ({onSubmit}) => {
+let FormAuth = ({ handleSubmit }) => {
   return (
-      <form className={form.formWrapper} onSubmit={onSubmit}>   
+      <form className={form.formWrapper} onSubmit={handleSubmit}>   
         <Field className={form.formInput} name="email" component="input" type="email" placeholder="email"/>
         <Field className={form.formInput} name="password"component="input" type="password" placeholder="password"/>
         <br/>

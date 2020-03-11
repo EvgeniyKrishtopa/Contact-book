@@ -9,13 +9,11 @@ import auth from './pages.module.scss';
 
 class Signup extends Component {
 
-  handleSignUp = event => {
-    event.preventDefault();
-
-    const { email,password } = event.target.elements;
+  handleSignUp = values => {
+    const { email,password } = values;
     
-    if(validateEmail(email.value)) {
-      this.props.createUser(email.value,password.value);
+    if(validateEmail(email)) {
+      this.props.createUser(email, password);
     }
   }
 

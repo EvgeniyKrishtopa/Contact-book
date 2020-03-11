@@ -9,9 +9,8 @@ import login from './pages.module.scss';
 
 class Login extends Component {
   
-  handleLogIn = event => {
-    event.preventDefault();
-    const { email,password } = event.target.elements;
+  handleLogIn = values => {
+    const { email,password } = values;
     this.props.loginUser(email, password);
   }
 
