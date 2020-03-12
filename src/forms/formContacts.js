@@ -2,10 +2,9 @@ import React from 'react';
 import form from './form.module.scss';
 import {Field, reduxForm} from 'redux-form';
 
-let FormContacts = React.memo(({isDisabled, ...props}) => {
-
+let FormContacts = React.memo(({isDisabled, ref,  ...props}) => {
   return(
-    <form className={form.formWrapper} onSubmit={props.handleSubmit}>
+    <form className={form.formWrapper} onSubmit={props.handleSubmit} ref={props.ref}>
       <Field
         className={form.formInput}
         placeholder="Name"

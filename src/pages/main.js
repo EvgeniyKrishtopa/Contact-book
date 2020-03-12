@@ -16,6 +16,7 @@ class Book extends PureComponent {
     super(props);
 
     this._isMounted = false;
+    this.formRef = React.createRef();
 
     this.state = {
       status: true,
@@ -59,9 +60,10 @@ class Book extends PureComponent {
   handleSubmitContact = values => {
     const {email, name, phone} = values;
     const {status, itemVisibility, userId} = this.state;
-      
+  
       if(validateEmail(email) && validatePhone(phone)) {
         this.props.asyncAddContact(name, phone, email, status, itemVisibility, userId);
+        this.formRef.current.reset();
       }
   }
 
@@ -83,6 +85,7 @@ class Book extends PureComponent {
           <FormContacts 
             onSubmit={this.handleSubmitContact} 
             isDisabled={isDisabled}
+            ref={this.formRef}
           />
           <br/>
           {
