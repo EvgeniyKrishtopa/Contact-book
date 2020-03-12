@@ -8,7 +8,9 @@ const CONTACTLIST = {
 const contacts = (state=CONTACTLIST, { type, id, statusFilter, result }) => {
   switch(type) {
 
-    case CONTACT_STATUS_SWITCHER :
+      case CONTACT_STATUS_SWITCHER :
+        //TODO:  В целом редьюсер как-то переусложнил. В Switch не делай никаких мапов и т д, возвращай просто результат
+        // Все операции с фильтрами мапами и т д лучше делай в экшне который будет отдавать сюда уже готовый результат
       return {
         ...state, contactItems: [...state.contactItems.map(contact => {
           if(contact.id === id) {

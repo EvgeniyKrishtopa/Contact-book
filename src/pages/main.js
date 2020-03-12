@@ -14,7 +14,7 @@ import mainPageStyles from './pages.module.scss';
 class Book extends PureComponent {
   constructor(props) {
     super(props);
-
+    //TODO: посмотрел, похоже на какой-то грязный хак)
     this._isMounted = false;
     this.formRef = React.createRef();
 

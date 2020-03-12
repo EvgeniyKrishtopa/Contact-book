@@ -14,5 +14,6 @@ export function validatePassword(password) {
   if(password.length >= 6 && password.length < 30) {
     return password;
   }
+  //TODO: Undefined возвращать плохо)
   return undefined;
 }
