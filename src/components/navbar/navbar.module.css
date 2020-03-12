@@ -1,0 +1,56 @@
+.navbar {
+  background: #fff;
+  padding: 15px 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.navMenu {
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+.navMenu a {
+  display: inline-block;
+  padding: 0 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000;
+  -webkit-transition: color ease .3s;
+  transition: color ease .3s;
+}
+
+.navMenu a:hover {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.navMenu a.active {
+  color: rgba(175, 47, 47, 0.55);
+}
+
+.logOut {
+  border: 0;
+  background: none;
+  text-transform: uppercase;
+  color: #000;
+  -webkit-transition: color ease .3s;
+  transition: color ease .3s;
+}
+
+.logOut:hover {
+  color: rgba(0, 0, 0, 0.5);
+}
+/*# sourceMappingURL=navbar.module.css.map */

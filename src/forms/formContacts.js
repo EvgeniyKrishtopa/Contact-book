@@ -3,6 +3,7 @@ import form from './form.module.scss';
 import {Field, reduxForm} from 'redux-form';
 
 let FormContacts = React.memo(({isDisabled, ...props}) => {
+
   return(
     <form className={form.formWrapper} onSubmit={props.handleSubmit}>
       <Field

@@ -57,10 +57,9 @@ class Book extends PureComponent {
   }
 
   handleSubmitContact = values => {
-
     const {email, name, phone} = values;
     const {status, itemVisibility, userId} = this.state;
-
+      
       if(validateEmail(email) && validatePhone(phone)) {
         this.props.asyncAddContact(name, phone, email, status, itemVisibility, userId);
       }
@@ -84,7 +83,6 @@ class Book extends PureComponent {
           <FormContacts 
             onSubmit={this.handleSubmitContact} 
             isDisabled={isDisabled}
-            onChange={this.handleChangeInput}
           />
           <br/>
           {

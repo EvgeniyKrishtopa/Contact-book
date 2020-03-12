@@ -4,16 +4,25 @@ import FormAuth from '../forms/formAuth';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/actionCreator';
 import { getCurrentUser,getErrorAuthNotification } from '../selectors/index';
-import { validateEmail } from '../helpers/validation';
+import { validateEmail,validatePassword } from '../helpers/validation';
 import auth from './pages.module.scss';
 
 class Signup extends Component {
 
+  constructor(props) {
+    super(props);
+    this.warningRef = React.createRef();
+  }
+
   handleSignUp = values => {
     const { email,password } = values;
     
-    if(validateEmail(email)) {
+    if(validateEmail(email) && validatePassword(password)) {
       this.props.createUser(email, password);
+    }
+
+    if(!validatePassword(password)) {
+      this.warningRef.current.style.display = 'block';
     }
   }
 
@@ -32,6 +41,7 @@ class Signup extends Component {
                     <p>{`${this.props.errorAuth}`}</p>
                 </div>
               }
+              <p className={auth.passwordWarning} ref={this.warningRef}>Your password must be between 6 and 30 characters.</p>
           </div>
         }
       </div>
