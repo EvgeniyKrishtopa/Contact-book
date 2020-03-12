@@ -6,7 +6,8 @@ const ContactList = ({ contacts }) => (
   <ul>
     {
       contacts.map(item => (
-        <ContactItem
+          //TODO: запили деструктуризацию item прямо тут, так проще читать его внутренности
+          <ContactItem
           key={item.id}
           name={item.name}
           id={item.id}
@@ -22,11 +23,11 @@ const ContactList = ({ contacts }) => (
 );
 
 ContactList.propTypes = {
-  contacts: PropTypes.array
+  contacts: PropTypes.array // TODO: PropTypes.shape({}) и описывай item - раз уже проптайпс - то хотя-бы так
 }
 
 ContactList.defaultProps = {
   contacts: []
 }
-
+//TODO: используй именованные экспорты 'export { ContactList }' - поможет избежать непредсказуемых проблем
 export default ContactList;

@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {ContextContactItem} from '../../context/contextContactItem';
+//TODO: alias - для того чтобы в больших проектах такого не было можно глобально настроить alias в webpack.config
 import item from './contact-item.module.scss';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,7 @@ const ContactItem = React.memo(({ name, tel, email, id, status, itemVisibility, 
       ? <p>Active contact</p>
       : <p>Inactive contact</p>
       }
+    {/*  TODO: можно все уместить в массив и рисовать через map() так как элементы повторяются. Тут не react-way*/}
     <div className={item.itemData}>
       <span>Name:</span>
       <span className={item.itemData__name}>{name}</span>
@@ -35,6 +37,7 @@ const ContactItem = React.memo(({ name, tel, email, id, status, itemVisibility, 
       <span>{email}</span>
     </div>
     <div className={item.buttons}>
+      {/*TODO: onClick на спан не оправдан, лучше button, не по w3c*/}
       <span onClick={() => statusSwitch(id)} className="far fa-check-circle"></span>
       <span onClick={() => asyncDeleteContact(id, userId)} className="fas fa-times"></span>
     </div>
@@ -60,4 +63,5 @@ ContactItem.defaultProps = {
   id: 0,
 }
 
+//TODO: используй именованные экспорты 'export { ContactItem }' - поможет избежать непредсказуемых проблем
 export default ContactItem;

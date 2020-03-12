@@ -21,6 +21,7 @@ class Navbar extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    //TODO: запили деструктуризацию this.props
     if(this.props.user !== prevProps.user) {
       localStorage.setItem('user', JSON.stringify(this.props.user))
       
@@ -31,6 +32,7 @@ class Navbar extends Component {
   }
 
   logOut = () => {
+    //TODO: onLogOut - просто это экшн, так будет более понятно с точки зрения именования
     this.props.signOutUser();
 
     this.setState({
@@ -43,6 +45,7 @@ class Navbar extends Component {
   render() {
     return(
     <nav className={navBar.navbar}>
+      {/*TODO: React - функциональный подход, тернарники в рендере - зло. Вынеси функцию выше с параметном user и просто ее тут вызывай как реакт компонент*/}
       { this.state.user
         ?<div className={navBar.container}>
             <strong className={navBar.userName}>{this.state.user.email}</strong>

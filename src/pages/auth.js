@@ -29,6 +29,7 @@ class Signup extends Component {
     render () {
       return(
       <div className={auth.mainWrapper}>
+        {/*TODO: тернарники в рендере плохо*/}
         {
           this.props.user
           ?<Redirect to={"/"}/>

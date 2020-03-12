@@ -8,7 +8,8 @@ import './App.scss';
 
 const Login = React.lazy(() => import('./pages/login'));
 const Signup = React.lazy(() => import('./pages/auth'));
-
+//TODO: напиши конфиг для роутинга и через map его тут обходи. Если будет много урлов - компонент слишком большой станет
+// Попробуй написать конфиг в формате json, компонент там укажи строкой и придумай как сделать так чтобы с config.json начать рисовать компоненты
 const App = () => (
     <Router>
         <Navbar/>
