@@ -1,0 +1,5 @@
+1.install scss, styled components, redux, react-redux, redux-form, reselect+
+2.create homepage, login and sign out form/create common styles
+3.Implement auth and redux
+4.Add reselect and redux form
+5.Add typescript 
