@@ -1,0 +1,30 @@
+.navbar {
+  padding: 15px 0;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  max-width: 200px;
+
+  a {
+    display: flex;
+    align-items: center;
+    color: #000;
+  }
+}
+
+.nav {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    li {
+      padding: 0 10px;
+
+      a {
+        font-weight: 700;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.home {
+  height: calc(100vh - 78px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    text-transform: uppercase;
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  p {
+    margin: 0;
+    padding-bottom: 20px;
+  }
+}
+
+.introHolder {
+  padding: 20px;
+  text-align: center;
+}
