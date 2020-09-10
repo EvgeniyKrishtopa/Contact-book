@@ -1,6 +1,8 @@
+@import '../../styles/variables.scss';
+
 .navbar {
   padding: 15px 0;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba($blue, 0.05);
 }
 
 .logo {
@@ -9,7 +11,7 @@
   a {
     display: flex;
     align-items: center;
-    color: #000;
+    color: $black;
   }
 }
 
@@ -21,10 +23,39 @@
 
     li {
       padding: 0 10px;
+    }
+  }
+}
 
-      a {
-        font-weight: 700;
-      }
+.underlineClosing {
+  font-weight: 700;
+  color: rgba($black, 0.8);
+  position: relative;
+  padding-bottom: 5px;
+
+  &:after,
+  &:before {
+    transition: width 0.2s ease-in-out;
+    content: '';
+    top: 100%;
+    position: absolute;
+    background: rgba($black, 0.8);
+    width: 0;
+    height: 3px;
+  }
+
+  &:after {
+    left: 0;
+  }
+
+  &:before {
+    right: 0;
+  }
+
+  &:hover {
+    &:after,
+    &:before {
+      width: 50%;
     }
   }
 }

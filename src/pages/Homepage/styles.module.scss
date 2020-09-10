@@ -1,22 +1,43 @@
+@import '../../styles/variables.scss';
+
 .home {
-  height: calc(100vh - 78px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba($gray, 0.67);
+    z-index: 9;
+  }
 
   h1 {
     text-transform: uppercase;
-    margin: 0;
     padding-bottom: 20px;
+    color: $black;
   }
 
   p {
-    margin: 0;
     padding-bottom: 20px;
+    font-size: 1.5em;
   }
 }
 
 .introHolder {
   padding: 20px;
   text-align: center;
+  position: relative;
+  z-index: 10;
+  color: $white;
+
+  strong {
+    color: $yellow;
+  }
 }

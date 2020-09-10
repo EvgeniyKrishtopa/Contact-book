@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
+import { NavLink } from "react-router-dom";
 
 const TopBar = () => {
   return (
@@ -8,17 +9,21 @@ const TopBar = () => {
       <div className="container">
         <div className="row">
           <strong className={styles.logo}>
-            <a href="/">
+            <NavLink to="/">
               <MaterialIcon icon="view_list" size="large" /> Y C B
-            </a>
+            </NavLink>
           </strong>
           <nav className={styles.nav}>
             <ul>
               <li>
-                <a href="#">Log In</a>
+                <NavLink to="/login" className={styles.underlineClosing}>
+                  Log In
+                </NavLink>
               </li>
               <li>
-                <a href="#">Sign Up</a>
+                <NavLink to="/register" className={styles.underlineClosing}>
+                  Sign Up
+                </NavLink>
               </li>
             </ul>
           </nav>
