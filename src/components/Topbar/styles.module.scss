@@ -1,0 +1,61 @@
+@import '../../styles/variables.scss';
+
+.navbar {
+  padding: 15px 0;
+  background: rgba($blue, 0.05);
+}
+
+.logo {
+  max-width: 200px;
+
+  a {
+    display: flex;
+    align-items: center;
+    color: $black;
+  }
+}
+
+.nav {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    li {
+      padding: 0 10px;
+    }
+  }
+}
+
+.underlineClosing {
+  font-weight: 700;
+  color: rgba($black, 0.8);
+  position: relative;
+  padding-bottom: 5px;
+
+  &:after,
+  &:before {
+    transition: width 0.2s ease-in-out;
+    content: '';
+    top: 100%;
+    position: absolute;
+    background: rgba($black, 0.8);
+    width: 0;
+    height: 3px;
+  }
+
+  &:after {
+    left: 0;
+  }
+
+  &:before {
+    right: 0;
+  }
+
+  &:hover {
+    &:after,
+    &:before {
+      width: 50%;
+    }
+  }
+}
