@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../styles.module.scss';
+import MainPageImg from '../../../images/mainpage_bg.jpg';
 
-const StartWelcome = ({ backgroundImage, styles }) => {
+const backgroundImage = {
+  backgroundImage: `url(${MainPageImg})`,
+};
+
+const StartWelcome = () => {
   return (
     <div className={`${styles.home} page-center`} style={backgroundImage}>
       <div className={styles.introHolder}>

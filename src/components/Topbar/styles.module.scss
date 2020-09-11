@@ -59,3 +59,12 @@
     }
   }
 }
+
+.active {
+  color: $fiolet;
+
+  &:after,
+  &:before {
+    background: $fiolet;
+  }
+}

@@ -1,7 +1,9 @@
 import React from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from 'react-router-dom';
+
+const isAuth = true;
 
 const TopBar = () => {
   return (
@@ -15,16 +17,36 @@ const TopBar = () => {
           </strong>
           <nav className={styles.nav}>
             <ul>
-              <li>
-                <NavLink to="/login" className={styles.underlineClosing}>
-                  Log In
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/register" className={styles.underlineClosing}>
-                  Sign Up
-                </NavLink>
-              </li>
+              {!isAuth && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className={styles.underlineClosing}
+                      activeClassName={styles.active}
+                    >
+                      Log In
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      className={styles.underlineClosing}
+                      activeClassName={styles.active}
+                    >
+                      Sign Up
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {isAuth && (
+                <li>
+                  <Link to="/" className={styles.underlineClosing}>
+                    Log Out
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
