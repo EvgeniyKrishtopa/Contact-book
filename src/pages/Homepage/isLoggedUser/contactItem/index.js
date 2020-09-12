@@ -1,8 +1,9 @@
 import React from 'react';
 import MaterialIcon from 'material-icons-react';
 import { Link } from 'react-router-dom';
+import styles from './styles.module.scss';
 
-const ContactItem = ({ styles }) => {
+const ContactItem = () => {
   return (
     <li className={`${styles.contactItem} ${styles.activeContact}`}>
       <div className={styles.contactItemHolder}>

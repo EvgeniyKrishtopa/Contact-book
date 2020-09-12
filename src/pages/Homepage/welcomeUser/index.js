@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../styles.module.scss';
+import styles from './styles.module.scss';
 import MainPageImg from '../../../images/mainpage_bg.jpg';
 
 const backgroundImage = {
@@ -11,13 +11,17 @@ const StartWelcome = () => {
   return (
     <div className={`${styles.home} page-center`} style={backgroundImage}>
       <div className={styles.introHolder}>
-        <h1>Create your contacts with YCB!!!</h1>
+        <h1>Create your contacts with YCB!</h1>
         <p>
           Welcome to <strong>Your Contact Book</strong>! You can create a lot of
           necessary contacts and manage them here.
         </p>
         <Link to="/register" className="btn btn-primary">
-          Get Started!
+          Need an Account?
+        </Link>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <Link to="/login" className="btn btn-primary">
+          Have an Account?
         </Link>
       </div>
     </div>

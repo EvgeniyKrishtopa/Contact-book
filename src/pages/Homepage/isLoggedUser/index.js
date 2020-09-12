@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 import MaterialIcon from 'material-icons-react';
-import ContactForm from '../../../../components/ContactForm';
+import ContactForm from '../../../components/ContactForm';
 import ContactItem from './contactItem';
+import firebase from '../../../firebase/firebase';
+import { Redirect } from 'react-router-dom';
 
-const IsLogginedUserPage = () => {
+const IsLogginedUserPage = ({ user, LogOut }) => {
+  const [redirect, setRedirect] = useState(false);
+
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        LogOut();
+        setRedirect(true);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  if (redirect) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className={styles.contactsPage}>
       <div className="container">
-        <h2 className="center">Hello, User!</h2>
+        <h2 className="center">{user && `Hello, ${user.displayName}`}</h2>
         <div className={styles.formBlock}>
           <h3 className="center">Add New Contact</h3>
           <ContactForm />
@@ -40,10 +61,13 @@ const IsLogginedUserPage = () => {
         <div className={styles.contactBlock}>
           <h3 className="center">Your contacts:</h3>
           <ul>
-            <ContactItem styles={styles} />
-            <ContactItem styles={styles} />
-            <ContactItem styles={styles} />
+            <ContactItem />
           </ul>
+        </div>
+        <div className={styles.btnHolder}>
+          <button className="btn" onClick={signOut}>
+            Sign Out
+          </button>
         </div>
       </div>
     </div>
