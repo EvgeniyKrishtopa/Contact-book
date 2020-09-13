@@ -1,21 +1,12 @@
-import React from 'react';
-import StartWelcome from './welcomeUser';
+import React, { useContext } from 'react';
 import IsLogginedUserPage from './isLoggedUser';
-import { connect } from 'react-redux';
-import { LogOut } from '../../store/actions';
+import { CurrentUserContext } from '../../context';
+import Loader from '../../components/Loader';
 
-const Homepage = props => {
-  const { user, LogOut } = props;
-  return user ? (
-    <IsLogginedUserPage user={user} LogOut={LogOut} />
-  ) : (
-    <StartWelcome />
-  );
+const Homepage = () => {
+  const user = useContext(CurrentUserContext);
+
+  return user ? <IsLogginedUserPage user={user} /> : <Loader />;
 };
 
-export default connect(
-  state => ({
-    user: state.user,
-  }),
-  { LogOut },
-)(Homepage);
+export default Homepage;

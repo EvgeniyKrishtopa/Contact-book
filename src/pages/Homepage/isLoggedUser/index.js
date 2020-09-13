@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { LogOut } from '../../../store/actions';
 import styles from './styles.module.scss';
 import MaterialIcon from 'material-icons-react';
 import ContactForm from '../../../components/ContactForm';
@@ -6,15 +8,16 @@ import ContactItem from './contactItem';
 import firebase from '../../../firebase/firebase';
 import { Redirect } from 'react-router-dom';
 
-const IsLogginedUserPage = ({ user, LogOut }) => {
+const IsLogginedUserPage = ({ user }) => {
   const [redirect, setRedirect] = useState(false);
+  const dispatch = useDispatch();
 
   const signOut = () => {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        LogOut();
+        dispatch(LogOut());
         setRedirect(true);
       })
       .catch(error => {
@@ -29,7 +32,7 @@ const IsLogginedUserPage = ({ user, LogOut }) => {
   return (
     <div className={styles.contactsPage}>
       <div className="container">
-        <h2 className="center">{user && `Hello, ${user.displayName}`}</h2>
+        <h2 className="center">{user && `Hello, ${user.state.displayName}`}</h2>
         <div className={styles.formBlock}>
           <h3 className="center">Add New Contact</h3>
           <ContactForm />
@@ -54,6 +57,10 @@ const IsLogginedUserPage = ({ user, LogOut }) => {
             </li>
             &nbsp;|&nbsp;
             <li>
+              <a href="/">Inactive</a>
+            </li>
+            &nbsp;|&nbsp;
+            <li>
               <a href="/">ALL</a>
             </li>
           </ul>
@@ -66,7 +73,7 @@ const IsLogginedUserPage = ({ user, LogOut }) => {
         </div>
         <div className={styles.btnHolder}>
           <button className="btn" onClick={signOut}>
-            Sign Out
+            Log Out
           </button>
         </div>
       </div>

@@ -2,14 +2,11 @@ import React, { useContext } from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
 import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { CurrentUserContext } from '../../context';
 
 const TopBar = props => {
-  const { user } = props;
-  const currentUser = useContext(CurrentUserContext);
+  const user = useContext(CurrentUserContext);
 
-  console.log(currentUser);
   return (
     <div className={styles.navbar}>
       <div className="container">
@@ -44,7 +41,7 @@ const TopBar = props => {
                 </>
               )}
 
-              {user && <li>{user.displayName}</li>}
+              {user && <li>{user.state.displayName}</li>}
             </ul>
           </nav>
         </div>
@@ -53,10 +50,4 @@ const TopBar = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-  };
-};
-
-export default connect(mapStateToProps)(TopBar);
+export default TopBar;

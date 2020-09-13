@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
-import MainPageImg from '../../../images/mainpage_bg.jpg';
+import MainPageImg from '../../images/mainpage_bg.jpg';
 
 const backgroundImage = {
   backgroundImage: `url(${MainPageImg})`,
 };
 
-const StartWelcome = () => {
+const StartPage = () => {
   return (
-    <div className={`${styles.home} page-center`} style={backgroundImage}>
+    <div className={`${styles.startPage} page-center`} style={backgroundImage}>
       <div className={styles.introHolder}>
         <h1>Create your contacts with YCB!</h1>
         <p>
@@ -28,4 +28,4 @@ const StartWelcome = () => {
   );
 };
 
-export default StartWelcome;
+export default StartPage;

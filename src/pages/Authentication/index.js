@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import firebase from '../../firebase/firebase';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from '../../store/actions';
 
-const Authentication = ({ match, LogIn, SignUp }) => {
+const Authentication = ({ match }) => {
+  const dispatch = useDispatch();
   const auth = firebase.auth();
   const isLogin = match.path === '/login';
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
@@ -21,15 +22,12 @@ const Authentication = ({ match, LogIn, SignUp }) => {
       auth
         .signInWithEmailAndPassword(email, password)
         .then(({ user }) => {
-          LogIn(user);
+          dispatch(LogIn(user));
           setUser(user);
         })
         .catch(function (error) {
           console.log(error);
         });
-
-      setEmail('');
-      setPassword('');
     }
 
     if (!isLogin) {
@@ -39,7 +37,7 @@ const Authentication = ({ match, LogIn, SignUp }) => {
           if (user) {
             user.updateProfile({ displayName: login });
             setUser(user);
-            SignUp(user);
+            dispatch(SignUp(user));
           }
         })
         .catch(function (error) {
@@ -47,13 +45,14 @@ const Authentication = ({ match, LogIn, SignUp }) => {
         });
 
       setLogin('');
-      setEmail('');
-      setPassword('');
     }
+
+    setEmail('');
+    setPassword('');
   };
 
   if (user) {
-    return <Redirect to="/" />;
+    return <Redirect to="/home" />;
   }
 
   return (
@@ -109,9 +108,4 @@ const Authentication = ({ match, LogIn, SignUp }) => {
   );
 };
 
-export default connect(
-  state => ({
-    user: state.user,
-  }),
-  { LogIn, SignUp },
-)(Authentication);
+export default Authentication;
