@@ -4,8 +4,8 @@ import styles from './styles.module.scss';
 import { NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../context';
 
-const TopBar = props => {
-  const user = useContext(CurrentUserContext);
+const TopBar = () => {
+  const {userData} = useContext(CurrentUserContext);
 
   return (
     <div className={styles.navbar}>
@@ -18,7 +18,7 @@ const TopBar = props => {
           </strong>
           <nav className={styles.nav}>
             <ul>
-              {!user && (
+              {!userData && (
                 <>
                   <li>
                     <NavLink
@@ -41,7 +41,7 @@ const TopBar = props => {
                 </>
               )}
 
-              {user && <li>{user.state.displayName}</li>}
+              {userData && <li>{userData.displayName}</li>}
             </ul>
           </nav>
         </div>

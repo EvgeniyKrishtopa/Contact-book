@@ -1,49 +1,28 @@
-import React, { useState } from 'react';
-import firebase from '../../firebase/firebase';
+import React, { useState, useContext } from 'react';
+import { CurrentUserContext } from '../../context';
 import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from '../../store/actions';
 
 const Authentication = ({ match }) => {
+  const { userData } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
-  const auth = firebase.auth();
   const isLogin = match.path === '/login';
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
   const submitText = isLogin ? 'Login' : 'Register';
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null);
 
   const handleSubmit = e => {
     e.preventDefault();
 
     if (isLogin) {
-      auth
-        .signInWithEmailAndPassword(email, password)
-        .then(({ user }) => {
-          dispatch(LogIn(user));
-          setUser(user);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      dispatch(LogIn(email, password));
     }
 
     if (!isLogin) {
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(({ user }) => {
-          if (user) {
-            user.updateProfile({ displayName: login });
-            setUser(user);
-            dispatch(SignUp(user));
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
+      dispatch(SignUp(login, email, password));
       setLogin('');
     }
 
@@ -51,7 +30,7 @@ const Authentication = ({ match }) => {
     setPassword('');
   };
 
-  if (user) {
+  if (userData) {
     return <Redirect to="/home" />;
   }
 

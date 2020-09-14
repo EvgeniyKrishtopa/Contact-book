@@ -5,34 +5,35 @@ import styles from './styles.module.scss';
 import MaterialIcon from 'material-icons-react';
 import ContactForm from '../../../components/ContactForm';
 import ContactItem from './contactItem';
-import firebase from '../../../firebase/firebase';
 import { Redirect } from 'react-router-dom';
 
 const IsLogginedUserPage = ({ user }) => {
-  const [redirect, setRedirect] = useState(false);
   const dispatch = useDispatch();
+  const [isSignOut, setIsSignOut] = useState(false);
+  const [isExistUser, setIsExistUser] = useState(true);
+
+  useEffect(() => {
+    if (!user.userData) {
+      setIsExistUser(false);
+    }
+  }, [user, isSignOut]);
 
   const signOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        dispatch(LogOut());
-        setRedirect(true);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    dispatch(LogOut());
+
+    setIsSignOut(true);
   };
 
-  if (redirect) {
+  if (!isExistUser && isSignOut) {
     return <Redirect to="/" />;
   }
 
   return (
     <div className={styles.contactsPage}>
       <div className="container">
-        <h2 className="center">{user && `Hello, ${user.state.displayName}`}</h2>
+        <h2 className="center">
+          {user.userData && `Hello, ${user.userData.displayName}`}
+        </h2>
         <div className={styles.formBlock}>
           <h3 className="center">Add New Contact</h3>
           <ContactForm />

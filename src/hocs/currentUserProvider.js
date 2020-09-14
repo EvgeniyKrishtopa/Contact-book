@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react';
 import { CurrentUserContext } from '../context';
 import { useDispatch, useSelector } from 'react-redux';
-import { LogIn } from '../store/actions';
-import firebase from '../firebase/firebase';
+import { IsLogIn } from '../store/actions';
 
 const CurrentUserProvider = ({ children }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        dispatch(LogIn(user));
-      }
-    });
+    dispatch(IsLogIn());
   }, [dispatch]);
 
   return (
