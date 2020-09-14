@@ -1,24 +1,12 @@
-import React from 'react';
-import StartWelcome from './components/startWelcome';
-import styles from './styles.module.scss';
-import MainPageImg from '../../images/mainpage_bg.jpg';
-
-const isAuth = false;
-
-const backgroundImage = {
-  backgroundImage: `url(${MainPageImg})`,
-};
-
-const Loginned = () => {
-  return <div>Hello</div>;
-};
+import React, { useContext } from 'react';
+import IsLogginedUserPage from './isLoggedUser';
+import { CurrentUserContext } from '../../context';
+import Loader from '../../components/Loader';
 
 const Homepage = () => {
-  return isAuth ? (
-    <Loginned />
-  ) : (
-    <StartWelcome backgroundImage={backgroundImage} styles={styles} />
-  );
+  const user = useContext(CurrentUserContext);
+
+  return user ? <IsLogginedUserPage user={user} /> : <Loader />;
 };
 
 export default Homepage;

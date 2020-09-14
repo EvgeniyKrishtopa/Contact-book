@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
+import { CurrentUserContext } from '../../context';
 
 const TopBar = () => {
+  const {userData} = useContext(CurrentUserContext);
+
   return (
     <div className={styles.navbar}>
       <div className="container">
@@ -15,16 +18,30 @@ const TopBar = () => {
           </strong>
           <nav className={styles.nav}>
             <ul>
-              <li>
-                <NavLink to="/login" className={styles.underlineClosing}>
-                  Log In
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/register" className={styles.underlineClosing}>
-                  Sign Up
-                </NavLink>
-              </li>
+              {!userData && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className={styles.underlineClosing}
+                      activeClassName={styles.active}
+                    >
+                      Log In
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      className={styles.underlineClosing}
+                      activeClassName={styles.active}
+                    >
+                      Sign Up
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {userData && <li>{userData.displayName}</li>}
             </ul>
           </nav>
         </div>
