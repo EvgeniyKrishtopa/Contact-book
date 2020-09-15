@@ -17,6 +17,7 @@ const USERSTATE = {
   loading: false,
   userData: null,
   error: null,
+  isLoginnedUser: false,
 };
 
 const user = (state = USERSTATE, { type, userData, error }) => {
@@ -33,6 +34,7 @@ const user = (state = USERSTATE, { type, userData, error }) => {
         userData,
         loading: false,
         error: null,
+        isLoginnedUser: true,
       };
 
     case LOG_IN_ERROR:
@@ -53,6 +55,7 @@ const user = (state = USERSTATE, { type, userData, error }) => {
         userData,
         loading: false,
         error: null,
+        isLoginnedUser: true,
       };
 
     case SIGN_UP_ERROR:
@@ -73,6 +76,7 @@ const user = (state = USERSTATE, { type, userData, error }) => {
         userData: null,
         loading: false,
         error: null,
+        isLoginnedUser: false,
       };
 
     case SIGN_OUT_ERROR:
@@ -93,6 +97,7 @@ const user = (state = USERSTATE, { type, userData, error }) => {
         userData,
         loading: false,
         error: null,
+        isLoginnedUser: true,
       };
 
     case IS_LOG_IN_ERROR: {

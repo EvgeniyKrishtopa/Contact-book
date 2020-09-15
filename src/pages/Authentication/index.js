@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import { CurrentUserContext } from '../../context';
 import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { LogIn, SignUp } from '../../store/actions';
+import { LogIn, SignUp } from '../../store/actions/userActions';
+import AuthForm from '../../components/AuthForm';
 
 const Authentication = ({ match }) => {
   const { userData } = useContext(CurrentUserContext);
@@ -38,50 +39,17 @@ const Authentication = ({ match }) => {
     <div className="page-center">
       <div className="container">
         <h2 className="center">{pageTitle}</h2>
-        <form className="form-styles" onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div className="input-holder">
-              <label className="form-label">
-                Your Login
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Login"
-                  value={login}
-                  onChange={e => setLogin(e.target.value)}
-                />
-              </label>
-            </div>
-          )}
-          <div className="input-holder">
-            <label className="form-label">
-              Your Email
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-            </label>
-          </div>
-          <div className="input-holder">
-            <label className="form-label">
-              Your Password
-              <input
-                type="password"
-                className="form-control"
-                placeholder="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-            </label>
-          </div>
-
-          <button type="submit" className="btn btn-primary">
-            {submitText}
-          </button>
-        </form>
+        <AuthForm
+          isLogin={isLogin}
+          login={login}
+          email={email}
+          password={password}
+          submitText={submitText}
+          setLogin={setLogin}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </div>
   );

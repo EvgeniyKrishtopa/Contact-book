@@ -3,10 +3,18 @@ import IsLogginedUserPage from './isLoggedUser';
 import { CurrentUserContext } from '../../context';
 import Loader from '../../components/Loader';
 
-const Homepage = () => {
-  const user = useContext(CurrentUserContext);
+const Homepage = props => {
+  const { userData, isLoginnedUser } = useContext(CurrentUserContext);
 
-  return user ? <IsLogginedUserPage user={user} /> : <Loader />;
+  return isLoginnedUser ? (
+    <IsLogginedUserPage
+      user={userData}
+      history={props.history}
+      isLoginnedUser={isLoginnedUser}
+    />
+  ) : (
+    <Loader />
+  );
 };
 
 export default Homepage;

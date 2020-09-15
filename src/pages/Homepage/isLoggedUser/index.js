@@ -1,39 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { LogOut } from '../../../store/actions';
+import { LogOut } from '../../../store/actions/userActions';
 import styles from './styles.module.scss';
 import MaterialIcon from 'material-icons-react';
 import ContactForm from '../../../components/ContactForm';
 import ContactItem from './contactItem';
-import { Redirect } from 'react-router-dom';
 
-const IsLogginedUserPage = ({ user }) => {
+const IsLogginedUserPage = ({ user, history }) => {
   const dispatch = useDispatch();
-  const [isSignOut, setIsSignOut] = useState(false);
-  const [isExistUser, setIsExistUser] = useState(true);
-
-  useEffect(() => {
-    if (!user.userData) {
-      setIsExistUser(false);
-    }
-  }, [user, isSignOut]);
 
   const signOut = () => {
-    dispatch(LogOut());
-
-    setIsSignOut(true);
+    async function logOutHandler() {
+      await dispatch(LogOut());
+    }
+    logOutHandler().then(() => history.push('/'));
   };
-
-  if (!isExistUser && isSignOut) {
-    return <Redirect to="/" />;
-  }
 
   return (
     <div className={styles.contactsPage}>
       <div className="container">
-        <h2 className="center">
-          {user.userData && `Hello, ${user.userData.displayName}`}
-        </h2>
+        <h2 className="center">{user && `Hello, ${user.displayName}`}</h2>
         <div className={styles.formBlock}>
           <h3 className="center">Add New Contact</h3>
           <ContactForm />
