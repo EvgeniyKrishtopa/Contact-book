@@ -13,3 +13,5 @@ export const SIGN_UP_ERROR = 'SIGN_UP_ERROR';
 export const SIGN_OUT_STARTED = 'SIGN_OUT_STARTED';
 export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 export const SIGN_OUT_ERROR = 'SIGN_OUT_ERROR';
+
+export const CHANGE_AUTH_PAGE = 'CHANGE_AUTH_PAGE';

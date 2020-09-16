@@ -1,16 +1,27 @@
 import React from 'react';
-const Input = props => {
-  const setType = props.setLogin || props.setEmail || props.setPassword;
-
+const Input = ({
+  input,
+  type,
+  placeholder,
+  className,
+  meta: { touched, error, warning },
+}) => {
+  const classNameHandler =
+    (touched && error) || warning ? `${className} error` : className;
   return (
-    <input
-      {...props.input}
-      type={props.type}
-      placeholder={props.placeholder}
-      value={props.value}
-      className={props.className}
-      onChange={e => setType(e.target.value)}
-    />
+    <>
+      <input
+        {...input}
+        type={type}
+        placeholder={placeholder}
+        className={classNameHandler}
+      />
+      {touched &&
+        ((error && <span className="error-field-message">{error}</span>) ||
+          (warning && (
+            <span className="warning-error-message">{warning}</span>
+          )))}
+    </>
   );
 };
 

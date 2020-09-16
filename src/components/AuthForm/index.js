@@ -2,17 +2,33 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Input from './input';
 
-const Form = ({
-  isLogin,
-  handleSubmit,
-  setLogin,
-  setEmail,
-  setPassword,
-  submitText,
-  login,
-  email,
-  password,
-}) => {
+const validate = values => {
+  const errors = {};
+  if (!values.userLogin) {
+    errors.userLogin = 'This field is required!';
+  } else if (values.userLogin.length > 15) {
+    errors.userLogin = 'Must be 15 characters or less';
+  }
+  if (!values.userEmail) {
+    errors.userEmail = 'This field is required!';
+  } else if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.userEmail)
+  ) {
+    errors.userEmail = 'Invalid email address!';
+  }
+
+  if (!values.userPassword) {
+    errors.userPassword = 'This field is required!';
+  } else if (values.userPassword.length < 6) {
+    errors.userPassword = 'Must be 6 characters or more';
+  }
+  return errors;
+};
+
+const AuthForm = ({ isLogin, buttonText, ...props }) => {
+  const { handleSubmit, submitting, pristine } = props;
+  console.log(submitting);
+
   return (
     <form className="form-styles" onSubmit={handleSubmit}>
       {!isLogin && (
@@ -21,13 +37,10 @@ const Form = ({
             Your Login
             <Field
               type="text"
-              name="login"
+              name="userLogin"
               className="form-control"
               placeholder="Login"
-              value={login}
-              setLogin={setLogin}
               component={Input}
-              required
             />
           </label>
         </div>
@@ -37,13 +50,10 @@ const Form = ({
           Your Email
           <Field
             type="email"
-            name="email"
+            name="userEmail"
             className="form-control"
             placeholder="Email"
-            value={email}
-            setEmail={setEmail}
             component={Input}
-            required
           />
         </label>
       </div>
@@ -52,26 +62,26 @@ const Form = ({
           Your Password
           <Field
             type="password"
-            name="password"
+            name="userPassword"
             className="form-control"
-            placeholder="password"
-            value={password}
-            setPassword={setPassword}
+            placeholder="Password"
             component={Input}
-            required
           />
         </label>
       </div>
 
-      <button type="submit" className="btn btn-primary">
-        {submitText}
+      <button
+        type="submit"
+        disabled={pristine || submitting}
+        className="btn btn-primary"
+      >
+        {buttonText}
       </button>
     </form>
   );
 };
 
-const AuthForm = reduxForm({
+export default reduxForm({
   form: 'Authform',
-})(Form);
-
-export default AuthForm;
+  validate,
+})(AuthForm);

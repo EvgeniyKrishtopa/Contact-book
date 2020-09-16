@@ -1,34 +1,25 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { CurrentUserContext } from '../../context';
 import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from '../../store/actions/userActions';
 import AuthForm from '../../components/AuthForm';
+import styles from './styles.module.scss';
 
 const Authentication = ({ match }) => {
-  const { userData } = useContext(CurrentUserContext);
+  const { userData, error } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
   const isLogin = match.path === '/login';
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
-  const submitText = isLogin ? 'Login' : 'Register';
-  const [login, setLogin] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const buttonText = isLogin ? 'Login' : 'Register';
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
+  const formSubmit = ({ userEmail, userPassword, userLogin }) => {
     if (isLogin) {
-      dispatch(LogIn(email, password));
+      dispatch(LogIn(userEmail, userPassword));
     }
-
     if (!isLogin) {
-      dispatch(SignUp(login, email, password));
-      setLogin('');
+      dispatch(SignUp(userEmail, userPassword, userLogin));
     }
-
-    setEmail('');
-    setPassword('');
   };
 
   if (userData) {
@@ -40,16 +31,11 @@ const Authentication = ({ match }) => {
       <div className="container">
         <h2 className="center">{pageTitle}</h2>
         <AuthForm
+          onSubmit={formSubmit}
           isLogin={isLogin}
-          login={login}
-          email={email}
-          password={password}
-          submitText={submitText}
-          setLogin={setLogin}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          handleSubmit={handleSubmit}
+          buttonText={buttonText}
         />
+        {error && <p className={styles.notificationError}>{error.message}</p>}
       </div>
     </div>
   );

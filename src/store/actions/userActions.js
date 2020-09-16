@@ -13,15 +13,16 @@ import {
   SIGN_OUT_STARTED,
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
+  CHANGE_AUTH_PAGE,
 } from '../constants';
 
 const auth = firebase.auth();
 
-export const LogIn = (email, password) => {
+export const LogIn = (userEmail, userPassword) => {
   return dispatch => {
     dispatch(logInStarted());
     auth
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(userEmail, userPassword)
       .then(({ user }) => {
         dispatch(logInSuccess(user));
       })
@@ -46,15 +47,15 @@ const logInEroor = error => {
   return { type: LOG_IN_ERROR, error };
 };
 
-export const SignUp = (login, email, password) => {
+export const SignUp = (userEmail, userPassword, userLogin) => {
   return dispatch => {
     dispatch(signUpStarted());
     auth
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(userEmail, userPassword)
       .then(({ user }) => {
         if (user) {
           user
-            .updateProfile({ displayName: login })
+            .updateProfile({ displayName: userLogin })
             .then(() => dispatch(signUpSuccess(user)));
         }
       })
@@ -144,5 +145,11 @@ const isLoginError = () => {
   return {
     error: 'No user is signed in',
     type: IS_LOG_IN_ERROR,
+  };
+};
+
+export const changeAuthPage = () => {
+  return {
+    type: CHANGE_AUTH_PAGE,
   };
 };

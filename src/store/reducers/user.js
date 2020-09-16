@@ -11,6 +11,7 @@ import {
   SIGN_OUT_STARTED,
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
+  CHANGE_AUTH_PAGE,
 } from '../constants';
 
 const USERSTATE = {
@@ -104,6 +105,13 @@ const user = (state = USERSTATE, { type, userData, error }) => {
       return {
         ...state,
         error: error,
+      };
+    }
+
+    case CHANGE_AUTH_PAGE: {
+      return {
+        ...state,
+        error: null,
       };
     }
 

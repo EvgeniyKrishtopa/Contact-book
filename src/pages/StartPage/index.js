@@ -10,7 +10,6 @@ const backgroundImage = {
 
 const StartPage = () => {
   const { isLoginnedUser } = useContext(CurrentUserContext);
-  console.log(isLoginnedUser);
 
   return (
     <div className={`${styles.startPage} page-center`} style={backgroundImage}>
