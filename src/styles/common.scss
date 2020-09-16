@@ -63,7 +63,8 @@ ul {
   border: 1px solid $gray;
   padding: 0.675rem 1.4rem;
   font-size: 1rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+  cursor: pointer;
 
   &-primary {
     color: $white;
@@ -74,6 +75,7 @@ ul {
   &:hover,
   &:active {
     background-color: rgba($blue, 0.8);
+    color: $white;
   }
 }
 
@@ -103,6 +105,13 @@ ul {
   button {
     align-self: center;
     min-width: 150px;
+
+    &:disabled {
+      background-color: rgba($gray, 0.2);
+      border-color: $blue;
+      border: 1px solid rgba($gray, 0.2);
+      color: $blue;
+    }
   }
 }
 
@@ -116,8 +125,22 @@ ul {
   line-height: 1.5;
   color: $gray-bold;
   background-color: $white;
-  border: 1px solid $gray-light;
+  border: 2px solid $gray-light;
   border-radius: 0.25rem;
+
+  &.error {
+    border-color: $red;
+
+    &::placeholder {
+      color: $red;
+    }
+  }
+}
+
+.error-field-message,
+.warning-error-message {
+  color: $red;
+  text-align: center;
 }
 
 .page-center {

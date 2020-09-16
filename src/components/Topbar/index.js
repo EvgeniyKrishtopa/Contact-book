@@ -1,11 +1,18 @@
 import React, { useContext } from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../context';
+import { changeAuthPage } from '../../store/actions/userActions';
 
 const TopBar = () => {
-  const {userData} = useContext(CurrentUserContext);
+  const { userData } = useContext(CurrentUserContext);
+  const dispatch = useDispatch();
+
+  const handleAuthPages = () => {
+    dispatch(changeAuthPage());
+  };
 
   return (
     <div className={styles.navbar}>
@@ -25,6 +32,7 @@ const TopBar = () => {
                       to="/login"
                       className={styles.underlineClosing}
                       activeClassName={styles.active}
+                      onClick={handleAuthPages}
                     >
                       Log In
                     </NavLink>
@@ -34,6 +42,7 @@ const TopBar = () => {
                       to="/register"
                       className={styles.underlineClosing}
                       activeClassName={styles.active}
+                      onClick={handleAuthPages}
                     >
                       Sign Up
                     </NavLink>
