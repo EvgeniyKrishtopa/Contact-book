@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-const Form = () => {
+const Form: React.FC = () => {
   return (
     <form className="form-styles">
       <div className="input-holder">

@@ -14,104 +14,107 @@ import {
   CHANGE_AUTH_PAGE,
 } from '../constants';
 
-const USERSTATE = {
+import { User } from '../../typings/interfaces';
+import { UserActionTypes } from '../actions/types';
+
+const USERSTATE: User = {
   loading: false,
   userData: null,
   error: null,
   isLoginnedUser: false,
 };
 
-const user = (state = USERSTATE, { type, userData, error }) => {
-  switch (type) {
+const user = (state = USERSTATE, action: UserActionTypes): User => {
+  switch (action.type) {
     case LOG_IN_STARTED:
       return {
         ...state,
-        loading: true,
+        loading: action.loading,
       };
 
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        userData,
-        loading: false,
-        error: null,
-        isLoginnedUser: true,
+        userData: action.userData,
+        loading: action.loading,
+        error: action.error,
+        isLoginnedUser: action.isLoginnedUser,
       };
 
     case LOG_IN_ERROR:
       return {
         ...state,
-        error: error,
+        error: action.error,
       };
 
     case SIGN_UP_STARTED:
       return {
         ...state,
-        loading: true,
+        loading: action.loading,
       };
 
     case SIGN_UP_SUCCESS:
       return {
         ...state,
-        userData,
-        loading: false,
-        error: null,
-        isLoginnedUser: true,
+        userData: action.userData,
+        loading: action.loading,
+        error: action.error,
+        isLoginnedUser: action.isLoginnedUser,
       };
 
     case SIGN_UP_ERROR:
       return {
         ...state,
-        error: error,
+        error: action.error,
       };
 
     case SIGN_OUT_STARTED:
       return {
         ...state,
-        loading: true,
+        loading: action.loading,
       };
 
     case SIGN_OUT_SUCCESS:
       return {
         ...state,
-        userData: null,
-        loading: false,
-        error: null,
-        isLoginnedUser: false,
+        userData: action.userData,
+        loading: action.loading,
+        error: action.error,
+        isLoginnedUser: action.isLoginnedUser,
       };
 
     case SIGN_OUT_ERROR:
       return {
         ...state,
-        error: error,
+        error: action.error,
       };
 
     case IS_LOG_IN_STARTED:
       return {
         ...state,
-        loading: true,
+        loading: action.loading,
       };
 
     case IS_LOG_IN_SUCCESS:
       return {
         ...state,
-        userData,
-        loading: false,
-        error: null,
-        isLoginnedUser: true,
+        userData: action.userData,
+        loading: action.loading,
+        error: action.error,
+        isLoginnedUser: action.isLoginnedUser,
       };
 
     case IS_LOG_IN_ERROR: {
       return {
         ...state,
-        error: error,
+        error: action.error,
       };
     }
 
     case CHANGE_AUTH_PAGE: {
       return {
         ...state,
-        error: null,
+        error: action.error,
       };
     }
 

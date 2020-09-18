@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../context';
 import { changeAuthPage } from '../../store/actions/userActions';
 
-const TopBar = () => {
+const TopBar: React.FC = () => {
   const { userData } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
 

@@ -25,7 +25,7 @@ const validate = values => {
   return errors;
 };
 
-const AuthForm = ({ isLogin, buttonText, ...props }) => {
+const AuthForm: React.FC = ({ isLogin, buttonText, ...props }) => {
   const { handleSubmit, submitting, pristine } = props;
   console.log(submitting);
 

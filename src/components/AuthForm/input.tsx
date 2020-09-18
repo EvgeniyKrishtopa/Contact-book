@@ -1,5 +1,5 @@
 import React from 'react';
-const Input = ({
+const Input: React.FC = ({
   input,
   type,
   placeholder,

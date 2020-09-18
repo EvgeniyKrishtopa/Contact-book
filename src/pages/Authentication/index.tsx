@@ -6,7 +6,7 @@ import { LogIn, SignUp } from '../../store/actions/userActions';
 import AuthForm from '../../components/AuthForm';
 import styles from './styles.module.scss';
 
-const Authentication = ({ match }) => {
+const Authentication: React.FC = ({ match }) => {
   const { userData, error } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
   const isLogin = match.path === '/login';
