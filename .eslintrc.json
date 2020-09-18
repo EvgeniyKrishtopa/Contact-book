@@ -4,25 +4,28 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["prettier","react"],
+  "plugins": ["prettier", "react", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
   "rules": {
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:prettier/recommended",
-      "google",
-      "prettier"
-    ],
-    "semi": "off",
-    "quotes": "off",
-    "object-curly-spacing": "off",
-    "arrow-parents": "off",
-    "linebreak-style": "off",
+    "semi": [0],
+    "quotes": [0],
+    "object-curly-spacing": [0],
+    "arrow-parents": [0],
+    "linebreak-style": [0],
     "require-jsdoc": [0],
-    "arrow-parens": "off",
-    "operator-linebreak": "off",
-    "no-debugger": "off",
-    "indent": "off",
-    "space-before-function-paren": "off"
+    "arrow-parens": [0],
+    "operator-linebreak": [0],
+    "no-debugger": [0],
+    "indent": [0],
+    "space-before-function-paren": [0],
+    "no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [1]
   }
 }

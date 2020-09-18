@@ -3,7 +3,7 @@ import MaterialIcon from 'material-icons-react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
-const ContactItem = () => {
+const ContactItem: React.FC = () => {
   return (
     <li className={`${styles.contactItem} ${styles.activeContact}`}>
       <div className={styles.contactItemHolder}>

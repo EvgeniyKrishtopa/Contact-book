@@ -8,7 +8,7 @@ const backgroundImage = {
   backgroundImage: `url(${MainPageImg})`,
 };
 
-const StartPage = () => {
+const StartPage: React.FC = () => {
   const { isLoginnedUser } = useContext(CurrentUserContext);
 
   return (
@@ -17,7 +17,7 @@ const StartPage = () => {
         <h1>Create your contacts with YCB!</h1>
         <p>
           Welcome to <strong>Your Contact Book</strong>! You can create a lot of
-          necessary contacts and manage them here.
+          necessary contacts and manage them here!
         </p>
         {!isLoginnedUser && (
           <>
