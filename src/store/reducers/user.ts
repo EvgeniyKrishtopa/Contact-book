@@ -13,7 +13,6 @@ import {
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
 } from '../constants';
-
 import { User } from '../../typings/interfaces';
 import { UserActionTypes } from '../actions/types';
 

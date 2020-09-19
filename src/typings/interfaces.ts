@@ -1,6 +1,11 @@
-export interface User {
+export type IError = {
+  message: string;
+  [propsName: string]: any;
+};
+
+export interface IUser {
   loading: boolean;
-  userData: object | null;
-  error: object | null | string;
+  userData: any | null;
+  error: IError | null | string;
   isLoginnedUser: boolean;
 }

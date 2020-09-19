@@ -5,9 +5,11 @@ import styles from './styles.module.scss';
 import MaterialIcon from 'material-icons-react';
 import ContactForm from '../../../components/ContactForm';
 import ContactItem from './contactItem';
+import { useHistory } from 'react-router-dom';
 
-const IsLogginedUserPage = ({ user, history }) => {
+const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const signOut = () => {
     async function logOutHandler() {

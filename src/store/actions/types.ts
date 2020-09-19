@@ -14,6 +14,8 @@ import {
   CHANGE_AUTH_PAGE,
 } from '../constants';
 
+import { IError } from '../../typings/interfaces';
+
 interface ILogInStarted {
   type: typeof LOG_IN_STARTED;
   loading: boolean;
@@ -21,7 +23,7 @@ interface ILogInStarted {
 
 interface ILogInSuccess {
   type: typeof LOG_IN_SUCCESS;
-  userData: object | null;
+  userData: any | null;
   loading: boolean;
   error: null;
   isLoginnedUser: boolean;
@@ -29,7 +31,7 @@ interface ILogInSuccess {
 
 interface ILogInError {
   type: typeof LOG_IN_ERROR;
-  error: object | null;
+  error: IError;
 }
 
 interface ISignUpStarted {
@@ -39,7 +41,7 @@ interface ISignUpStarted {
 
 interface ISignUpSuccess {
   type: typeof SIGN_UP_SUCCESS;
-  userData: object | null;
+  userData: any | null;
   loading: boolean;
   error: null;
   isLoginnedUser: boolean;
@@ -47,7 +49,7 @@ interface ISignUpSuccess {
 
 interface ISignUpError {
   type: typeof SIGN_UP_ERROR;
-  error: object | null;
+  error: IError;
 }
 
 interface ISignOutStarted {
@@ -57,7 +59,7 @@ interface ISignOutStarted {
 
 interface ISignOutSuccess {
   type: typeof SIGN_OUT_SUCCESS;
-  userData: object | null;
+  userData: null;
   loading: boolean;
   error: null;
   isLoginnedUser: boolean;
@@ -65,7 +67,7 @@ interface ISignOutSuccess {
 
 interface ISignOutError {
   type: typeof SIGN_OUT_ERROR;
-  error: object | null;
+  error: IError;
 }
 
 interface IIsLoginStarted {
@@ -75,7 +77,7 @@ interface IIsLoginStarted {
 
 interface IIsLoginSuccess {
   type: typeof IS_LOG_IN_SUCCESS;
-  userData: object | null;
+  userData: any | null;
   loading: boolean;
   error: null;
   isLoginnedUser: boolean;

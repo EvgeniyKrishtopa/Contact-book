@@ -2,6 +2,7 @@ import firebase from '../../firebase/firebase';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../reducers/';
 import { UserActionTypes } from './types';
+import { IError } from '../../typings/interfaces';
 import {
   LOG_IN_STARTED,
   LOG_IN_ERROR,
@@ -42,7 +43,7 @@ const logInStarted = (): UserActionTypes => {
   };
 };
 
-const logInSuccess = (user: object | null): UserActionTypes => {
+const logInSuccess = (user: any | null): UserActionTypes => {
   return {
     type: LOG_IN_SUCCESS,
     userData: user,
@@ -52,7 +53,7 @@ const logInSuccess = (user: object | null): UserActionTypes => {
   };
 };
 
-const logInEroor = (error: object | null): UserActionTypes => {
+const logInEroor = (error: IError): UserActionTypes => {
   return {
     type: LOG_IN_ERROR,
     error,
@@ -89,7 +90,7 @@ const signUpStarted = (): UserActionTypes => {
   };
 };
 
-const signUpSuccess = (user: object | null): UserActionTypes => {
+const signUpSuccess = (user: any | null): UserActionTypes => {
   return {
     type: SIGN_UP_SUCCESS,
     userData: user,
@@ -99,7 +100,7 @@ const signUpSuccess = (user: object | null): UserActionTypes => {
   };
 };
 
-const signUpError = (error: object | null): UserActionTypes => {
+const signUpError = (error: IError): UserActionTypes => {
   return {
     type: SIGN_UP_ERROR,
     error,
@@ -138,7 +139,7 @@ const logOutSuccess = (): UserActionTypes => {
   };
 };
 
-const logOutError = (error): UserActionTypes => {
+const logOutError = (error: IError): UserActionTypes => {
   return {
     type: SIGN_OUT_ERROR,
     error,
@@ -166,7 +167,7 @@ const isLoginStarted = (): UserActionTypes => {
   };
 };
 
-const isLoginSuccess = (user: object | null): UserActionTypes => {
+const isLoginSuccess = (user: any | null): UserActionTypes => {
   return {
     type: IS_LOG_IN_SUCCESS,
     userData: user,

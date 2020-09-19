@@ -5,8 +5,15 @@ import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from '../../store/actions/userActions';
 import AuthForm from '../../components/AuthForm';
 import styles from './styles.module.scss';
+import { RouteComponentProps } from 'react-router-dom';
 
-const Authentication: React.FC = ({ match }) => {
+type RouteParams = {
+  match?: string | undefined;
+};
+
+const Authentication: React.FC<RouteComponentProps<RouteParams>> = ({
+  match,
+}) => {
   const { userData, error } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
   const isLogin = match.path === '/login';

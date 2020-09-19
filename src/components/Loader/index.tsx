@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-const Loader: React.FC = () => {
+const Loader = () => {
   return (
     <div className="page-center">
       <div className={styles.ldsDualRing}></div>
