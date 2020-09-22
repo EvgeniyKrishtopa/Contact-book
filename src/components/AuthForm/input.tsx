@@ -1,5 +1,11 @@
 import React from 'react';
-const Input = ({
+import { WrappedFieldProps } from 'redux-form';
+interface IInputProps {
+  type: string;
+  className: string;
+  placeholder: string;
+}
+const Input: React.FC<WrappedFieldProps & IInputProps> = ({
   input,
   type,
   placeholder,
@@ -8,6 +14,7 @@ const Input = ({
 }) => {
   const classNameHandler =
     (touched && error) || warning ? `${className} error` : className;
+
   return (
     <>
       <input

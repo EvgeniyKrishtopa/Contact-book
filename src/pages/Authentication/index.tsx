@@ -5,15 +5,32 @@ import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from '../../store/actions/userActions';
 import AuthForm from '../../components/AuthForm';
 import styles from './styles.module.scss';
+import { RouteComponentProps } from 'react-router-dom';
 
-const Authentication = ({ match }) => {
+type RouteParams = {
+  match?: string | undefined;
+};
+
+export interface IUserAuthData {
+  userEmail: string;
+  userPassword: string;
+  userLogin: string;
+}
+
+const Authentication: React.FC<RouteComponentProps<RouteParams>> = ({
+  match,
+}) => {
   const { userData, error } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
   const isLogin = match.path === '/login';
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
   const buttonText = isLogin ? 'Login' : 'Register';
 
-  const formSubmit = ({ userEmail, userPassword, userLogin }) => {
+  const formSubmit = ({
+    userEmail,
+    userPassword,
+    userLogin,
+  }: IUserAuthData) => {
     if (isLogin) {
       dispatch(LogIn(userEmail, userPassword));
     }

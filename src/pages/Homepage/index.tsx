@@ -3,15 +3,11 @@ import IsLogginedUserPage from './isLoggedUser';
 import { CurrentUserContext } from '../../context';
 import Loader from '../../components/Loader';
 
-const Homepage = props => {
+const Homepage: React.FC = () => {
   const { userData, isLoginnedUser } = useContext(CurrentUserContext);
 
-  return isLoginnedUser ? (
-    <IsLogginedUserPage
-      user={userData}
-      history={props.history}
-      isLoginnedUser={isLoginnedUser}
-    />
+  return isLoginnedUser && userData ? (
+    <IsLogginedUserPage user={userData} />
   ) : (
     <Loader />
   );

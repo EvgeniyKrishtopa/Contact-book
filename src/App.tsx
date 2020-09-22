@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import { Provider } from 'react-redux';
 import store from './store/state';
 
-const App = () => (
+const App: React.FC = () => (
   <Provider store={store}>
     <CurrentUserProvider>
       <Router>

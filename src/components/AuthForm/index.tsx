@@ -1,9 +1,27 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import Input from './input';
+import { IUserAuthData } from '../../pages/Authentication';
 
-const validate = values => {
-  const errors = {};
+interface IProps {
+  isLogin: boolean;
+  buttonText: string;
+}
+
+export interface IAuthFormErrors {
+  userLogin?: string;
+  userEmail?: string;
+  userPassword?: string;
+}
+
+interface IAuthFromFieldValues {
+  userLogin: string | null;
+  userEmail: string | null;
+  userPassword: string | null;
+}
+
+const validate = (values: IAuthFromFieldValues): IAuthFormErrors => {
+  const errors: IAuthFormErrors = {};
   if (!values.userLogin) {
     errors.userLogin = 'This field is required!';
   } else if (values.userLogin.length > 15) {
@@ -25,9 +43,12 @@ const validate = values => {
   return errors;
 };
 
-const AuthForm = ({ isLogin, buttonText, ...props }) => {
+const AuthForm: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
+  isLogin,
+  buttonText,
+  ...props
+}) => {
   const { handleSubmit, submitting, pristine } = props;
-  console.log(submitting);
 
   return (
     <form className="form-styles" onSubmit={handleSubmit}>
@@ -81,7 +102,7 @@ const AuthForm = ({ isLogin, buttonText, ...props }) => {
   );
 };
 
-export default reduxForm({
+export default reduxForm<IUserAuthData, IProps>({
   form: 'Authform',
   validate,
 })(AuthForm);

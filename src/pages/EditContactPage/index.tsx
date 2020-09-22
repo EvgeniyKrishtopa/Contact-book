@@ -2,7 +2,7 @@ import React from 'react';
 import ContactForm from '../../components/ContactForm';
 import styles from './styles.module.scss';
 
-const EditContactPage = () => {
+const EditContactPage: React.FC = () => {
   return (
     <div className={`${styles.editContactPage} page-center`}>
       <div className="container">
