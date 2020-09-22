@@ -1,11 +1,12 @@
 export type IError = {
   message: string;
-  [propsName: string]: any;
+  code?: string;
+  a?: null;
 };
 
 export interface IUser {
   loading: boolean;
   userData: any | null;
-  error: IError | null | string;
+  error: IError | null;
   isLoginnedUser: boolean;
 }

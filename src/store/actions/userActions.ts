@@ -180,7 +180,7 @@ const isLoginSuccess = (user: any | null): UserActionTypes => {
 const isLoginError = (): UserActionTypes => {
   return {
     type: IS_LOG_IN_ERROR,
-    error: 'No user is signed in',
+    error: { message: 'No user is signed in' },
   };
 };
 

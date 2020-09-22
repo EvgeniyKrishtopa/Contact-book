@@ -1,8 +1,9 @@
-import React, { createContext } from 'react';
-import { User } from '../typings/interfaces';
-import { useSelector } from 'react-redux';
-import { getCurrentUser } from '../selectors';
-import { RootState } from '../store/reducers';
+import { createContext } from 'react';
+import { IUser } from '../typings/interfaces';
 
-const user = useSelector<RootState, User>(state => getCurrentUser(state));
-export const CurrentUserContext = createContext<User>(user);
+export const CurrentUserContext = createContext<IUser>({
+  loading: false,
+  userData: null,
+  error: null,
+  isLoginnedUser: false,
+});

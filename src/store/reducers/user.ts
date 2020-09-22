@@ -13,17 +13,17 @@ import {
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
 } from '../constants';
-import { User } from '../../typings/interfaces';
+import { IUser } from '../../typings/interfaces';
 import { UserActionTypes } from '../actions/types';
 
-const USERSTATE: User = {
+const USERSTATE: IUser = {
   loading: false,
   userData: null,
   error: null,
   isLoginnedUser: false,
 };
 
-const user = (state = USERSTATE, action: UserActionTypes): User => {
+const user = (state = USERSTATE, action: UserActionTypes): IUser => {
   switch (action.type) {
     case LOG_IN_STARTED:
       return {
@@ -106,7 +106,7 @@ const user = (state = USERSTATE, action: UserActionTypes): User => {
     case IS_LOG_IN_ERROR: {
       return {
         ...state,
-        error: action.error,
+        error: action.error
       };
     }
 
