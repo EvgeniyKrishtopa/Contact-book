@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { CurrentUserContext } from '../../context';
-import { changeAuthPage } from '../../store/actions/userActions';
+import { changeAuthPage } from '../../store/actions/Users/actions';
 
 const TopBar: React.FC = () => {
   const { userData } = useContext(CurrentUserContext);

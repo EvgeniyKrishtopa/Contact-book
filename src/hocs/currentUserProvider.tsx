@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { CurrentUserContext } from '../context';
 import { useDispatch, useSelector } from 'react-redux';
-import { IsLogIn } from '../store/actions/userActions';
+import { IsLogIn } from '../store/actions/Users/actions';
 import { getCurrentUser } from '../selectors';
 import { IUser } from '../typings/interfaces';
 import { RootState } from '../store/reducers';

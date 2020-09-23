@@ -14,7 +14,7 @@ import {
   CHANGE_AUTH_PAGE,
 } from '../constants';
 import { IUser } from '../../typings/interfaces';
-import { UserActionTypes } from '../actions/types';
+import { UserActionTypes } from '../actions/Users/types';
 
 const USERSTATE: IUser = {
   loading: false,
