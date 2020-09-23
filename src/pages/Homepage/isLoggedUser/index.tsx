@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { LogOut } from '../../../store/actions/userActions';
+import { LogOut } from '../../../store/actions/Users/actions';
+import { SendContact } from '../../../store/actions/Contacts/actions';
 import styles from './styles.module.scss';
 import ContactForm from '../../../components/ContactForm';
 import ContactItem from './contactItem';
@@ -8,6 +9,11 @@ import SelectContact from './selectContact';
 import StatusToggler from './statusToggler';
 import { useHistory } from 'react-router-dom';
 
+export interface IContactSendData {
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+}
 const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -19,13 +25,21 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     logOutHandler().then(() => history.push('/'));
   };
 
+  const formSubmit = ({
+    contactName,
+    contactEmail,
+    contactPhone,
+  }: IContactSendData) => {
+    dispatch(SendContact(contactName, contactEmail, contactPhone));
+  };
+
   return (
     <div className={styles.contactsPage}>
       <div className="container">
         <h2 className="center">{user && `Hello, ${user.displayName}`}</h2>
         <div className={styles.formBlock}>
           <h3 className="center">Add New Contact</h3>
-          <ContactForm />
+          <ContactForm onSubmit={formSubmit} />
         </div>
         <div className={styles.selectContactBlock}>
           <h3 className="center">Select contact by Email</h3>

@@ -1,18 +1,25 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
+import { IContactSendData } from '../../pages/Homepage/isLoggedUser/';
+import Input from '../Input';
+import { validate } from '../../utils';
 
-const Form: React.FC = () => {
+const Form: React.FC<InjectedFormProps<IContactSendData>> = ({
+  handleSubmit,
+  submitting,
+  pristine,
+}) => {
   return (
-    <form className="form-styles">
+    <form className="form-styles" onSubmit={handleSubmit}>
       <div className="input-holder">
         <label className="form-label">
           Contact Name
           <Field
             type="text"
-            name="name"
+            name="contactName"
             className="form-control"
             placeholder="Contact Name"
-            component="input"
+            component={Input}
           />
         </label>
       </div>
@@ -21,10 +28,10 @@ const Form: React.FC = () => {
           Contact Email
           <Field
             type="email"
-            name="email"
+            name="contactEmail"
             className="form-control"
             placeholder="ContactEmail"
-            component="input"
+            component={Input}
           />
         </label>
       </div>
@@ -33,22 +40,28 @@ const Form: React.FC = () => {
           Contact Phone
           <Field
             type="tel"
-            name="phone"
+            name="contactPhone"
             className="form-control"
-            placeholder="Contact Phone"
-            component="input"
+            placeholder="+380 (XX)-XXX-XX-XX"
+            component={Input}
           />
         </label>
       </div>
-      <button type="submit" className="btn btn-primary">
+      <button
+        type="submit"
+        disabled={pristine || submitting}
+        className="btn btn-primary"
+      >
         Submit Contact
       </button>
     </form>
   );
 };
 
-const ContactForm = reduxForm({
+const ContactForm = reduxForm<IContactSendData>({
   form: 'contactForm',
+  validate,
+  onSubmitSuccess: (result, dispatch, props) => dispatch(reset('contactForm')),
 })(Form);
 
 export default ContactForm;

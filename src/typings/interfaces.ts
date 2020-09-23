@@ -10,3 +10,15 @@ export interface IUser {
   error: IError | null;
   isLoginnedUser: boolean;
 }
+
+export interface IContact {
+  email: string;
+  name: string;
+  phone: string;
+  status: boolean;
+}
+export interface IContacts {
+  loading: boolean;
+  contactsData: Array<IContact> | null;
+  error: IError | null;
+}
