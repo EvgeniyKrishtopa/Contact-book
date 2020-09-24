@@ -1,22 +1,37 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LogOut } from '../../../store/actions/Users/actions';
-import { SendContact } from '../../../store/actions/Contacts/actions';
+import {
+  SendContact,
+  FetchCurrentUserContacts,
+} from '../../../store/actions/Contacts/actions';
 import styles from './styles.module.scss';
 import ContactForm from '../../../components/ContactForm';
-import ContactItem from './contactItem';
+import ContactList from './contactsList';
 import SelectContact from './selectContact';
 import StatusToggler from './statusToggler';
 import { useHistory } from 'react-router-dom';
+import { getCurrentUserContacts } from '../../../selectors';
+import { RootState } from '../../../store/reducers';
+import { IContacts } from '../../../typings/interfaces';
 
 export interface IContactSendData {
   contactName: string;
   contactEmail: string;
   contactPhone: string;
 }
+
 const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const userContacts = useSelector<RootState, IContacts>(state =>
+    getCurrentUserContacts(state),
+  );
+
+  useEffect(() => {
+    dispatch(FetchCurrentUserContacts(user.uid));
+  }, [user, dispatch]);
 
   const signOut = () => {
     async function logOutHandler() {
@@ -30,7 +45,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     contactEmail,
     contactPhone,
   }: IContactSendData) => {
-    dispatch(SendContact(contactName, contactEmail, contactPhone));
+    dispatch(SendContact(contactName, contactEmail, contactPhone, user.uid));
   };
 
   return (
@@ -49,12 +64,9 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
           <h3 className="center">Filter contacts by status:</h3>
           <StatusToggler />
         </div>
-        <div className={styles.contactBlock}>
-          <h3 className="center">Your contacts:</h3>
-          <ul>
-            <ContactItem />
-          </ul>
-        </div>
+        {userContacts.contactsData.length > 0 && (
+          <ContactList contacts={userContacts.contactsData} />
+        )}
         <div className={styles.btnHolder}>
           <button className="btn" onClick={signOut}>
             Log Out

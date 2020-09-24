@@ -2,23 +2,30 @@ import React from 'react';
 import MaterialIcon from 'material-icons-react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
+import { IContact } from '../../../../typings/interfaces';
 
-const ContactItem: React.FC = () => {
+const ContactItem: React.FC<IContact> = ({
+  contactEmail,
+  contactName,
+  contactPhone,
+  activeStatus,
+  id,
+}) => {
   return (
     <li className={`${styles.contactItem} ${styles.activeContact}`}>
       <div className={styles.contactItemHolder}>
         <div className={styles.contactData}>
           <span className={styles.contactName}>
             <MaterialIcon icon="account_box" size="30" />
-            Contact Name
+            {contactName}
           </span>
-          <a href="mailto:email@gmail.com" className={styles.contactEmail}>
+          <a href={`mailto:${contactEmail}`} className={styles.contactEmail}>
             <MaterialIcon icon="contact_mail" size="30" />
-            email@gmail.com
+            {contactEmail}
           </a>
-          <a href="tel:0934817799" className={styles.contactPhone}>
+          <a href={`tel:${contactPhone}`} className={styles.contactPhone}>
             <MaterialIcon icon="contact_phone" size="30" />
-            0934817799
+            {contactPhone}
           </a>
         </div>
         <div className={styles.contactHandlers}>

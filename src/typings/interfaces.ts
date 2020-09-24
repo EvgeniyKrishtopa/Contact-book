@@ -1,8 +1,8 @@
-export type IError = {
+export interface IError {
   message: string;
   code?: string;
   a?: null;
-};
+}
 
 export interface IUser {
   loading: boolean;
@@ -12,13 +12,15 @@ export interface IUser {
 }
 
 export interface IContact {
-  email: string;
-  name: string;
-  phone: string;
-  status: boolean;
+  activeStatus: boolean;
+  contactEmail: string;
+  contactName: string;
+  contactPhone: string;
+  id: number;
 }
+
 export interface IContacts {
   loading: boolean;
-  contactsData: Array<IContact> | null;
+  contactsData: Array<IContact> | [];
   error: IError | null;
 }
