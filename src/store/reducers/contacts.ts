@@ -1,14 +1,15 @@
 import {
+  GET_CURRENT_USER_CONTACTS,
   SEND_CONTACT_STARTED,
   SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
 } from '../constants';
-import { IContact, IContacts } from '../../typings/interfaces';
+import { IContacts } from '../../typings/interfaces';
 import { ContactActionTypes } from '../actions/Contacts/types';
 
 const CONTACTSSTATE: IContacts = {
   loading: false,
-  contactsData: null,
+  contactsData: [],
   error: null,
 };
 
@@ -17,6 +18,11 @@ const contacts = (
   action: ContactActionTypes,
 ): IContacts => {
   switch (action.type) {
+    case GET_CURRENT_USER_CONTACTS:
+      return {
+        ...state,
+        contactsData: action.contactsData,
+      };
     case SEND_CONTACT_STARTED:
       return {
         ...state,
