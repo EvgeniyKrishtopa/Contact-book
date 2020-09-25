@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteContactFromBook } from '../../../../store/actions/Contacts/actions';
 import MaterialIcon from 'material-icons-react';
-import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 import { IContact } from '../../../../typings/interfaces';
+import { CurrentUserContext } from '../../../../context';
 
 const ContactItem: React.FC<IContact> = ({
   contactEmail,
@@ -11,8 +13,20 @@ const ContactItem: React.FC<IContact> = ({
   activeStatus,
   id,
 }) => {
+  const { userData } = useContext(CurrentUserContext);
+  const userId: string = userData.uid;
+  const dispatch = useDispatch();
+
+  const deleteContactHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    dispatch(deleteContactFromBook(id, userId));
+  };
+
   return (
-    <li className={`${styles.contactItem} ${styles.activeContact}`}>
+    <li
+      className={`${styles.contactItem} ${
+        activeStatus ? styles.activeContact : styles.inActiveContact
+      }`}
+    >
       <div className={styles.contactItemHolder}>
         <div className={styles.contactData}>
           <span className={styles.contactName}>
@@ -32,12 +46,7 @@ const ContactItem: React.FC<IContact> = ({
           <button>
             <MaterialIcon icon="check" size="30" />
           </button>
-          <button>
-            <Link to="/edit/1">
-              <MaterialIcon icon="edit" size="30" />
-            </Link>
-          </button>
-          <button>
+          <button onClick={deleteContactHandler}>
             <MaterialIcon icon="delete" size="30" />
           </button>
         </div>

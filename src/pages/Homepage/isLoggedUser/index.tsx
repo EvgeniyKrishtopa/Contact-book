@@ -45,7 +45,9 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     contactEmail,
     contactPhone,
   }: IContactSendData) => {
-    dispatch(SendContact(contactName, contactEmail, contactPhone, user.uid));
+    dispatch(
+      SendContact(contactName, contactEmail, contactPhone, user.uid),
+    );
   };
 
   return (
@@ -56,14 +58,12 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
           <h3 className="center">Add New Contact</h3>
           <ContactForm onSubmit={formSubmit} />
         </div>
-        <div className={styles.selectContactBlock}>
-          <h3 className="center">Select contact by Email</h3>
-          <SelectContact />
-        </div>
-        <div className={styles.contactStatusFilter}>
-          <h3 className="center">Filter contacts by status:</h3>
-          <StatusToggler />
-        </div>
+        {userContacts.contactsData.length > 1 && (
+          <>
+            <SelectContact contacts={userContacts.contactsData}/>
+            <StatusToggler />
+          </>
+        )}
         {userContacts.contactsData.length > 0 && (
           <ContactList contacts={userContacts.contactsData} />
         )}

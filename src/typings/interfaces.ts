@@ -16,7 +16,7 @@ export interface IContact {
   contactEmail: string;
   contactName: string;
   contactPhone: string;
-  id: number;
+  id: string;
 }
 
 export interface IContacts {
