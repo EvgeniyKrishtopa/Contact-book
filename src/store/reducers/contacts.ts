@@ -3,6 +3,7 @@ import {
   SEND_CONTACT_STARTED,
   SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
+  DELETE_USER_CONTACT
 } from '../constants';
 import { IContacts } from '../../typings/interfaces';
 import { ContactActionTypes } from '../actions/Contacts/types';
@@ -42,6 +43,11 @@ const contacts = (
         error: action.error,
       };
 
+    case DELETE_USER_CONTACT:
+      return {
+        ...state
+      }
+      
     default:
       return state;
   }

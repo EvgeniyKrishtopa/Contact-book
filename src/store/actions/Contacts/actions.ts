@@ -9,6 +9,7 @@ import {
   SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
   GET_CURRENT_USER_CONTACTS,
+  DELETE_USER_CONTACT,
 } from '../../constants';
 
 const db = firebase.firestore();
@@ -22,6 +23,7 @@ export const FetchCurrentUserContacts = (id: string): ThunkType => {
       .onSnapshot(snapshot => {
         const contactItems = snapshot.docs.map(item => {
           const contact = item.data();
+          contact.id = item.id;
           return contact;
         });
 
@@ -41,19 +43,18 @@ export const SendContact = (
   contactName: string,
   contactEmail: string,
   contactPhone: string,
-  id: string,
+  userId: string,
 ): ThunkType => {
   return dispatch => {
     dispatch(contactSendStarted());
     db.collection('users')
-      .doc(id)
+      .doc(userId)
       .collection('Contacts')
       .add({
         contactName,
         contactEmail,
         contactPhone,
         activeStatus: true,
-        id: new Date().getTime(),
       })
       .then(() => {
         dispatch(contactSendSuccess());
@@ -83,5 +84,22 @@ const contactSendError = (error: IError): ContactActionTypes => {
   return {
     type: SEND_CONTACT_ERROR,
     error,
+  };
+};
+
+export const deleteContactFromBook = (id: string, userId: string) => {
+  return async dispatch => {
+    db.collection('users')
+      .doc(userId)
+      .collection('Contacts')
+      .doc(id)
+      .delete()
+      .then(() => dispatch(deleteContact()));
+  };
+};
+
+const deleteContact = (): ContactActionTypes => {
+  return {
+    type: DELETE_USER_CONTACT,
   };
 };

@@ -24,6 +24,10 @@
   background: rgba($blue, 0.3);
 }
 
+.inActiveContact {
+  background: rgba($blue, 0.1);
+}
+
 .contactItemHolder {
   display: flex;
   min-width: 737px;

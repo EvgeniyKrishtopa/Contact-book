@@ -3,6 +3,7 @@ import {
   SEND_CONTACT_STARTED,
   SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
+  DELETE_USER_CONTACT,
 } from '../../constants';
 
 import { IError, IContact } from '../../../typings/interfaces';
@@ -28,8 +29,13 @@ interface IContactSendError {
   error: IError;
 }
 
+interface IDeleteContact {
+  type: typeof DELETE_USER_CONTACT;
+}
+
 export type ContactActionTypes =
   | IGetCurrentUserContacts
   | IContactSendStarted
   | IContactSendSuccess
-  | IContactSendError;
+  | IContactSendError
+  | IDeleteContact;
