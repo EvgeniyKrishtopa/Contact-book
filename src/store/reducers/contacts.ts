@@ -3,7 +3,8 @@ import {
   SEND_CONTACT_STARTED,
   SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
-  DELETE_USER_CONTACT
+  DELETE_USER_CONTACT,
+  FILTERED_CONTACT_BY_EMAIL,
 } from '../constants';
 import { IContacts } from '../../typings/interfaces';
 import { ContactActionTypes } from '../actions/Contacts/types';
@@ -45,9 +46,15 @@ const contacts = (
 
     case DELETE_USER_CONTACT:
       return {
-        ...state
-      }
-      
+        ...state,
+      };
+
+    case FILTERED_CONTACT_BY_EMAIL:
+      return {
+        ...state,
+        contactsData: action.contactsData,
+      };
+
     default:
       return state;
   }

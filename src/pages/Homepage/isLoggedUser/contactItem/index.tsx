@@ -12,6 +12,7 @@ const ContactItem: React.FC<IContact> = ({
   contactPhone,
   activeStatus,
   id,
+  visibility,
 }) => {
   const { userData } = useContext(CurrentUserContext);
   const userId: string = userData.uid;
@@ -23,9 +24,10 @@ const ContactItem: React.FC<IContact> = ({
 
   return (
     <li
-      className={`${styles.contactItem} ${
-        activeStatus ? styles.activeContact : styles.inActiveContact
-      }`}
+      className={`${styles.contactItem} 
+      ${activeStatus ? styles.activeContact : styles.inActiveContact}
+      ${visibility ? styles.visibleContact : styles.hiddenContact}
+      `}
     >
       <div className={styles.contactItemHolder}>
         <div className={styles.contactData}>

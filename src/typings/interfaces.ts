@@ -16,6 +16,7 @@ export interface IContact {
   contactEmail: string;
   contactName: string;
   contactPhone: string;
+  visibility: boolean;
   id: string;
 }
 
