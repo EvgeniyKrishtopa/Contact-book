@@ -10,6 +10,7 @@ import {
   SEND_CONTACT_ERROR,
   GET_CURRENT_USER_CONTACTS,
   DELETE_USER_CONTACT,
+  FILTERED_CONTACT_BY_EMAIL,
 } from '../../constants';
 
 const db = firebase.firestore();
@@ -55,6 +56,7 @@ export const SendContact = (
         contactEmail,
         contactPhone,
         activeStatus: true,
+        visibility: true,
       })
       .then(() => {
         dispatch(contactSendSuccess());
@@ -101,5 +103,12 @@ export const deleteContactFromBook = (id: string, userId: string) => {
 const deleteContact = (): ContactActionTypes => {
   return {
     type: DELETE_USER_CONTACT,
+  };
+};
+
+export const filterContact = (filteredContacts: any): ContactActionTypes => {
+  return {
+    type: FILTERED_CONTACT_BY_EMAIL,
+    contactsData: filteredContacts,
   };
 };

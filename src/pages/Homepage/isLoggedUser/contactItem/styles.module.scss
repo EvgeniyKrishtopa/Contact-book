@@ -28,6 +28,14 @@
   background: rgba($blue, 0.1);
 }
 
+.hiddenContact {
+  display: none;
+}
+
+.visibleContact {
+  display: block;
+}
+
 .contactItemHolder {
   display: flex;
   min-width: 737px;

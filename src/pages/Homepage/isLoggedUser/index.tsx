@@ -45,9 +45,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     contactEmail,
     contactPhone,
   }: IContactSendData) => {
-    dispatch(
-      SendContact(contactName, contactEmail, contactPhone, user.uid),
-    );
+    dispatch(SendContact(contactName, contactEmail, contactPhone, user.uid));
   };
 
   return (
@@ -60,7 +58,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
         </div>
         {userContacts.contactsData.length > 1 && (
           <>
-            <SelectContact contacts={userContacts.contactsData}/>
+            <SelectContact contacts={userContacts.contactsData} />
             <StatusToggler />
           </>
         )}
