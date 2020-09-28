@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteContactFromBook } from '../../../../store/actions/Contacts/actions';
+import {
+  deleteContactFromBook,
+  changeContactStatus,
+} from '../../../../store/actions/Contacts/actions';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
 import { IContact } from '../../../../typings/interfaces';
@@ -21,6 +24,14 @@ const ContactItem: React.FC<IContact> = ({
   const deleteContactHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(deleteContactFromBook(id, userId));
   };
+
+  const changeStatusContactHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    dispatch(changeContactStatus(id, userId, activeStatus));
+  };
+
+  const status = activeStatus ? false : true;
 
   return (
     <li
@@ -45,8 +56,11 @@ const ContactItem: React.FC<IContact> = ({
           </a>
         </div>
         <div className={styles.contactHandlers}>
-          <button>
-            <MaterialIcon icon="check" size="30" />
+          <button
+            onClick={changeStatusContactHandler}
+            className={`${activeStatus ? styles.active : styles.inActive}`}
+          >
+            <MaterialIcon icon="check_box" size="30" />
           </button>
           <button onClick={deleteContactHandler}>
             <MaterialIcon icon="delete" size="30" />

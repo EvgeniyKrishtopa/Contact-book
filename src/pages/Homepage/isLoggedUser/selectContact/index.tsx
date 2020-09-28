@@ -32,13 +32,11 @@ const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
   return (
     <div className={styles.selectContactBlock}>
       <h3 className="center">Select contact by Email</h3>
-      <div className={styles.selectHolder}>
-        <Select
-          onChange={handleChange}
-          defaultValue={selectedOption}
-          options={options}
-        />
-      </div>
+      <Select
+        onChange={handleChange}
+        defaultValue={selectedOption}
+        options={options}
+      />
     </div>
   );
 };
