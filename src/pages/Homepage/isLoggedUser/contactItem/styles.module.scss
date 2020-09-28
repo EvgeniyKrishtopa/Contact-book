@@ -6,16 +6,9 @@
   background: rgba($gray, 0.1);
   border-radius: 0.45rem;
   margin-bottom: 20px;
-  overflow-x: auto;
-  transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
-  @media screen and (min-width: 767px) {
-    overflow-x: none;
-  }
-
-  &:hover {
-    border: 1px solid rgba($blue, 0.2);
-    background: rgba($blue, 0.3);
+  @media screen and (max-width: 767px) {
+    overflow-x: auto;
   }
 }
 
@@ -25,7 +18,7 @@
 }
 
 .inActiveContact {
-  background: rgba($blue, 0.1);
+  background: rgba($blue, 0.05);
 }
 
 .hiddenContact {
@@ -75,5 +68,17 @@
   button {
     margin-left: 12px;
     cursor: pointer;
+  }
+}
+
+.active {
+  i {
+    color: rgba($black, 0.54) !important;
+  }
+}
+
+.inActive {
+  i {
+    color: $white !important;
   }
 }

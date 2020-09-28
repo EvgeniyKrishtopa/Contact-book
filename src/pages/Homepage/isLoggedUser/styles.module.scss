@@ -32,42 +32,6 @@
   }
 }
 
-.selectHolder {
-  position: relative;
-
-  select {
-    border: 1px solid rgba($gray, 0.2);
-    border-radius: 0.45rem;
-    display: block;
-    width: 100%;
-    height: calc(1.5em + 0.75rem + 2px);
-    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    background-color: transparent;
-    color: $gray;
-    font-weight: 700;
-    appearance: none;
-    position: relative;
-    z-index: 10;
-
-    option {
-      font-weight: inherit;
-      display: block;
-      padding: 5px;
-    }
-  }
-
-  i {
-    position: absolute;
-    z-index: 9;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}
-
 .contactStatusFilter {
   padding-bottom: 40px;
 

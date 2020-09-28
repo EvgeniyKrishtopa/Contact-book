@@ -11,6 +11,7 @@ import {
   GET_CURRENT_USER_CONTACTS,
   DELETE_USER_CONTACT,
   FILTERED_CONTACT_BY_EMAIL,
+  CHANGE_CONTACT_STATUS,
 } from '../../constants';
 
 const db = firebase.firestore();
@@ -110,5 +111,26 @@ export const filterContact = (filteredContacts: any): ContactActionTypes => {
   return {
     type: FILTERED_CONTACT_BY_EMAIL,
     contactsData: filteredContacts,
+  };
+};
+
+export const changeContactStatus = (
+  id: string,
+  userId: string,
+  activeStatus: boolean,
+) => {
+  return async dispatch => {
+    db.collection('users')
+      .doc(userId)
+      .collection('Contacts')
+      .doc(id)
+      .update({ activeStatus: !activeStatus })
+      .then(() => dispatch(changeContact()));
+  };
+};
+
+const changeContact = (): ContactActionTypes => {
+  return {
+    type: CHANGE_CONTACT_STATUS,
   };
 };
