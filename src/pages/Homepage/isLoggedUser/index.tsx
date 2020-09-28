@@ -59,7 +59,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
         {userContacts.contactsData.length > 1 && (
           <>
             <SelectContact contacts={userContacts.contactsData} />
-            <StatusToggler />
+            <StatusToggler contacts={userContacts.contactsData} />
           </>
         )}
         {userContacts.contactsData.length > 0 && (

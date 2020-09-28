@@ -12,6 +12,7 @@ import {
   DELETE_USER_CONTACT,
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
+  FILTERED_CONTACT_BY_STATUS,
 } from '../../constants';
 
 const db = firebase.firestore();
@@ -132,5 +133,14 @@ export const changeContactStatus = (
 const changeContact = (): ContactActionTypes => {
   return {
     type: CHANGE_CONTACT_STATUS,
+  };
+};
+
+export const filterContactsByStatus = (
+  filteredContacts: any,
+): ContactActionTypes => {
+  return {
+    type: FILTERED_CONTACT_BY_STATUS,
+    contactsData: filteredContacts,
   };
 };

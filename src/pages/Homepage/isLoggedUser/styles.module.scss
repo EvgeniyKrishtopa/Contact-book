@@ -45,10 +45,28 @@
   justify-content: center;
   text-transform: uppercase;
 
+  li {
+    padding: 0 10px;
+    position: relative;
+
+    &:after {
+      content: '|';
+      position: absolute;
+      right: 0;
+      top: -1px;
+    }
+
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+  }
+
   a {
     &:hover {
       text-decoration: underline;
-      color: $fiolet;
+      color: $blue;
     }
   }
 }

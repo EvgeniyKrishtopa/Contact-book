@@ -6,6 +6,7 @@ import {
   DELETE_USER_CONTACT,
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
+  FILTERED_CONTACT_BY_STATUS,
 } from '../constants';
 import { IContacts } from '../../typings/interfaces';
 import { ContactActionTypes } from '../actions/Contacts/types';
@@ -58,6 +59,12 @@ const contacts = (
     case CHANGE_CONTACT_STATUS:
       return {
         ...state,
+      };
+
+    case FILTERED_CONTACT_BY_STATUS:
+      return {
+        ...state,
+        contactsData: action.contactsData,
       };
 
     default:

@@ -6,6 +6,7 @@ import {
   DELETE_USER_CONTACT,
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
+  FILTERED_CONTACT_BY_STATUS,
 } from '../../constants';
 
 import { IError, IContact } from '../../../typings/interfaces';
@@ -44,6 +45,11 @@ interface IChangeContactStatus {
   type: typeof CHANGE_CONTACT_STATUS;
 }
 
+interface IFilterContactByStatus {
+  type: typeof FILTERED_CONTACT_BY_STATUS;
+  contactsData: Array<IContact> | [];
+}
+
 export type ContactActionTypes =
   | IGetCurrentUserContacts
   | IContactSendStarted
@@ -51,4 +57,5 @@ export type ContactActionTypes =
   | IContactSendError
   | IDeleteContact
   | IFilteredContactByEmail
-  | IChangeContactStatus;
+  | IChangeContactStatus
+  | IFilterContactByStatus;
