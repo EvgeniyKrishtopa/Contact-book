@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../styles.module.scss';
 import ContactItem from '../contactItem';
-import { IContact } from '../../../../typings/interfaces';
+import { IContact } from 'typings/interfaces';
 
 const ContactList: React.FC<{ contacts: Array<IContact> }> = ({ contacts }) => {
   return (

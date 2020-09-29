@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { CurrentUserContext } from '../../context';
+import { CurrentUserContext } from 'context';
 import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { LogIn, SignUp } from '../../store/actions/Users/actions';
-import AuthForm from '../../components/AuthForm';
+import { LogIn, SignUp } from 'store/actions/Users/actions';
+import AuthForm from 'components/AuthForm';
 import styles from './styles.module.scss';
 import { RouteComponentProps } from 'react-router-dom';
 

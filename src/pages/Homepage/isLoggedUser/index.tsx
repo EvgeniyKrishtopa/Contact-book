@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LogOut } from '../../../store/actions/Users/actions';
+import { LogOut } from 'store/actions/Users/actions';
 import {
   SendContact,
   FetchCurrentUserContacts,
-} from '../../../store/actions/Contacts/actions';
+} from 'store/actions/Contacts/actions';
 import styles from './styles.module.scss';
-import ContactForm from '../../../components/ContactForm';
+import ContactForm from 'components/ContactForm';
 import ContactList from './contactsList';
 import SelectContact from './selectContact';
 import StatusToggler from './statusToggler';
 import { useHistory } from 'react-router-dom';
-import { getCurrentUserContacts } from '../../../selectors';
-import { RootState } from '../../../store/reducers';
-import { IContacts } from '../../../typings/interfaces';
+import { getCurrentUserContacts } from 'selectors';
+import { RootState } from 'store/reducers';
+import { IContacts } from 'typings/interfaces';
 
 export interface IContactSendData {
   contactName: string;

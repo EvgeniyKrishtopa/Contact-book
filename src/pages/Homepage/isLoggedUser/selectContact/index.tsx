@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from '../styles.module.scss';
 import Select from 'react-select';
-import { filterContact } from '../../../../store/actions/Contacts/actions';
-import { IContact } from '../../../../typings/interfaces';
+import { filterContact } from 'store/actions/Contacts/actions';
+import { IContact } from 'typings/interfaces';
 
 const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
   contacts,
@@ -27,7 +27,7 @@ const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
 
   const options = contacts
     .map(item => item.contactEmail)
-    .map(item => new Object({ label: item, value: item }));
+    .map(item => ({ label: item, value: item }));
 
   return (
     <div className={styles.selectContactBlock}>

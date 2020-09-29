@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
 import Input from '../Input';
-import { IUserAuthData } from '../../pages/Authentication';
-import { validate } from '../../utils';
+import { IUserAuthData } from 'pages/Authentication';
+import { validate } from 'utils';
 
 interface IProps {
   isLogin: boolean;
@@ -70,6 +70,6 @@ const AuthForm: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
 
 export default reduxForm<IUserAuthData, IProps>({
   form: 'Authform',
-  onSubmitSuccess: (result, dispatch, props) => dispatch(reset('Authform')),
+  onSubmitSuccess: (_result, dispatch, _props) => dispatch(reset('Authform')),
   validate,
 })(AuthForm);

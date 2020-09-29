@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from '../styles.module.scss';
 import { useDispatch } from 'react-redux';
-import { IContact } from '../../../../typings/interfaces';
-import { filterContactsByStatus } from '../../../../store/actions/Contacts/actions';
+import { IContact } from 'typings/interfaces';
+import { filterContactsByStatus } from 'store/actions/Contacts/actions';
 
 interface IFilter {
   textContent: string;

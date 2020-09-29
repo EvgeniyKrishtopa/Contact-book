@@ -4,6 +4,7 @@
     "browser": true,
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "plugins": ["prettier", "react", "react-hooks", "@typescript-eslint"],
   "extends": [
     "eslint:recommended",
@@ -24,13 +25,11 @@
     "operator-linebreak": [0],
     "no-debugger": [0],
     "indent": [0],
-    "space-before-function-paren": [0],
+    "no-new-object": [0],
+    "space-before-function-parent": [0],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "error",
-      { "variables": false }
-    ],
-    "react-hooks/rules-of-hooks": "error",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "react-hooks/rules-of-hooks": [1],
     "react-hooks/exhaustive-deps": "warn"
   }
 }

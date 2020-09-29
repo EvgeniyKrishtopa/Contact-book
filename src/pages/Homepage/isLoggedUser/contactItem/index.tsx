@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import {
   deleteContactFromBook,
   changeContactStatus,
-} from '../../../../store/actions/Contacts/actions';
+} from 'store/actions/Contacts/actions';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
-import { IContact } from '../../../../typings/interfaces';
-import { CurrentUserContext } from '../../../../context';
+import { IContact } from 'typings/interfaces';
+import { CurrentUserContext } from 'context';
 
 const ContactItem: React.FC<IContact> = ({
   contactEmail,
@@ -30,8 +30,6 @@ const ContactItem: React.FC<IContact> = ({
   ) => {
     dispatch(changeContactStatus(id, userId, activeStatus));
   };
-
-  const status = activeStatus ? false : true;
 
   return (
     <li

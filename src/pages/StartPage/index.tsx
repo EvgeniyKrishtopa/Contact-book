@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
-import { CurrentUserContext } from '../../context';
-import MainPageImg from '../../images/mainpage_bg.jpg';
+import { CurrentUserContext } from 'context';
+import MainPageImg from 'images/mainpage_bg.jpg';
 
 const backgroundImage = {
   backgroundImage: `url(${MainPageImg})`,
