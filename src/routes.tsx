@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Authentication from './pages/Authentication';
-import Homepage from './pages/Homepage';
-import StartPage from './pages/StartPage';
+import Loader from './components/Loader';
+const Authentication = lazy(() => import('./pages/Authentication'));
+const HomePage = lazy(() => import('./pages/Homepage'));
+const StartPage = lazy(() => import('./pages/StartPage'));
 
 export default () => {
   return (
-    <Switch>
-      <Route path="/" component={StartPage} exact />
-      <Route path="/home" component={Homepage} />
-      <Route path="/login" component={Authentication} />
-      <Route path="/register" component={Authentication} />
-    </Switch>
+    <Suspense fallback={Loader()}>
+      <Switch>
+        <Route path="/" component={StartPage} exact />
+        <Route path="/home" component={HomePage} />
+        <Route path="/login" component={Authentication} />
+        <Route path="/register" component={Authentication} />
+      </Switch>
+    </Suspense>
   );
 };
