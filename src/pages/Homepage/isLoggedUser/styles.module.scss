@@ -40,6 +40,11 @@
   }
 }
 
+.active {
+  text-decoration: underline;
+  color: $fiolet;
+}
+
 .contactsToggler {
   display: flex;
   justify-content: center;
@@ -65,8 +70,7 @@
 
   a {
     &:hover {
-      text-decoration: underline;
-      color: $blue;
+      @extend .active;
     }
   }
 }
