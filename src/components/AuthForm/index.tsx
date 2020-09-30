@@ -9,7 +9,7 @@ interface IProps {
   buttonText: string;
 }
 
-const AuthForm: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
+const Form: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
   isLogin,
   buttonText,
   ...props
@@ -68,8 +68,10 @@ const AuthForm: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
   );
 };
 
-export default reduxForm<IUserAuthData, IProps>({
+const AuthForm = reduxForm<IUserAuthData, IProps>({
   form: 'Authform',
   onSubmitSuccess: (_result, dispatch, _props) => dispatch(reset('Authform')),
   validate,
-})(AuthForm);
+})(Form);
+
+export default React.memo(AuthForm);

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import MaterialIcon from 'material-icons-react';
 import styles from './styles.module.scss';
 import { useDispatch } from 'react-redux';
@@ -8,11 +8,16 @@ import { changeAuthPage } from 'store/actions/Users/actions';
 
 const TopBar: React.FC = () => {
   const { userData } = useContext(CurrentUserContext);
+  const [currentUserData, setCurrentUserData] = useState<any | null>(null);
   const dispatch = useDispatch();
 
   const handleAuthPages = () => {
     dispatch(changeAuthPage());
   };
+
+  useEffect(() => {
+    setCurrentUserData(userData);
+  }, [userData]);
 
   return (
     <div className={styles.navbar}>
@@ -25,7 +30,7 @@ const TopBar: React.FC = () => {
           </strong>
           <nav className={styles.nav}>
             <ul>
-              {!userData && (
+              {!currentUserData && (
                 <>
                   <li>
                     <NavLink
@@ -50,7 +55,7 @@ const TopBar: React.FC = () => {
                 </>
               )}
 
-              {userData && <li>{userData.displayName}</li>}
+              {currentUserData && <li>{currentUserData.displayName}</li>}
             </ul>
           </nav>
         </div>

@@ -35,4 +35,4 @@ const ContactList: React.FC<{ contacts: Array<IContact> }> = ({ contacts }) => {
   );
 };
 
-export default ContactList;
+export default React.memo(ContactList);

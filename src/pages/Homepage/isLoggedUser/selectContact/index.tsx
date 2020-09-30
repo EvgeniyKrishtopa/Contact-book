@@ -41,4 +41,4 @@ const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
   );
 };
 
-export default SelectContact;
+export default React.memo(SelectContact);

@@ -110,4 +110,4 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
   );
 };
 
-export default StatusToggler;
+export default React.memo(StatusToggler);

@@ -75,4 +75,4 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   );
 };
 
-export default IsLogginedUserPage;
+export default React.memo(IsLogginedUserPage);

@@ -69,4 +69,4 @@ const ContactItem: React.FC<IContact> = ({
   );
 };
 
-export default ContactItem;
+export default React.memo(ContactItem);
