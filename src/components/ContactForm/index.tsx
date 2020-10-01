@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
 import { IContactSendData } from 'pages/Homepage/isLoggedUser/';
-import Input from '../Input';
+import Input from 'components/Input';
 import { validate } from 'utils';
 
 const Form: React.FC<InjectedFormProps<IContactSendData>> = ({

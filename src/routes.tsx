@@ -5,9 +5,9 @@ const Authentication = lazy(() => import('pages/Authentication'));
 const HomePage = lazy(() => import('pages/Homepage'));
 const StartPage = lazy(() => import('pages/StartPage'));
 
-export default () => {
+const Routes: React.FC = () => {
   return (
-    <Suspense fallback={Loader()}>
+    <Suspense fallback={Loader}>
       <Switch>
         <Route path="/" component={StartPage} exact />
         <Route path="/home" component={HomePage} />
@@ -17,3 +17,5 @@ export default () => {
     </Suspense>
   );
 };
+
+export default Routes;

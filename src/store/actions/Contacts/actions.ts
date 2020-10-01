@@ -1,8 +1,8 @@
-import firebase from '../../../firebase/firebase';
+import firebase from 'firebase/firebase';
 import { ThunkAction } from 'redux-thunk';
-import { RootState } from '../../reducers';
+import { RootState } from 'store/reducers';
 import { ContactActionTypes } from './types';
-import { IError } from '../../../typings/interfaces';
+import { IError, IContact } from 'typings/interfaces';
 
 import {
   SEND_CONTACT_STARTED,
@@ -13,10 +13,17 @@ import {
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
   FILTERED_CONTACT_BY_STATUS,
-} from '../../constants';
+} from 'store/constants';
 
 const db = firebase.firestore();
 type ThunkType = ThunkAction<void, RootState, unknown, ContactActionTypes>;
+
+const FetchContacts = (contactItems: any): ContactActionTypes => {
+  return {
+    type: GET_CURRENT_USER_CONTACTS,
+    contactsData: contactItems,
+  };
+};
 
 export const FetchCurrentUserContacts = (id: string): ThunkType => {
   return dispatch => {
@@ -35,10 +42,25 @@ export const FetchCurrentUserContacts = (id: string): ThunkType => {
   };
 };
 
-const FetchContacts = (contactItems: any): ContactActionTypes => {
+const contactSendStarted = (): ContactActionTypes => {
   return {
-    type: GET_CURRENT_USER_CONTACTS,
-    contactsData: contactItems,
+    type: SEND_CONTACT_STARTED,
+    loading: true,
+  };
+};
+
+const contactSendSuccess = (): ContactActionTypes => {
+  return {
+    type: SEND_CONTACT_SUCCESS,
+    loading: false,
+    error: null,
+  };
+};
+
+const contactSendError = (error: IError): ContactActionTypes => {
+  return {
+    type: SEND_CONTACT_ERROR,
+    error,
   };
 };
 
@@ -69,29 +91,16 @@ export const SendContact = (
   };
 };
 
-const contactSendStarted = (): ContactActionTypes => {
+const deleteContact = (): ContactActionTypes => {
   return {
-    type: SEND_CONTACT_STARTED,
-    loading: true,
+    type: DELETE_USER_CONTACT,
   };
 };
 
-const contactSendSuccess = (): ContactActionTypes => {
-  return {
-    type: SEND_CONTACT_SUCCESS,
-    loading: false,
-    error: null,
-  };
-};
-
-const contactSendError = (error: IError): ContactActionTypes => {
-  return {
-    type: SEND_CONTACT_ERROR,
-    error,
-  };
-};
-
-export const deleteContactFromBook = (id: string, userId: string) => {
+export const deleteContactFromBook = (
+  id: string,
+  userId: string,
+): ThunkType => {
   return async dispatch => {
     db.collection('users')
       .doc(userId)
@@ -102,16 +111,18 @@ export const deleteContactFromBook = (id: string, userId: string) => {
   };
 };
 
-const deleteContact = (): ContactActionTypes => {
-  return {
-    type: DELETE_USER_CONTACT,
-  };
-};
-
-export const filterContact = (filteredContacts: any): ContactActionTypes => {
+export const filterContact = (
+  filteredContacts: Array<IContact>,
+): ContactActionTypes => {
   return {
     type: FILTERED_CONTACT_BY_EMAIL,
     contactsData: filteredContacts,
+  };
+};
+
+const changeContact = (): ContactActionTypes => {
+  return {
+    type: CHANGE_CONTACT_STATUS,
   };
 };
 
@@ -119,7 +130,7 @@ export const changeContactStatus = (
   id: string,
   userId: string,
   activeStatus: boolean,
-) => {
+): ThunkType => {
   return async dispatch => {
     db.collection('users')
       .doc(userId)
@@ -130,14 +141,8 @@ export const changeContactStatus = (
   };
 };
 
-const changeContact = (): ContactActionTypes => {
-  return {
-    type: CHANGE_CONTACT_STATUS,
-  };
-};
-
 export const filterContactsByStatus = (
-  filteredContacts: any,
+  filteredContacts: Array<IContact>,
 ): ContactActionTypes => {
   return {
     type: FILTERED_CONTACT_BY_STATUS,

@@ -13,13 +13,29 @@ import StatusToggler from './statusToggler';
 import { useHistory } from 'react-router-dom';
 import { getCurrentUserContacts } from 'selectors';
 import { RootState } from 'store/reducers';
-import { IContacts } from 'typings/interfaces';
+import { IContacts, IContact } from 'typings/interfaces';
 
 export interface IContactSendData {
   contactName: string;
   contactEmail: string;
   contactPhone: string;
 }
+
+const ContactsWidgets: React.FC<{ contactList: Array<IContact> }> = ({
+  contactList,
+}) => {
+  return (
+    <>
+      {contactList.length > 1 && (
+        <>
+          <SelectContact contacts={contactList} />
+          <StatusToggler contacts={contactList} />
+        </>
+      )}
+      {contactList.length > 0 && <ContactList contacts={contactList} />}
+    </>
+  );
+};
 
 const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   const dispatch = useDispatch();
@@ -56,14 +72,10 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
           <h3 className="center">Add New Contact</h3>
           <ContactForm onSubmit={formSubmit} />
         </div>
-        {userContacts.contactsData.length > 1 && (
-          <>
-            <SelectContact contacts={userContacts.contactsData} />
-            <StatusToggler contacts={userContacts.contactsData} />
-          </>
-        )}
-        {userContacts.contactsData.length > 0 && (
-          <ContactList contacts={userContacts.contactsData} />
+        {userContacts.contactsData ? (
+          <ContactsWidgets contactList={userContacts.contactsData} />
+        ) : (
+          <p>Loading...</p>
         )}
         <div className={styles.btnHolder}>
           <button className="btn" onClick={signOut}>

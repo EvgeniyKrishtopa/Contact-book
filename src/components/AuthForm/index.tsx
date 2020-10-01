@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
-import Input from '../Input';
+import Input from 'components/Input';
 import { IUserAuthData } from 'pages/Authentication';
 import { validate } from 'utils';
 

@@ -12,9 +12,9 @@ import {
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
-} from '../../constants';
+} from 'store/constants';
 
-import { IError } from '../../../typings/interfaces';
+import { IError } from 'typings/interfaces';
 
 interface ILogInStarted {
   type: typeof LOG_IN_STARTED;

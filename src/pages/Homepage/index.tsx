@@ -1,7 +1,7 @@
 import React, { lazy, useContext, useState, useEffect } from 'react';
 import { CurrentUserContext } from 'context';
+import Loader from 'components/Loader';
 const IsLogginedUserPage = lazy(() => import('./isLoggedUser'));
-const Loader = lazy(() => import('components/Loader'));
 
 const Homepage: React.FC = () => {
   const { userData, isLoginnedUser } = useContext(CurrentUserContext);

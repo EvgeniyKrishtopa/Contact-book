@@ -21,13 +21,11 @@ const ContactItem: React.FC<IContact> = ({
   const userId: string = userData.uid;
   const dispatch = useDispatch();
 
-  const deleteContactHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const deleteContactHandler = () => {
     dispatch(deleteContactFromBook(id, userId));
   };
 
-  const changeStatusContactHandler = (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const changeStatusContactHandler = () => {
     dispatch(changeContactStatus(id, userId, activeStatus));
   };
 

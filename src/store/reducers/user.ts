@@ -12,9 +12,9 @@ import {
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
-} from '../constants';
-import { IUser } from '../../typings/interfaces';
-import { UserActionTypes } from '../actions/Users/types';
+} from 'store/constants';
+import { IUser } from 'typings/interfaces';
+import { UserActionTypes } from 'store/actions/Users/types';
 
 const USERSTATE: IUser = {
   loading: false,
@@ -106,7 +106,7 @@ const user = (state = USERSTATE, action: UserActionTypes): IUser => {
     case IS_LOG_IN_ERROR: {
       return {
         ...state,
-        error: action.error
+        error: action.error,
       };
     }
 

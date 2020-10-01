@@ -7,9 +7,9 @@ import {
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
   FILTERED_CONTACT_BY_STATUS,
-} from '../constants';
-import { IContacts } from '../../typings/interfaces';
-import { ContactActionTypes } from '../actions/Contacts/types';
+} from 'store/constants';
+import { IContacts } from 'typings/interfaces';
+import { ContactActionTypes } from 'store/actions/Contacts/types';
 
 const CONTACTSSTATE: IContacts = {
   loading: false,

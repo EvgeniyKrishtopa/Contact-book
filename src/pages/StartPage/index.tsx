@@ -9,12 +9,14 @@ const backgroundImage = {
 };
 
 const StartPage: React.FC = () => {
-  const [isLoginnedUserState, setIsLoginnedUserState] = useState<boolean>(false);
+  const [isLoginnedUserState, setIsLoginnedUserState] = useState<boolean>(
+    false,
+  );
   const { isLoginnedUser } = useContext(CurrentUserContext);
 
   useEffect(() => {
     setIsLoginnedUserState(isLoginnedUser);
-  }, [isLoginnedUser ])
+  }, [isLoginnedUser]);
 
   return (
     <div className={`${styles.startPage} page-center`} style={backgroundImage}>
