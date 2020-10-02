@@ -1,7 +1,8 @@
-@import '../../../styles/variables.scss';
+@import 'styles/variables.scss';
 
 .contactsPage {
   padding: 40px 0;
+  min-height: calc(100vh - 140px);
 
   h2 {
     margin-bottom: 30px;

@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className="container">
         <div className="projectInfo">
-          Designed and built with all the love in the world by the{' '}
+          Designed and built with all the love in the world by the &nbsp;
           <a href="https://www.linkedin.com/in/evgeniy-krishtopa/">
             Evgeniy Krishtopa
           </a>

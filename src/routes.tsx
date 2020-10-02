@@ -7,7 +7,7 @@ const StartPage = lazy(() => import('pages/StartPage'));
 
 const Routes: React.FC = () => {
   return (
-    <Suspense fallback={Loader}>
+    <Suspense fallback={<Loader />}>
       <Switch>
         <Route path="/" component={StartPage} exact />
         <Route path="/home" component={HomePage} />

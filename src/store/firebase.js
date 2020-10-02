@@ -1,9 +1,7 @@
 import * as firebase from 'firebase/app';
-import 'firebase/database';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyD8HSI8eD9HdEGtFtZCdQayV4qTDLi6oH4',
   authDomain: 'contact-book-refactored.firebaseapp.com',
@@ -14,7 +12,6 @@ const firebaseConfig = {
   appId: '1:809880163120:web:37ebdcacba3eb613212ef5',
   measurementId: 'G-EJZWLE5Y7B',
 };
-// Initialize Firebase
 
 firebase.initializeApp(firebaseConfig);
 

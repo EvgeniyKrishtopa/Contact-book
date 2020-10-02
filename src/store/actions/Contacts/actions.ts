@@ -1,4 +1,4 @@
-import firebase from 'firebase/firebase';
+import firebase from 'store/firebase';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from 'store/reducers';
 import { ContactActionTypes } from './types';
@@ -16,6 +16,7 @@ import {
 } from 'store/constants';
 
 const db = firebase.firestore();
+
 type ThunkType = ThunkAction<void, RootState, unknown, ContactActionTypes>;
 
 const FetchContacts = (contactItems: any): ContactActionTypes => {

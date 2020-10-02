@@ -1,8 +1,9 @@
-import firebase from 'firebase/firebase';
+import firebase from 'store/firebase';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from 'store/reducers';
 import { UserActionTypes } from './types';
 import { IError } from 'typings/interfaces';
+
 import {
   LOG_IN_STARTED,
   LOG_IN_ERROR,
@@ -20,6 +21,7 @@ import {
 } from 'store/constants';
 
 const auth = firebase.auth();
+
 type ThunkType = ThunkAction<void, RootState, unknown, UserActionTypes>;
 
 const logInStarted = (): UserActionTypes => {
@@ -166,7 +168,7 @@ const isLoginSuccess = (user: any | null): UserActionTypes => {
 const isLoginError = (): UserActionTypes => {
   return {
     type: IS_LOG_IN_ERROR,
-    error: { message: 'No user is signed in' },
+    error: { message: 'No user have signed in' },
   };
 };
 
