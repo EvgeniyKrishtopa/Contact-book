@@ -1,15 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
-import { CurrentUserContext } from '../../context';
-import MainPageImg from '../../images/mainpage_bg.jpg';
+import { CurrentUserContext } from 'context';
+import MainPageImg from 'images/mainpage_bg.jpg';
 
 const backgroundImage = {
   backgroundImage: `url(${MainPageImg})`,
 };
 
 const StartPage: React.FC = () => {
+  const [isLoginnedUserState, setIsLoginnedUserState] = useState<boolean>(
+    false,
+  );
   const { isLoginnedUser } = useContext(CurrentUserContext);
+
+  useEffect(() => {
+    setIsLoginnedUserState(isLoginnedUser);
+  }, [isLoginnedUser]);
 
   return (
     <div className={`${styles.startPage} page-center`} style={backgroundImage}>
@@ -19,7 +26,7 @@ const StartPage: React.FC = () => {
           Welcome to <strong>Your Contact Book</strong>! You can create a lot of
           necessary contacts and manage them here!
         </p>
-        {!isLoginnedUser && (
+        {!isLoginnedUserState && (
           <>
             <Link to="/register" className="btn btn-primary">
               Need an Account?
@@ -31,7 +38,7 @@ const StartPage: React.FC = () => {
           </>
         )}
 
-        {isLoginnedUser && (
+        {isLoginnedUserState && (
           <Link className="btn btn-primary" to="/home">
             Go To Homepage
           </Link>

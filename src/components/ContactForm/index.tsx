@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
-import { IContactSendData } from '../../pages/Homepage/isLoggedUser/';
-import Input from '../Input';
-import { validate } from '../../utils';
+import { IContactSendData } from 'pages/Homepage/isLoggedUser/';
+import Input from 'components/Input';
+import { validate } from 'utils';
 
 const Form: React.FC<InjectedFormProps<IContactSendData>> = ({
   handleSubmit,
@@ -61,7 +61,8 @@ const Form: React.FC<InjectedFormProps<IContactSendData>> = ({
 const ContactForm = reduxForm<IContactSendData>({
   form: 'contactForm',
   validate,
-  onSubmitSuccess: (result, dispatch, props) => dispatch(reset('contactForm')),
+  onSubmitSuccess: (_result, dispatch, _props) =>
+    dispatch(reset('contactForm')),
 })(Form);
 
 export default ContactForm;

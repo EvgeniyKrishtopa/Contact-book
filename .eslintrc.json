@@ -4,17 +4,19 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["prettier", "react", "react-hooks", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "react-hooks", "prettier", "@typescript-eslint"],
   "extends": [
+    "prettier",
+    "prettier/@typescript-eslint",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "plugin:prettier/recommended"
   ],
   "rules": {
-    "semi": [0],
+    "semi": "off",
+    "@typescript-eslint/semi": "error",
     "quotes": [0],
     "object-curly-spacing": [0],
     "arrow-parents": [0],
@@ -24,13 +26,21 @@
     "operator-linebreak": [0],
     "no-debugger": [0],
     "indent": [0],
-    "space-before-function-paren": [0],
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": [
+    "no-new-object": [0],
+    "space-before-function-parent": [0],
+    "no-use-before-define": [0],
+    "eslint-disable-next-line": "off",
+    "@typescript-eslint/no-use-before-define": [0],
+    "react-hooks/rules-of-hooks": [1],
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": 0,
+    "@typescript-eslint/no-explicit-any": [0],
+    "@typescript-eslint/no-unused-vars": [0],
+    "prettier/prettier": [
       "error",
-      { "variables": false }
-    ],
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }

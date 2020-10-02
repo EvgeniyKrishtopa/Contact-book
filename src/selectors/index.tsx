@@ -1,5 +1,6 @@
-import { createSelector } from 'reselect';
-import { RootState } from '../store/reducers';
-//Should add memoized selector when I'll create filter contacts by status and email
-export const getCurrentUser = (state: RootState) => state.user;
-export const getCurrentUserContacts = (state: RootState) => state.contacts;
+import { RootState } from 'store/reducers';
+import { IUser, IContacts } from 'typings/interfaces';
+
+export const getCurrentUser = (state: RootState): IUser => state.user;
+export const getCurrentUserContacts = (state: RootState): IContacts =>
+  state.contacts;

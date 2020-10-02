@@ -7,9 +7,9 @@ import {
   FILTERED_CONTACT_BY_EMAIL,
   CHANGE_CONTACT_STATUS,
   FILTERED_CONTACT_BY_STATUS,
-} from '../../constants';
+} from 'store/constants';
 
-import { IError, IContact } from '../../../typings/interfaces';
+import { IError, IContact } from 'typings/interfaces';
 
 interface IGetCurrentUserContacts {
   type: typeof GET_CURRENT_USER_CONTACTS;

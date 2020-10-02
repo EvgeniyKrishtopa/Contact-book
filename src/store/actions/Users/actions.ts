@@ -1,8 +1,9 @@
-import firebase from '../../../firebase/firebase';
+import firebase from 'store/firebase';
 import { ThunkAction } from 'redux-thunk';
-import { RootState } from '../../reducers';
+import { RootState } from 'store/reducers';
 import { UserActionTypes } from './types';
-import { IError } from '../../../typings/interfaces';
+import { IError } from 'typings/interfaces';
+
 import {
   LOG_IN_STARTED,
   LOG_IN_ERROR,
@@ -17,24 +18,11 @@ import {
   SIGN_OUT_ERROR,
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
-} from '../../constants';
+} from 'store/constants';
 
 const auth = firebase.auth();
-type ThunkType = ThunkAction<void, RootState, unknown, UserActionTypes>;
 
-export const LogIn = (userEmail: string, userPassword: string): ThunkType => {
-  return dispatch => {
-    dispatch(logInStarted());
-    auth
-      .signInWithEmailAndPassword(userEmail, userPassword)
-      .then(({ user }) => {
-        dispatch(logInSuccess(user));
-      })
-      .catch(error => {
-        dispatch(logInEroor(error));
-      });
-  };
-};
+type ThunkType = ThunkAction<void, RootState, unknown, UserActionTypes>;
 
 const logInStarted = (): UserActionTypes => {
   return {
@@ -60,25 +48,16 @@ const logInEroor = (error: IError): UserActionTypes => {
   };
 };
 
-export const SignUp = (
-  userEmail: string,
-  userPassword: string,
-  userLogin: string,
-): ThunkType => {
+export const LogIn = (userEmail: string, userPassword: string): ThunkType => {
   return dispatch => {
-    dispatch(signUpStarted());
+    dispatch(logInStarted());
     auth
-      .createUserWithEmailAndPassword(userEmail, userPassword)
+      .signInWithEmailAndPassword(userEmail, userPassword)
       .then(({ user }) => {
-        if (user) {
-          user
-            .updateProfile({ displayName: userLogin })
-            .then(() => dispatch(signUpSuccess(user)));
-        }
+        dispatch(logInSuccess(user));
       })
-
       .catch(error => {
-        dispatch(signUpError(error));
+        dispatch(logInEroor(error));
       });
   };
 };
@@ -107,17 +86,25 @@ const signUpError = (error: IError): UserActionTypes => {
   };
 };
 
-export const LogOut = (): ThunkType => {
+export const SignUp = (
+  userEmail: string,
+  userPassword: string,
+  userLogin: string,
+): ThunkType => {
   return dispatch => {
-    dispatch(logOutStarted());
+    dispatch(signUpStarted());
     auth
-      .signOut()
-      .then(() => {
-        dispatch(logOutSuccess());
+      .createUserWithEmailAndPassword(userEmail, userPassword)
+      .then(({ user }) => {
+        if (user) {
+          user
+            .updateProfile({ displayName: userLogin })
+            .then(() => dispatch(signUpSuccess(user)));
+        }
       })
 
       .catch(error => {
-        dispatch(logOutError(error));
+        dispatch(signUpError(error));
       });
   };
 };
@@ -146,17 +133,18 @@ const logOutError = (error: IError): UserActionTypes => {
   };
 };
 
-export const IsLogIn = (): ThunkType => {
+export const LogOut = (): ThunkType => {
   return dispatch => {
-    dispatch(isLoginStarted());
+    dispatch(logOutStarted());
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(logOutSuccess());
+      })
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        dispatch(isLoginSuccess(user));
-      } else {
-        dispatch(isLoginError());
-      }
-    });
+      .catch(error => {
+        dispatch(logOutError(error));
+      });
   };
 };
 
@@ -180,7 +168,21 @@ const isLoginSuccess = (user: any | null): UserActionTypes => {
 const isLoginError = (): UserActionTypes => {
   return {
     type: IS_LOG_IN_ERROR,
-    error: { message: 'No user is signed in' },
+    error: { message: 'No user have signed in' },
+  };
+};
+
+export const IsLogIn = (): ThunkType => {
+  return dispatch => {
+    dispatch(isLoginStarted());
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        dispatch(isLoginSuccess(user));
+      } else {
+        dispatch(isLoginError());
+      }
+    });
   };
 };
 
