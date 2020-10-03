@@ -1,4 +1,14 @@
-Link https://evgeniykrishtopa.github.io/Contact-book/
+## For this application I've used such technologies as:
+
+React, react-hooks, react-router,
+css modules,
+redux-forms,
+react-select,
+typescript,
+redux (thunk middleware),
+firebase
+
+## Available Link https://evgeniykrishtopa.github.io/Contact-book/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
