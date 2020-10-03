@@ -10,7 +10,7 @@ firebase.
 
 After registration You can create your contacts and manage them: add new contact, remove, filter by email, change contact status, filter contact by status.
 
-## Available Link https://evgeniykrishtopa.github.io/Contact-book/
+## Link https://evgeniykrishtopa.github.io/Contact-book/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
