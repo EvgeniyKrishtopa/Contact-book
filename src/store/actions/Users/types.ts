@@ -85,7 +85,7 @@ interface IIsLoginSuccess {
 
 interface IIsLoginError {
   type: typeof IS_LOG_IN_ERROR;
-  error: IError;
+  isLoginnedUser: boolean;
 }
 
 interface IChangeAuthPage {

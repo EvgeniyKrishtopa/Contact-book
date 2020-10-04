@@ -106,7 +106,7 @@ const user = (state = USERSTATE, action: UserActionTypes): IUser => {
     case IS_LOG_IN_ERROR: {
       return {
         ...state,
-        error: action.error,
+        isLoginnedUser: action.isLoginnedUser,
       };
     }
 
