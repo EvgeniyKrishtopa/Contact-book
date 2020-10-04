@@ -2,7 +2,7 @@ import React from 'react';
 import 'normalize.css';
 import 'styles/common.scss';
 import Routes from 'routes';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import CurrentUserProvider from 'currentUserProvider';
 import TopBar from 'components/Topbar';
 import Footer from 'components/Footer';

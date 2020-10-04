@@ -1,5 +1,6 @@
 {
-  "name": "calendar-app",
+  "homepage": "http://EvgeniyKrishtopa.github.io/Contact-book",
+  "name": "contact-book",
   "version": "2.0.0",
   "private": true,
   "dependencies": {

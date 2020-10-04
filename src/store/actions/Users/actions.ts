@@ -168,7 +168,7 @@ const isLoginSuccess = (user: any | null): UserActionTypes => {
 const isLoginError = (): UserActionTypes => {
   return {
     type: IS_LOG_IN_ERROR,
-    error: { message: 'No user have signed in' },
+    isLoginnedUser: false,
   };
 };
 
