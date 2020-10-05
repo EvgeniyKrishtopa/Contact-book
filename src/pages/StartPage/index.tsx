@@ -31,7 +31,6 @@ const StartPage: React.FC = () => {
             <Link to="/register" className="btn btn-primary">
               Need an Account?
             </Link>
-            &nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/login" className="btn btn-primary">
               Have an Account?
             </Link>
