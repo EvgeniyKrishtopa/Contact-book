@@ -103,9 +103,9 @@ test('toggling a contact status updates it via Firestore', () => {
   });
 });
 
-// Visibility is CSS-driven (a hiddenContact/visibleContact class swap, see
-// contactsList/index.tsx): every contact stays mounted, so this asserts the
-// class change rather than DOM presence.
+// Visibility is CSS-driven (a hidden/block class swap, see contactItem/
+// index.tsx): every contact stays mounted, so this asserts the class change
+// rather than DOM presence.
 test('filtering contacts by status marks non-matching contacts as hidden', async () => {
   const { getByText } = renderHomepage([
     contact({ id: '1', contactName: 'Jane', activeStatus: true }),
@@ -115,13 +115,13 @@ test('filtering contacts by status marks non-matching contacts as hidden', async
   const janeItem = () => getByText('Jane').closest('li');
   const johnItem = () => getByText('John').closest('li');
 
-  expect(janeItem()).toHaveClass('visibleContact');
-  expect(johnItem()).toHaveClass('visibleContact');
+  expect(janeItem()).toHaveClass('block');
+  expect(johnItem()).toHaveClass('block');
 
   fireEvent.click(getByText('Inactive'));
 
-  await waitFor(() => expect(janeItem()).toHaveClass('hiddenContact'));
-  expect(johnItem()).toHaveClass('visibleContact');
+  await waitFor(() => expect(janeItem()).toHaveClass('hidden'));
+  expect(johnItem()).toHaveClass('block');
 });
 
 test('signing out logs the user out via Firebase and navigates to the start page', async () => {

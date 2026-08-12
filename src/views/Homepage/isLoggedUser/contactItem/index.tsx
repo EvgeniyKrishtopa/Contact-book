@@ -11,7 +11,6 @@ import {
   MdCheckBox,
   MdDelete,
 } from 'react-icons/md';
-import styles from './styles.module.scss';
 import { IContact } from 'typings/interfaces';
 import { CurrentUserContext } from 'context';
 
@@ -37,34 +36,39 @@ const ContactItem: React.FC<IContact> = ({
 
   return (
     <li
-      className={`${styles.contactItem} 
-      ${activeStatus ? styles.activeContact : styles.inActiveContact}
-      ${visibility ? styles.visibleContact : styles.hiddenContact}
+      className={`px-[10px] py-[8px] border rounded-[0.45rem] mb-[20px] max-[767px]:overflow-x-auto
+      ${activeStatus ? 'border-blue/20 bg-blue/30' : 'border-gray/20 bg-blue/5'}
+      ${visibility ? 'block' : 'hidden'}
       `}
     >
-      <div className={styles.contactItemHolder}>
-        <div className={styles.contactData}>
-          <span className={styles.contactName}>
-            <MdAccountBox size={30} />
+      <div className="flex min-w-[737px] justify-between">
+        <div className="pr-[30px] text-blue flex">
+          <span className="pr-[30px] flex items-center">
+            <MdAccountBox size={30} className="text-fiolet mr-[7px]" />
             {contactName}
           </span>
-          <a href={`mailto:${contactEmail}`} className={styles.contactEmail}>
-            <MdContactMail size={30} />
+          <a
+            href={`mailto:${contactEmail}`}
+            className="pr-[30px] flex items-center"
+          >
+            <MdContactMail size={30} className="text-fiolet mr-[7px]" />
             {contactEmail}
           </a>
-          <a href={`tel:${contactPhone}`} className={styles.contactPhone}>
-            <MdContactPhone size={30} />
+          <a href={`tel:${contactPhone}`} className="flex items-center">
+            <MdContactPhone size={30} className="text-fiolet mr-[7px]" />
             {contactPhone}
           </a>
         </div>
-        <div className={styles.contactHandlers}>
+        <div>
           <button
             onClick={changeStatusContactHandler}
-            className={`${activeStatus ? styles.active : styles.inActive}`}
+            className={`ml-[12px] cursor-pointer ${
+              activeStatus ? 'text-black/54' : 'text-white'
+            }`}
           >
             <MdCheckBox size={30} />
           </button>
-          <button onClick={deleteContactHandler}>
+          <button onClick={deleteContactHandler} className="ml-[12px] cursor-pointer">
             <MdDelete size={30} />
           </button>
         </div>

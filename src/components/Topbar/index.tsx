@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { MdViewList } from 'react-icons/md';
-import styles from './styles.module.scss';
 import { useAppDispatch } from 'store/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,35 +20,39 @@ const TopBar: React.FC = () => {
     setCurrentUserData(userData);
   }, [userData]);
 
+  const underlineClosing =
+    "font-bold text-black/80 relative pb-[5px] after:content-[''] after:absolute after:top-full after:left-0 after:h-[3px] after:w-0 after:bg-black/80 after:transition-[width] after:duration-200 after:ease-in-out before:content-[''] before:absolute before:top-full before:right-0 before:h-[3px] before:w-0 before:bg-black/80 before:transition-[width] before:duration-200 before:ease-in-out hover:after:w-1/2 hover:before:w-1/2";
+  const active = 'text-fiolet after:bg-fiolet before:bg-fiolet';
+
   return (
-    <div className={styles.navbar}>
+    <div className="py-[5px] bg-blue/5 min-[767px]:py-[15px]">
       <div className="container">
         <div className="row">
-          <strong className={styles.logo}>
-            <Link href="/">
+          <strong className="max-w-[200px]">
+            <Link href="/" className="flex items-center text-black">
               <MdViewList size={24} /> Y C B
             </Link>
           </strong>
-          <nav className={styles.nav}>
-            <ul>
+          <nav>
+            <ul className="flex flex-wrap items-center">
               {!currentUserData && (
                 <>
-                  <li>
+                  <li className="px-[10px]">
                     <Link
                       href="/login"
-                      className={`${styles.underlineClosing} ${
-                        pathname === '/login' ? styles.active : ''
+                      className={`${underlineClosing} ${
+                        pathname === '/login' ? active : ''
                       }`}
                       onClick={handleAuthPages}
                     >
                       Log In
                     </Link>
                   </li>
-                  <li>
+                  <li className="px-[10px]">
                     <Link
                       href="/register"
-                      className={`${styles.underlineClosing} ${
-                        pathname === '/register' ? styles.active : ''
+                      className={`${underlineClosing} ${
+                        pathname === '/register' ? active : ''
                       }`}
                       onClick={handleAuthPages}
                     >
@@ -59,7 +62,9 @@ const TopBar: React.FC = () => {
                 </>
               )}
 
-              {currentUserData && <li>{currentUserData.displayName}</li>}
+              {currentUserData && (
+                <li className="px-[10px]">{currentUserData.displayName}</li>
+              )}
             </ul>
           </nav>
         </div>

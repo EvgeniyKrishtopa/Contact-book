@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styles from '../styles.module.scss';
 import { useAppDispatch } from 'store/hooks';
 import { IContact } from 'typings/interfaces';
 import { filterContactsByStatus } from 'store/actions/Contacts/actions';
@@ -14,6 +13,7 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
   contacts,
 }) => {
   const dispatch = useAppDispatch();
+  const activeClassName = 'underline text-fiolet';
 
   const filters: Array<IFilter> = [
     {
@@ -29,7 +29,7 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
     {
       textContent: 'All',
       id: 3,
-      className: `${styles.active}`,
+      className: activeClassName,
     },
   ];
 
@@ -43,7 +43,7 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
     const currentFilters = filters.map(item => {
       item.className = '';
       if (item.textContent === e.currentTarget.textContent) {
-        item.className = `${styles.active}`;
+        item.className = activeClassName;
       }
       return item;
     });
@@ -79,16 +79,19 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
   };
 
   return (
-    <div className={styles.contactStatusFilter}>
-      <h3 className="center">Filter contacts by status:</h3>
-      <ul className={styles.contactsToggler}>
+    <div className="pb-[40px]">
+      <h3 className="center mb-[10px]">Filter contacts by status:</h3>
+      <ul className="flex justify-center uppercase">
         {contactStatusFilters.map(({ textContent, id, className }) => {
           return (
-            <li key={id}>
+            <li
+              key={id}
+              className="relative px-[10px] after:content-['|'] after:absolute after:right-0 after:-top-px last:after:hidden"
+            >
               <a
                 href="/"
                 onClick={handleContactsByStatus}
-                className={className}
+                className={`hover:underline hover:text-fiolet ${className}`}
               >
                 {textContent}
               </a>

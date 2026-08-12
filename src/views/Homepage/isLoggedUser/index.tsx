@@ -5,7 +5,6 @@ import {
   SendContact,
   FetchCurrentUserContacts,
 } from 'store/actions/Contacts/actions';
-import styles from './styles.module.scss';
 import ContactForm from 'components/ContactForm';
 import ContactList from './contactsList';
 import SelectContact from './selectContact';
@@ -64,11 +63,13 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   };
 
   return (
-    <div className={styles.contactsPage}>
+    <div className="py-[40px] min-h-[calc(100vh-140px)]">
       <div className="container">
-        <h2 className="center">{user && `Hello, ${user.displayName}`}</h2>
-        <div className={styles.formBlock}>
-          <h3 className="center">Add New Contact</h3>
+        <h2 className="center mb-[30px]">
+          {user && `Hello, ${user.displayName}`}
+        </h2>
+        <div className="pb-[10px]">
+          <h3 className="center mb-[20px]">Add New Contact</h3>
           <ContactForm onSubmit={formSubmit} />
         </div>
         {userContacts.contactsData ? (
@@ -76,7 +77,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
         ) : (
           <p>Loading...</p>
         )}
-        <div className={styles.btnHolder}>
+        <div className="center">
           <button className="btn" onClick={signOut}>
             Log Out
           </button>
