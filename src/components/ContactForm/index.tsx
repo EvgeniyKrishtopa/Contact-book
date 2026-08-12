@@ -30,7 +30,7 @@ const ContactForm: React.FC<IProps> = ({ onSubmit }) => {
       onSubmit={handleSubmit(submitHandler)}
     >
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Name
           <Input
             type="text"
@@ -42,7 +42,7 @@ const ContactForm: React.FC<IProps> = ({ onSubmit }) => {
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Email
           <Input
             type="email"
@@ -54,7 +54,7 @@ const ContactForm: React.FC<IProps> = ({ onSubmit }) => {
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Phone
           <Input
             type="tel"
@@ -68,7 +68,7 @@ const ContactForm: React.FC<IProps> = ({ onSubmit }) => {
       <button
         type="submit"
         disabled={!isDirty || isSubmitting}
-        className="btn btn-primary"
+        className="btn btn-primary self-center min-w-[150px] disabled:bg-blue/70 disabled:border-blue/70"
       >
         Submit Contact
       </button>

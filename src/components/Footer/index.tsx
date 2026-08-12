@@ -1,11 +1,10 @@
 import React from 'react';
-import styles from './styles.module.scss';
 
 const Footer: React.FC = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className="py-[15px] bg-gray/20 text-center">
       <div className="container">
-        <div className="projectInfo">
+        <div>
           Designed and built with all the love in the world by the &nbsp;
           <a href="https://www.linkedin.com/in/evgeniy-krishtopa/">
             Evgeniy Krishtopa

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from 'store/hooks';
-import styles from '../styles.module.scss';
 import Select from 'react-select';
 import { filterContact } from 'store/actions/Contacts/actions';
 import { IContact } from 'typings/interfaces';
@@ -26,8 +25,8 @@ const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
     .map(item => ({ label: item, value: item }));
 
   return (
-    <div className={styles.selectContactBlock}>
-      <h3 className="center">Select contact by Email</h3>
+    <div className="mb-[40px]">
+      <h3 className="center mb-[20px]">Select contact by Email</h3>
       <Select
         onChange={handleChange}
         defaultValue={selectedOption}

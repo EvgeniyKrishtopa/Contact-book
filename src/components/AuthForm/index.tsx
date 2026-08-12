@@ -33,7 +33,7 @@ const AuthForm: React.FC<IProps> = ({ isLogin, buttonText, onSubmit }) => {
     >
       {!isLogin && (
         <div className="input-holder">
-          <label className="form-label">
+          <label>
             Your Login
             <Input
               type="text"
@@ -46,7 +46,7 @@ const AuthForm: React.FC<IProps> = ({ isLogin, buttonText, onSubmit }) => {
         </div>
       )}
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Your Email
           <Input
             type="email"
@@ -58,7 +58,7 @@ const AuthForm: React.FC<IProps> = ({ isLogin, buttonText, onSubmit }) => {
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Your Password
           <Input
             type="password"
@@ -73,7 +73,7 @@ const AuthForm: React.FC<IProps> = ({ isLogin, buttonText, onSubmit }) => {
       <button
         type="submit"
         disabled={!isDirty || isSubmitting}
-        className="btn btn-primary"
+        className="btn btn-primary self-center min-w-[150px] disabled:bg-blue/70 disabled:border-blue/70"
       >
         {buttonText}
       </button>

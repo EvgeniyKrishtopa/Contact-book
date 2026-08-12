@@ -256,6 +256,52 @@ for colors instead of arbitrary values. Delete the `.scss`/`.module.scss` files 
 build before moving to the next (this phase is pure presentation — no behavior should change, but
 it's the phase most likely to introduce visual regressions since it touches every component).
 
+*Implementation notes (discovered during Phase 6, not anticipated above):*
+- *`styles/common.scss` and `normalize.css` turned out to be silently orphaned since Phase 1:
+  `App.tsx`'s import of both was dropped when it was restructured into `app/layout.tsx` +
+  `app/providers.tsx`, and nothing re-added it. Confirmed against `master`'s original `App.tsx`.
+  This meant every plain-string className from `common.scss` (`.btn`, `.container`, `.form-control`,
+  `.input-holder`, etc. — used across `AuthForm`, `ContactForm`, `Footer`, `Topbar`, `StartPage`,
+  `Authentication`, and the logged-in Homepage tree) was rendering completely unstyled, and Tailwind's
+  own Preflight (`h1`-`h6 { font-size: inherit; font-weight: inherit; }`, active since Phase 1) was
+  flattening every heading to body-text size with no compensating override. Restoring this cascade is
+  squarely this phase's job ("convert the two global stylesheets"), so it's fixed here rather than
+  filed separately: `app/globals.css` now has a `@layer base` restoring the body font/link/heading
+  defaults `common.scss` + the browser's own UA stylesheet used to provide, and normalize.css itself
+  is dropped outright as a dependency — Tailwind's Preflight already fully supersedes it.*
+- *Classes shared across multiple, unrelated components (`.btn`/`.btn-primary`, `.container`, `.row`,
+  `.center`, `.page-center`, `.form-styles`, `.form-control`, `.input-holder`,
+  `.error-field-message`) are defined once in `app/globals.css` via `@layer components` + `@apply`
+  rather than inlined at every call site — JSX keeps `className="btn btn-primary"` unchanged. This
+  was a deliberate choice over literal inline utilities: those classes are used at ~15 call sites
+  across otherwise-unrelated components (StartPage, AuthForm, ContactForm, Homepage), and duplicating
+  a long utility string at each site would violate DRY for no benefit. Component-local classes (the
+  actual 7 `.module.scss` files' worth of styling — `contactItem`, `Topbar`'s `.navbar`/`.logo`/
+  `.underlineClosing`, etc.) are still converted to literal inline utilities at their single usage
+  site, matching the plan's original instruction, since those have exactly one owner.*
+- *All numeric values (padding, margins, border-radius, font-size, breakpoints) are ported as
+  arbitrary bracket values (e.g. `px-[15px]`, `min-[767px]:`) taken directly from the original SCSS,
+  rather than mapped to the "nearest" named Tailwind spacing-scale step — this guarantees pixel-exact
+  parity with the pre-migration design instead of introducing small, hard-to-spot drifts. The
+  "theme tokens instead of arbitrary values" instruction is read as applying to colors specifically
+  (colors do use the Phase 1 `--color-*` tokens throughout, including with opacity modifiers like
+  `bg-blue/80` for what was `rgba($blue, 0.8)`).*
+- *A handful of classNames in the original code were already fully dead before this phase touched
+  them (unreachable regardless of the dropped-import bug above) and were dropped rather than ported:
+  `form-label` (never defined in `common.scss`), `.projectInfo` (`Footer`, never defined), and the
+  `.contactData i` / `.active i` / `.inActive i` nested rules in `contactItem`'s module.scss (written
+  for the `<i>`-tag icon markup `material-icons-react` used to render; Phase 1 already swapped that
+  library for `react-icons`' SVG components before this phase started, so those selectors could never
+  match). The active/inactive checkbox-icon coloring intent (`rgba(black,0.54)` / white) is restored
+  correctly for the current SVG-based icons via `text-black/54` / `text-white` on the button itself
+  (SVGs from `react-icons` use `fill="currentColor"`, so this reaches the icon via inheritance the
+  same way the old `i { color }` rule did for its target).*
+- *Verified via a temporary, uncommitted preview route rendering `contactsList`/`selectContact`/
+  `statusToggler` with mock Redux state (not committed) — logging in for real requires Firebase
+  credentials outside this session's access. `IsLogginedUserPage` itself couldn't be used for this
+  because its `useEffect` fires a real Firestore `onSnapshot` fetch against the fake uid, which
+  immediately overwrites any preloaded mock contacts with an empty result.*
+
 **Phase 7 — Remaining dependency bumps**
 `react-select` → v5 (verify `onChange`/styling API in `selectContact/index.tsx`, one usage site).
 `material-icons-react` → `react-icons` in the 3 usage sites (`Topbar`, `contactItem`, and the
@@ -309,9 +355,9 @@ manual pass is required before calling the migration done.
 - [x] Phase 1 — Next.js scaffold + tooling (PR #44, merged)
 - [x] Phase 2 — Firebase modular SDK (PR #45, merged)
 - [x] Phase 3 — Routing (PR #46, merged)
-- [ ] Phase 4 — State management: Redux → RTK (open — awaiting review/approval)
-- [ ] Phase 5 — Forms: redux-form → react-hook-form
-- [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS
+- [x] Phase 4 — State management: Redux → RTK (PR #47, merged)
+- [x] Phase 5 — Forms: redux-form → react-hook-form (PR #48, merged)
+- [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS (open — awaiting review/approval)
 - [ ] Phase 7 — Remaining dependency bumps
 - [ ] Phase 8 — Testing modernization
 - [ ] Phase 9 — Cleanup & deploy verification

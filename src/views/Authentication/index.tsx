@@ -4,7 +4,6 @@ import { CurrentUserContext } from 'context';
 import { useAppDispatch } from 'store/hooks';
 import { LogIn, SignUp } from 'store/actions/Users/actions';
 import AuthForm from 'components/AuthForm';
-import styles from './styles.module.scss';
 import { IError } from 'typings/interfaces';
 
 export interface IUserAuthData {
@@ -66,7 +65,7 @@ const Authentication: React.FC<Props> = ({ isLogin }) => {
           buttonText={buttonText}
         />
         {errorNotification && (
-          <p className={styles.notificationError}>
+          <p className="text-center text-[1.2rem] uppercase text-red">
             {errorNotification.message}
           </p>
         )}
