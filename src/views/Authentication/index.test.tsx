@@ -16,7 +16,7 @@ beforeEach(() => {
 const renderAuthPage = (isLogin: boolean, store = createTestStore()) =>
   renderWithStore(<Authentication isLogin={isLogin} />, { store });
 
-test('logging in with valid credentials calls Firebase sign-in with the entered values', () => {
+test('logging in with valid credentials calls Firebase sign-in with the entered values', async () => {
   mockSignInWithEmailAndPassword.mockResolvedValue({
     user: fakeFirebaseUser(),
   });
@@ -30,10 +30,12 @@ test('logging in with valid credentials calls Firebase sign-in with the entered 
   });
   fireEvent.click(getByText('Login'));
 
-  expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
-    expect.anything(),
-    'jane@example.com',
-    'secret1',
+  await waitFor(() =>
+    expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
+      expect.anything(),
+      'jane@example.com',
+      'secret1',
+    ),
   );
 });
 
@@ -72,10 +74,12 @@ test('registering with valid details calls Firebase sign-up and sets the display
   });
   fireEvent.click(getByText('Register'));
 
-  expect(mockCreateUserWithEmailAndPassword).toHaveBeenCalledWith(
-    expect.anything(),
-    'jane@example.com',
-    'secret1',
+  await waitFor(() =>
+    expect(mockCreateUserWithEmailAndPassword).toHaveBeenCalledWith(
+      expect.anything(),
+      'jane@example.com',
+      'secret1',
+    ),
   );
   await waitFor(() =>
     expect(mockUpdateProfile).toHaveBeenCalledWith(fakeUser, {
