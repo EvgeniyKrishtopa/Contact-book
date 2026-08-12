@@ -197,6 +197,45 @@ Delete `store/constants.js` (RTK generates action types). Re-source `selectors/`
 `@reduxjs/toolkit`'s `createSelector` instead of `reselect`, then remove `reselect` and
 `redux-thunk` as direct deps.
 
+*Implementation notes (discovered during Phase 4, not anticipated above):*
+- *The `createAsyncThunk`/`createSlice` pair for each domain now lives together in
+  `store/reducers/{contacts,user}.ts` rather than split across `reducers/` and `actions/` as the
+  bullet above literally names — `extraReducers` needs the async thunk's action creators, and
+  the thunks need the slice's plain sync action creators, so keeping them in separate files would
+  create a `reducers/contacts.ts` ⇄ `store/actions/Contacts/actions.ts` circular import.
+  `store/actions/{Contacts,Users}/actions.ts` are now thin `export { ... } from 'store/reducers/...'`
+  barrels, so every existing `from 'store/actions/.../actions'` import site (5 components, 2 test
+  files) kept working unchanged — only the thunks' call signatures changed (see below).*
+- *`selectors/` were **not** switched to `createSelector`: they're plain `state => state.slice`
+  pass-throughs with no derived computation, and wrapping a zero-transform selector in
+  `createSelector` trips reselect's own dev-mode "identity function" warning — a real anti-pattern
+  it exists to catch, not a false positive. They stay the plain functions they already were; the
+  actual goal (no direct `reselect` dependency) was already true before this phase; `reselect` is
+  fully removed from `package.json` now.*
+- *`SendContact`, `deleteContactFromBook`, `changeContactStatus`, `LogIn`, and `SignUp` now take a
+  single object argument (`createAsyncThunk` payload creators take one arg) instead of positional
+  parameters — updated their 4 call sites (`ContactItem`, `IsLogginedUserPage`, `Authentication`)
+  and both `actions.test.ts` files accordingly. `FetchCurrentUserContacts`, `IsLogIn`, `LogOut`,
+  `filterContact`, `filterContactsByStatus`, and `changeAuthPage` keep their original signatures
+  (subscriptions and no-payload/single-array actions don't need the object-arg treatment).*
+- *Added `store/hooks.ts` (`useAppDispatch`/`useAppSelector`) and switched every component off raw
+  `useDispatch`/`useSelector`. Needed because `redux-thunk`'s old ambient `Dispatch` type
+  augmentation (which let a bare `useDispatch()` accept a thunk without complaint) is gone now that
+  nothing imports `redux-thunk` directly — RTK's official TS pattern is exactly this typed-hooks
+  pair, so this isn't scope creep, it's what unblocks `tsc --noEmit` staying clean.*
+- *`configureStore`'s dev-only `immutableStateInvariantMiddleware` caught a real pre-existing bug:
+  `statusToggler` and `selectContact` were mutating the Firestore-sourced contact objects living in
+  Redux state directly (`item.visibility = false; return item;`) before dispatching, instead of
+  building new objects. Plain `createStore` never checked for this, so it silently worked; RTK
+  correctly flags it, and the Phase 0 "filtering contacts by status" smoke test started failing
+  because of it. Fixed both handlers to map to new objects (`{ ...item, visibility: ... }`) — same
+  resulting values, immutable instead of in-place.*
+- *`redux-form@8.3.6`'s `peerDependencies` cap `react-redux` at `^6 || ^7`, predating `react-redux`
+  v8/v9's release — a stale constraint on a dependency Phase 5 removes outright. Installed with
+  `npm install --legacy-peer-deps` to get past `npm`'s peer-dependency resolution; `react-redux` v9's
+  `connect` HOC (what `redux-form` actually uses) is unaffected, confirmed by the AuthForm/ContactForm
+  smoke tests and a manual `/login` page load still rendering and submitting correctly.*
+
 **Phase 5 — Forms: redux-form → react-hook-form**
 Rewrite `ContactForm/index.tsx` and `AuthForm/index.tsx` off `reduxForm`/`<Field>` onto RHF's
 `useForm`/`register`. Convert `Input/index.tsx` from consuming `WrappedFieldProps`
@@ -269,8 +308,8 @@ manual pass is required before calling the migration done.
 - [x] Phase 0 — Safety net tests (PR #43, merged)
 - [x] Phase 1 — Next.js scaffold + tooling (PR #44, merged)
 - [x] Phase 2 — Firebase modular SDK (PR #45, merged)
-- [ ] Phase 3 — Routing (open — awaiting review/approval)
-- [ ] Phase 4 — State management: Redux → RTK
+- [x] Phase 3 — Routing (PR #46, merged)
+- [ ] Phase 4 — State management: Redux → RTK (open — awaiting review/approval)
 - [ ] Phase 5 — Forms: redux-form → react-hook-form
 - [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS
 - [ ] Phase 7 — Remaining dependency bumps

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { MdViewList } from 'react-icons/md';
 import styles from './styles.module.scss';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'store/hooks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { CurrentUserContext } from 'context';
@@ -10,7 +10,7 @@ import { changeAuthPage } from 'store/actions/Users/actions';
 const TopBar: React.FC = () => {
   const { userData } = useContext(CurrentUserContext);
   const [currentUserData, setCurrentUserData] = useState<any | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
 
   const handleAuthPages = () => {

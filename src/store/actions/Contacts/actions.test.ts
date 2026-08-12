@@ -34,7 +34,7 @@ test('FetchCurrentUserContacts subscribes to the user contact collection and sto
   });
   const store = createTestStore();
 
-  store.dispatch(FetchCurrentUserContacts('user-1') as any);
+  store.dispatch(FetchCurrentUserContacts('user-1'));
 
   expect(store.getState().contacts.contactsData).toEqual([
     {
@@ -53,12 +53,12 @@ test('SendContact writes a new contact document and clears the loading flag on s
   const store = createTestStore();
 
   store.dispatch(
-    SendContact(
-      'Jane',
-      'jane@example.com',
-      '+380 (11)-111-11-11',
-      'user-1',
-    ) as any,
+    SendContact({
+      contactName: 'Jane',
+      contactEmail: 'jane@example.com',
+      contactPhone: '+380 (11)-111-11-11',
+      userId: 'user-1',
+    }),
   );
 
   expect(mockAdd).toHaveBeenCalledWith(expect.anything(), {
@@ -78,12 +78,12 @@ test('SendContact records the Firebase error on failure', async () => {
   const store = createTestStore();
 
   store.dispatch(
-    SendContact(
-      'Jane',
-      'jane@example.com',
-      '+380 (11)-111-11-11',
-      'user-1',
-    ) as any,
+    SendContact({
+      contactName: 'Jane',
+      contactEmail: 'jane@example.com',
+      contactPhone: '+380 (11)-111-11-11',
+      userId: 'user-1',
+    }),
   );
 
   await waitFor(() => expect(store.getState().contacts.error).toEqual(error));
@@ -93,7 +93,7 @@ test('deleteContactFromBook deletes the contact document', async () => {
   mockDelete.mockResolvedValue(undefined);
   const store = createTestStore();
 
-  await store.dispatch(deleteContactFromBook('1', 'user-1') as any);
+  await store.dispatch(deleteContactFromBook({ id: '1', userId: 'user-1' }));
 
   expect(mockDelete).toHaveBeenCalledTimes(1);
 });
@@ -102,7 +102,9 @@ test('changeContactStatus flips the contact activeStatus', async () => {
   mockUpdate.mockResolvedValue(undefined);
   const store = createTestStore();
 
-  await store.dispatch(changeContactStatus('1', 'user-1', true) as any);
+  await store.dispatch(
+    changeContactStatus({ id: '1', userId: 'user-1', activeStatus: true }),
+  );
 
   expect(mockUpdate).toHaveBeenCalledWith(expect.anything(), {
     activeStatus: false,

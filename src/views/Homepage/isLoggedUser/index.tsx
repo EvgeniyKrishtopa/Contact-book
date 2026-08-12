@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { LogOut } from 'store/actions/Users/actions';
 import {
   SendContact,
@@ -12,8 +12,7 @@ import SelectContact from './selectContact';
 import StatusToggler from './statusToggler';
 import { useRouter } from 'next/navigation';
 import { getCurrentUserContacts } from 'selectors';
-import { RootState } from 'store/reducers';
-import { IContacts, IContact } from 'typings/interfaces';
+import { IContact } from 'typings/interfaces';
 
 export interface IContactSendData {
   contactName: string;
@@ -38,12 +37,10 @@ const ContactsWidgets: React.FC<{ contactList: Array<IContact> }> = ({
 };
 
 const IsLogginedUserPage: React.FC<any> = ({ user }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const userContacts = useSelector<RootState, IContacts>(state =>
-    getCurrentUserContacts(state),
-  );
+  const userContacts = useAppSelector(getCurrentUserContacts);
 
   useEffect(() => {
     dispatch(FetchCurrentUserContacts(user.uid));
@@ -61,7 +58,9 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     contactEmail,
     contactPhone,
   }: IContactSendData) => {
-    dispatch(SendContact(contactName, contactEmail, contactPhone, user.uid));
+    dispatch(
+      SendContact({ contactName, contactEmail, contactPhone, userId: user.uid }),
+    );
   };
 
   return (
