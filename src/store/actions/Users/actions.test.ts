@@ -1,6 +1,6 @@
 jest.mock('store/firebase');
 
-import { wait } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { createTestStore, fakeFirebaseUser } from 'testUtils';
 import { LogIn, SignUp, LogOut, IsLogIn } from './actions';
 import {
@@ -26,7 +26,7 @@ test('LogIn signs the user in and stores the resolved user on success', async ()
     'jane@example.com',
     'secret1',
   );
-  await wait(() => expect(store.getState().user.isLoginnedUser).toBe(true));
+  await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(true));
   expect(store.getState().user.userData).toEqual(fakeUser);
   expect(store.getState().user.error).toBeNull();
 });
@@ -38,7 +38,7 @@ test('LogIn records the Firebase error on failure without logging the user in', 
 
   store.dispatch(LogIn('jane@example.com', 'wrong') as any);
 
-  await wait(() => expect(store.getState().user.error).toEqual(error));
+  await waitFor(() => expect(store.getState().user.error).toEqual(error));
   expect(store.getState().user.isLoginnedUser).toBe(false);
 });
 
@@ -53,12 +53,12 @@ test('SignUp creates the account, sets the display name, and logs the user in', 
     'jane@example.com',
     'secret1',
   );
-  await wait(() =>
+  await waitFor(() =>
     expect(fakeUser.updateProfile).toHaveBeenCalledWith({
       displayName: 'jane',
     }),
   );
-  await wait(() => expect(store.getState().user.isLoginnedUser).toBe(true));
+  await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(true));
   expect(store.getState().user.userData).toEqual(fakeUser);
 });
 
@@ -69,7 +69,7 @@ test('SignUp records the Firebase error on failure', async () => {
 
   store.dispatch(SignUp('jane@example.com', 'secret1', 'jane') as any);
 
-  await wait(() => expect(store.getState().user.error).toEqual(error));
+  await waitFor(() => expect(store.getState().user.error).toEqual(error));
 });
 
 test('LogOut signs the user out and clears the session', async () => {
@@ -85,7 +85,7 @@ test('LogOut signs the user out and clears the session', async () => {
 
   store.dispatch(LogOut() as any);
 
-  await wait(() => expect(store.getState().user.isLoginnedUser).toBe(false));
+  await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(false));
   expect(store.getState().user.userData).toBeNull();
 });
 
@@ -96,7 +96,7 @@ test('IsLogIn restores a persisted session when Firebase reports a signed-in use
 
   store.dispatch(IsLogIn() as any);
 
-  await wait(() => expect(store.getState().user.isLoginnedUser).toBe(true));
+  await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(true));
   expect(store.getState().user.userData).toEqual(fakeUser);
 });
 
@@ -106,5 +106,5 @@ test('IsLogIn reports no session when Firebase has no signed-in user', async () 
 
   store.dispatch(IsLogIn() as any);
 
-  await wait(() => expect(store.getState().user.isLoginnedUser).toBe(false));
+  await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(false));
 });

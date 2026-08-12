@@ -4,7 +4,13 @@ import {
   deleteContactFromBook,
   changeContactStatus,
 } from 'store/actions/Contacts/actions';
-import MaterialIcon from 'material-icons-react';
+import {
+  MdAccountBox,
+  MdContactMail,
+  MdContactPhone,
+  MdCheckBox,
+  MdDelete,
+} from 'react-icons/md';
 import styles from './styles.module.scss';
 import { IContact } from 'typings/interfaces';
 import { CurrentUserContext } from 'context';
@@ -39,15 +45,15 @@ const ContactItem: React.FC<IContact> = ({
       <div className={styles.contactItemHolder}>
         <div className={styles.contactData}>
           <span className={styles.contactName}>
-            <MaterialIcon icon="account_box" size="30" />
+            <MdAccountBox size={30} />
             {contactName}
           </span>
           <a href={`mailto:${contactEmail}`} className={styles.contactEmail}>
-            <MaterialIcon icon="contact_mail" size="30" />
+            <MdContactMail size={30} />
             {contactEmail}
           </a>
           <a href={`tel:${contactPhone}`} className={styles.contactPhone}>
-            <MaterialIcon icon="contact_phone" size="30" />
+            <MdContactPhone size={30} />
             {contactPhone}
           </a>
         </div>
@@ -56,10 +62,10 @@ const ContactItem: React.FC<IContact> = ({
             onClick={changeStatusContactHandler}
             className={`${activeStatus ? styles.active : styles.inActive}`}
           >
-            <MaterialIcon icon="check_box" size="30" />
+            <MdCheckBox size={30} />
           </button>
           <button onClick={deleteContactHandler}>
-            <MaterialIcon icon="delete" size="30" />
+            <MdDelete size={30} />
           </button>
         </div>
       </div>

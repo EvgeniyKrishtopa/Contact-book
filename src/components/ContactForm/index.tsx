@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
-import { IContactSendData } from 'pages/Homepage/isLoggedUser/';
+import { IContactSendData } from 'views/Homepage/isLoggedUser/';
 import Input from 'components/Input';
 import { validate } from 'utils';
 
