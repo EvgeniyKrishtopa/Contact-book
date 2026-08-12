@@ -1,25 +1,24 @@
-// Typed access to store/__mocks__/firebase.js's mock helpers.
-//
-// TypeScript resolves `import ... from 'store/firebase'` against the real
-// module (only a default export), so it can't see the extra named exports
-// the manual mock adds. Jest, on the other hand, only swaps in the manual
-// mock for a module path once `jest.mock('store/firebase')` has run in the
-// current test file — importing straight from '__mocks__/firebase' would
-// load a second, disconnected module instance instead. Casting the
-// namespace import to the mock's own type gets both right: correct runtime
-// wiring, no `as any` at every call site.
-import * as firebaseNs from 'store/firebase';
+// Typed access to the mocked 'firebase/auth' / 'firebase/firestore' modules
+// (auto-mocked for every test via __mocks__/firebase/{auth,firestore}.js at
+// the repo root — see https://jestjs.io/docs/manual-mocks#mocking-node-modules).
+// Action/component tests import these mockXxx helpers instead of reaching
+// into 'firebase/auth'/'firebase/firestore' directly at each call site.
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+} from 'firebase/auth';
+import { onSnapshot, addDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 
-const mocks = (firebaseNs as unknown) as typeof import('./__mocks__/firebase');
+export const mockSignInWithEmailAndPassword = signInWithEmailAndPassword as jest.Mock;
+export const mockCreateUserWithEmailAndPassword = createUserWithEmailAndPassword as jest.Mock;
+export const mockSignOut = signOut as jest.Mock;
+export const mockOnAuthStateChanged = onAuthStateChanged as jest.Mock;
+export const mockUpdateProfile = updateProfile as jest.Mock;
 
-export const {
-  mockSignInWithEmailAndPassword,
-  mockCreateUserWithEmailAndPassword,
-  mockSignOut,
-  mockOnAuthStateChanged,
-  mockOnSnapshot,
-  mockAdd,
-  mockDelete,
-  mockUpdate,
-  resetFirebaseMock,
-} = mocks;
+export const mockOnSnapshot = onSnapshot as jest.Mock;
+export const mockAdd = addDoc as jest.Mock;
+export const mockDelete = deleteDoc as jest.Mock;
+export const mockUpdate = updateDoc as jest.Mock;

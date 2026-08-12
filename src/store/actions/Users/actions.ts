@@ -1,4 +1,11 @@
-import firebase from 'store/firebase';
+import { auth } from 'store/firebase';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+} from 'firebase/auth';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from 'store/reducers';
 import { UserActionTypes } from './types';
@@ -19,8 +26,6 @@ import {
   SIGN_OUT_SUCCESS,
   CHANGE_AUTH_PAGE,
 } from 'store/constants';
-
-const auth = firebase.auth();
 
 type ThunkType = ThunkAction<void, RootState, unknown, UserActionTypes>;
 
@@ -51,8 +56,7 @@ const logInEroor = (error: IError): UserActionTypes => {
 export const LogIn = (userEmail: string, userPassword: string): ThunkType => {
   return dispatch => {
     dispatch(logInStarted());
-    auth
-      .signInWithEmailAndPassword(userEmail, userPassword)
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then(({ user }) => {
         dispatch(logInSuccess(user));
       })
@@ -93,13 +97,12 @@ export const SignUp = (
 ): ThunkType => {
   return dispatch => {
     dispatch(signUpStarted());
-    auth
-      .createUserWithEmailAndPassword(userEmail, userPassword)
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then(({ user }) => {
         if (user) {
-          user
-            .updateProfile({ displayName: userLogin })
-            .then(() => dispatch(signUpSuccess(user)));
+          updateProfile(user, { displayName: userLogin }).then(() =>
+            dispatch(signUpSuccess(user)),
+          );
         }
       })
 
@@ -136,8 +139,7 @@ const logOutError = (error: IError): UserActionTypes => {
 export const LogOut = (): ThunkType => {
   return dispatch => {
     dispatch(logOutStarted());
-    auth
-      .signOut()
+    signOut(auth)
       .then(() => {
         dispatch(logOutSuccess());
       })
@@ -176,7 +178,7 @@ export const IsLogIn = (): ThunkType => {
   return dispatch => {
     dispatch(isLoginStarted());
 
-    auth.onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       if (user) {
         dispatch(isLoginSuccess(user));
       } else {

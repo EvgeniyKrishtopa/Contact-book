@@ -1,5 +1,3 @@
-jest.mock('store/firebase');
-
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
@@ -8,11 +6,11 @@ import Authentication from './index';
 import {
   mockSignInWithEmailAndPassword,
   mockCreateUserWithEmailAndPassword,
-  resetFirebaseMock,
+  mockUpdateProfile,
 } from 'store/firebaseTestMocks';
 
 beforeEach(() => {
-  resetFirebaseMock();
+  mockUpdateProfile.mockResolvedValue(undefined);
 });
 
 const renderAuthPage = (
@@ -41,6 +39,7 @@ test('logging in with valid credentials calls Firebase sign-in with the entered 
   fireEvent.click(getByText('Login'));
 
   expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
+    expect.anything(),
     'jane@example.com',
     'secret1',
   );
@@ -82,11 +81,12 @@ test('registering with valid details calls Firebase sign-up and sets the display
   fireEvent.click(getByText('Register'));
 
   expect(mockCreateUserWithEmailAndPassword).toHaveBeenCalledWith(
+    expect.anything(),
     'jane@example.com',
     'secret1',
   );
   await waitFor(() =>
-    expect(fakeUser.updateProfile).toHaveBeenCalledWith({
+    expect(mockUpdateProfile).toHaveBeenCalledWith(fakeUser, {
       displayName: 'jane',
     }),
   );
