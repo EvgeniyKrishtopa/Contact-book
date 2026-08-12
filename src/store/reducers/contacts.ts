@@ -1,75 +1,117 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  GET_CURRENT_USER_CONTACTS,
-  SEND_CONTACT_STARTED,
-  SEND_CONTACT_SUCCESS,
-  SEND_CONTACT_ERROR,
-  DELETE_USER_CONTACT,
-  FILTERED_CONTACT_BY_EMAIL,
-  CHANGE_CONTACT_STATUS,
-  FILTERED_CONTACT_BY_STATUS,
-} from 'store/constants';
-import { IContacts } from 'typings/interfaces';
-import { ContactActionTypes } from 'store/actions/Contacts/types';
+  collection,
+  doc,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { db } from 'store/firebase';
+import type { AppThunk } from 'store/reducers';
+import { IContacts, IContact, IError } from 'typings/interfaces';
 
-const CONTACTSSTATE: IContacts = {
+const initialState: IContacts = {
   loading: false,
   contactsData: [],
   error: null,
 };
 
-const contacts = (
-  state = CONTACTSSTATE,
-  action: ContactActionTypes,
-): IContacts => {
-  switch (action.type) {
-    case GET_CURRENT_USER_CONTACTS:
-      return {
-        ...state,
-        contactsData: action.contactsData,
-      };
-    case SEND_CONTACT_STARTED:
-      return {
-        ...state,
-        loading: action.loading,
-      };
+// onSnapshot keeps firing for the life of the subscription, so it can't be
+// modeled as a single-resolution createAsyncThunk.
+export const FetchCurrentUserContacts =
+  (userId: string): AppThunk =>
+  dispatch => {
+    const contactsRef = collection(db, 'users', userId, 'Contacts');
+    onSnapshot(contactsRef, snapshot => {
+      const contactItems = snapshot.docs.map(item => {
+        const contact = item.data() as IContact;
+        contact.id = item.id;
+        return contact;
+      });
 
-    case SEND_CONTACT_SUCCESS:
-      return {
-        ...state,
-        loading: action.loading,
-        error: null,
-      };
+      dispatch(contactsReceived(contactItems));
+    });
+  };
 
-    case SEND_CONTACT_ERROR:
-      return {
-        ...state,
-        error: action.error,
-      };
+export const SendContact = createAsyncThunk(
+  'contacts/sendContact',
+  async ({
+    contactName,
+    contactEmail,
+    contactPhone,
+    userId,
+  }: {
+    contactName: string;
+    contactEmail: string;
+    contactPhone: string;
+    userId: string;
+  }) => {
+    const contactsRef = collection(db, 'users', userId, 'Contacts');
+    await addDoc(contactsRef, {
+      contactName,
+      contactEmail,
+      contactPhone,
+      activeStatus: true,
+      visibility: true,
+    });
+  },
+);
 
-    case DELETE_USER_CONTACT:
-      return {
-        ...state,
-      };
+export const deleteContactFromBook = createAsyncThunk(
+  'contacts/deleteContact',
+  async ({ id, userId }: { id: string; userId: string }) => {
+    const contactRef = doc(db, 'users', userId, 'Contacts', id);
+    await deleteDoc(contactRef);
+  },
+);
 
-    case FILTERED_CONTACT_BY_EMAIL:
-      return {
-        ...state,
-        contactsData: action.contactsData,
-      };
-    case CHANGE_CONTACT_STATUS:
-      return {
-        ...state,
-      };
+export const changeContactStatus = createAsyncThunk(
+  'contacts/changeContactStatus',
+  async ({
+    id,
+    userId,
+    activeStatus,
+  }: {
+    id: string;
+    userId: string;
+    activeStatus: boolean;
+  }) => {
+    const contactRef = doc(db, 'users', userId, 'Contacts', id);
+    await updateDoc(contactRef, { activeStatus: !activeStatus });
+  },
+);
 
-    case FILTERED_CONTACT_BY_STATUS:
-      return {
-        ...state,
-        contactsData: action.contactsData,
-      };
+const contactsSlice = createSlice({
+  name: 'contacts',
+  initialState,
+  reducers: {
+    contactsReceived: (state, action: PayloadAction<Array<IContact>>) => {
+      state.contactsData = action.payload;
+    },
+    filterContact: (state, action: PayloadAction<Array<IContact>>) => {
+      state.contactsData = action.payload;
+    },
+    filterContactsByStatus: (state, action: PayloadAction<Array<IContact>>) => {
+      state.contactsData = action.payload;
+    },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(SendContact.pending, state => {
+        state.loading = true;
+      })
+      .addCase(SendContact.fulfilled, state => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(SendContact.rejected, (state, action) => {
+        state.error = action.error as IError;
+      });
+  },
+});
 
-    default:
-      return state;
-  }
-};
+export const { contactsReceived, filterContact, filterContactsByStatus } =
+  contactsSlice.actions;
 
-export default contacts;
+export default contactsSlice.reducer;

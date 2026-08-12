@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'store/hooks';
 import {
   deleteContactFromBook,
   changeContactStatus,
@@ -25,14 +25,14 @@ const ContactItem: React.FC<IContact> = ({
 }) => {
   const { userData } = useContext(CurrentUserContext);
   const userId: string = userData.uid;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const deleteContactHandler = () => {
-    dispatch(deleteContactFromBook(id, userId));
+    dispatch(deleteContactFromBook({ id, userId }));
   };
 
   const changeStatusContactHandler = () => {
-    dispatch(changeContactStatus(id, userId, activeStatus));
+    dispatch(changeContactStatus({ id, userId, activeStatus }));
   };
 
   return (

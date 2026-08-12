@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'store/hooks';
 import styles from '../styles.module.scss';
 import Select from 'react-select';
 import { filterContact } from 'store/actions/Contacts/actions';
@@ -9,18 +9,14 @@ const SelectContact: React.FC<{ contacts: Array<IContact> }> = ({
   contacts,
 }) => {
   const [selectedOption, setSelectedOption] = useState<null | string>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleChange = ({ value }) => {
     setSelectedOption(value);
 
-    const filteredContacts = contacts.map(item => {
-      if (item.contactEmail !== value) {
-        item.visibility = false;
-      }
-
-      return item;
-    });
+    const filteredContacts = contacts.map(item =>
+      item.contactEmail !== value ? { ...item, visibility: false } : item,
+    );
 
     dispatch(filterContact(filteredContacts));
   };

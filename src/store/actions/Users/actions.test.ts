@@ -14,7 +14,7 @@ test('LogIn signs the user in and stores the resolved user on success', async ()
   mockSignInWithEmailAndPassword.mockResolvedValue({ user: fakeUser });
   const store = createTestStore();
 
-  store.dispatch(LogIn('jane@example.com', 'secret1') as any);
+  store.dispatch(LogIn({ userEmail: 'jane@example.com', userPassword: 'secret1' }));
 
   expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
     expect.anything(),
@@ -31,7 +31,7 @@ test('LogIn records the Firebase error on failure without logging the user in', 
   mockSignInWithEmailAndPassword.mockRejectedValue(error);
   const store = createTestStore();
 
-  store.dispatch(LogIn('jane@example.com', 'wrong') as any);
+  store.dispatch(LogIn({ userEmail: 'jane@example.com', userPassword: 'wrong' }));
 
   await waitFor(() => expect(store.getState().user.error).toEqual(error));
   expect(store.getState().user.isLoginnedUser).toBe(false);
@@ -43,7 +43,13 @@ test('SignUp creates the account, sets the display name, and logs the user in', 
   mockUpdateProfile.mockResolvedValue(undefined);
   const store = createTestStore();
 
-  store.dispatch(SignUp('jane@example.com', 'secret1', 'jane') as any);
+  store.dispatch(
+    SignUp({
+      userEmail: 'jane@example.com',
+      userPassword: 'secret1',
+      userLogin: 'jane',
+    }),
+  );
 
   expect(mockCreateUserWithEmailAndPassword).toHaveBeenCalledWith(
     expect.anything(),
@@ -64,7 +70,13 @@ test('SignUp records the Firebase error on failure', async () => {
   mockCreateUserWithEmailAndPassword.mockRejectedValue(error);
   const store = createTestStore();
 
-  store.dispatch(SignUp('jane@example.com', 'secret1', 'jane') as any);
+  store.dispatch(
+    SignUp({
+      userEmail: 'jane@example.com',
+      userPassword: 'secret1',
+      userLogin: 'jane',
+    }),
+  );
 
   await waitFor(() => expect(store.getState().user.error).toEqual(error));
 });
@@ -80,7 +92,7 @@ test('LogOut signs the user out and clears the session', async () => {
     },
   } as any);
 
-  store.dispatch(LogOut() as any);
+  store.dispatch(LogOut());
 
   await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(false));
   expect(store.getState().user.userData).toBeNull();
@@ -93,7 +105,7 @@ test('IsLogIn restores a persisted session when Firebase reports a signed-in use
   );
   const store = createTestStore();
 
-  store.dispatch(IsLogIn() as any);
+  store.dispatch(IsLogIn());
 
   await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(true));
   expect(store.getState().user.userData).toEqual(fakeUser);
@@ -105,7 +117,7 @@ test('IsLogIn reports no session when Firebase has no signed-in user', async () 
   );
   const store = createTestStore();
 
-  store.dispatch(IsLogIn() as any);
+  store.dispatch(IsLogIn());
 
   await waitFor(() => expect(store.getState().user.isLoginnedUser).toBe(false));
 });

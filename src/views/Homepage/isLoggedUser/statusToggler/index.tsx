@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles.module.scss';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'store/hooks';
 import { IContact } from 'typings/interfaces';
 import { filterContactsByStatus } from 'store/actions/Contacts/actions';
 
@@ -13,7 +13,7 @@ interface IFilter {
 const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
   contacts,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const filters: Array<IFilter> = [
     {
@@ -51,38 +51,28 @@ const StatusToggler: React.FC<{ contacts: Array<IContact> }> = ({
     setContactStatusFilters(currentFilters);
 
     if (e.currentTarget.textContent === 'Active') {
-      const filteredContacts = contacts.map(item => {
-        item.visibility = false;
-
-        if (item.activeStatus) {
-          item.visibility = true;
-        }
-
-        return item;
-      });
+      const filteredContacts = contacts.map(item => ({
+        ...item,
+        visibility: item.activeStatus,
+      }));
 
       dispatch(filterContactsByStatus(filteredContacts));
     }
 
     if (e.currentTarget.textContent === 'Inactive') {
-      const filteredContacts = contacts.map(item => {
-        item.visibility = false;
-
-        if (!item.activeStatus) {
-          item.visibility = true;
-        }
-
-        return item;
-      });
+      const filteredContacts = contacts.map(item => ({
+        ...item,
+        visibility: !item.activeStatus,
+      }));
 
       dispatch(filterContactsByStatus(filteredContacts));
     }
 
     if (e.currentTarget.textContent === 'All') {
-      const filteredContacts = contacts.map(item => {
-        item.visibility = true;
-        return item;
-      });
+      const filteredContacts = contacts.map(item => ({
+        ...item,
+        visibility: true,
+      }));
 
       dispatch(filterContactsByStatus(filteredContacts));
     }

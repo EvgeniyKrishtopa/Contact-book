@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CurrentUserContext } from 'context';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'store/hooks';
 import { LogIn, SignUp } from 'store/actions/Users/actions';
 import AuthForm from 'components/AuthForm';
 import styles from './styles.module.scss';
@@ -19,7 +19,7 @@ type Props = {
 
 const Authentication: React.FC<Props> = ({ isLogin }) => {
   const { userData, error } = useContext(CurrentUserContext);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
   const buttonText = isLogin ? 'Login' : 'Register';
@@ -49,10 +49,10 @@ const Authentication: React.FC<Props> = ({ isLogin }) => {
     userLogin,
   }: IUserAuthData) => {
     if (isLogin) {
-      dispatch(LogIn(userEmail, userPassword));
+      dispatch(LogIn({ userEmail, userPassword }));
     }
     if (!isLogin) {
-      dispatch(SignUp(userEmail, userPassword, userLogin));
+      dispatch(SignUp({ userEmail, userPassword, userLogin }));
     }
   };
 
