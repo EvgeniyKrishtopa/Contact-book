@@ -361,6 +361,32 @@ Next.js migration itself). Port Phase 0's baseline tests into the new structure,
 tests for the Phase 2 (Firebase) and Phase 5 (forms) migrations specifically, since those are the
 two behavior-preserving rewrites with the most surface for regressions.
 
+*Implementation notes (discovered during Phase 8, not anticipated above):*
+- *All three of this phase's headline items were already done by the time this phase started, each
+  pulled forward by an earlier phase's own tooling requirements rather than deferred to here:
+  `@testing-library/react`/`jest-dom`/`user-event`/`dom` were bumped to current majors in Phase 1
+  (forced by the React 19 bump — RTL v9's `render()` calls the removed React 16 `ReactDOM.render`),
+  `next/jest` was wired up in Phase 1 as `jest.config.js`'s runner (forced by `react-scripts test`
+  crashing outright on Next's `tsconfig.json` shape), and Phase 0's baseline tests were never a
+  one-time port — every phase from 2 through 7 updated them in place as its own migration landed
+  (Firebase mocks re-pointed at the modular SDK in Phase 2, RTK action shapes in Phase 4, RHF form
+  interactions in Phase 5, Tailwind class assertions in Phase 6, `react-select` v5 in Phase 7), so
+  by Phase 8 the "new structure" they needed porting into no longer existed as a separate step.
+  Confirmed against the npm registry that all six packages sit at the exact latest published
+  version, not just "a current major."*
+- *This left one real gap, found via `jest --coverage`: Phase 0's own named flows were "register,
+  login, add/delete/toggle-status a contact, and filter by email/status," but two of those branches
+  were only ever exercised at the reducer level, never through the component a user actually clicks.
+  `selectContact/index.tsx` (`handleChange`, the "filter by email" dropdown) was untested at the
+  component level, and `statusToggler/index.tsx` only had coverage for its "Inactive" branch — not
+  "Active" or "All." Added `selectContact/index.test.tsx` (drives `react-select`'s own `combobox`
+  role via `userEvent`, since it's a real select widget, not a plain `<select>`) and two new cases
+  in `statusToggler/index.test.tsx` closing both. Coverage moved from 94.3%/85.7% (stmts/branch) to
+  97.3%/93.5%; the remaining branch gap (`selectContact`'s `option?.value ?? null` fallback for
+  react-select's clear action, never exercised) is a one-line defensive guard with no distinct
+  behavior to assert beyond what's already covered, so it's left as-is rather than chased for its
+  own sake.*
+
 **Phase 9 — Cleanup & deploy verification**
 Remove leftover CRA artifacts (`react-app-env.d.ts` if no longer needed, any CRA-only tsconfig
 options). Update `README.md`'s tech list. Bump `gh-pages`. Run `next build` (static export) and
@@ -404,6 +430,6 @@ manual pass is required before calling the migration done.
 - [x] Phase 4 — State management: Redux → RTK (PR #47, merged)
 - [x] Phase 5 — Forms: redux-form → react-hook-form (PR #48, merged)
 - [x] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS (PR #49, merged)
-- [ ] Phase 7 — Remaining dependency bumps (open — awaiting review/approval)
-- [ ] Phase 8 — Testing modernization
+- [x] Phase 7 — Remaining dependency bumps (PR #50, merged)
+- [ ] Phase 8 — Testing modernization (open — awaiting review/approval)
 - [ ] Phase 9 — Cleanup & deploy verification
