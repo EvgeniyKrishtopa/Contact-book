@@ -1,4 +1,12 @@
-import firebase from 'store/firebase';
+import { db } from 'store/firebase';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from 'store/reducers';
 import { ContactActionTypes } from './types';
@@ -15,8 +23,6 @@ import {
   FILTERED_CONTACT_BY_STATUS,
 } from 'store/constants';
 
-const db = firebase.firestore();
-
 type ThunkType = ThunkAction<void, RootState, unknown, ContactActionTypes>;
 
 const FetchContacts = (contactItems: any): ContactActionTypes => {
@@ -28,18 +34,16 @@ const FetchContacts = (contactItems: any): ContactActionTypes => {
 
 export const FetchCurrentUserContacts = (id: string): ThunkType => {
   return dispatch => {
-    db.collection('users')
-      .doc(id)
-      .collection('Contacts')
-      .onSnapshot(snapshot => {
-        const contactItems = snapshot.docs.map(item => {
-          const contact = item.data();
-          contact.id = item.id;
-          return contact;
-        });
-
-        dispatch(FetchContacts(contactItems));
+    const contactsRef = collection(db, 'users', id, 'Contacts');
+    onSnapshot(contactsRef, snapshot => {
+      const contactItems = snapshot.docs.map(item => {
+        const contact = item.data();
+        contact.id = item.id;
+        return contact;
       });
+
+      dispatch(FetchContacts(contactItems));
+    });
   };
 };
 
@@ -73,16 +77,14 @@ export const SendContact = (
 ): ThunkType => {
   return dispatch => {
     dispatch(contactSendStarted());
-    db.collection('users')
-      .doc(userId)
-      .collection('Contacts')
-      .add({
-        contactName,
-        contactEmail,
-        contactPhone,
-        activeStatus: true,
-        visibility: true,
-      })
+    const contactsRef = collection(db, 'users', userId, 'Contacts');
+    addDoc(contactsRef, {
+      contactName,
+      contactEmail,
+      contactPhone,
+      activeStatus: true,
+      visibility: true,
+    })
       .then(() => {
         dispatch(contactSendSuccess());
       })
@@ -103,12 +105,8 @@ export const deleteContactFromBook = (
   userId: string,
 ): ThunkType => {
   return async dispatch => {
-    db.collection('users')
-      .doc(userId)
-      .collection('Contacts')
-      .doc(id)
-      .delete()
-      .then(() => dispatch(deleteContact()));
+    const contactRef = doc(db, 'users', userId, 'Contacts', id);
+    deleteDoc(contactRef).then(() => dispatch(deleteContact()));
   };
 };
 
@@ -133,12 +131,10 @@ export const changeContactStatus = (
   activeStatus: boolean,
 ): ThunkType => {
   return async dispatch => {
-    db.collection('users')
-      .doc(userId)
-      .collection('Contacts')
-      .doc(id)
-      .update({ activeStatus: !activeStatus })
-      .then(() => dispatch(changeContact()));
+    const contactRef = doc(db, 'users', userId, 'Contacts', id);
+    updateDoc(contactRef, { activeStatus: !activeStatus }).then(() =>
+      dispatch(changeContact()),
+    );
   };
 };
 

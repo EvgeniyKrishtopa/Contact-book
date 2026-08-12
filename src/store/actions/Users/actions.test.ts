@@ -1,5 +1,3 @@
-jest.mock('store/firebase');
-
 import { waitFor } from '@testing-library/react';
 import { createTestStore, fakeFirebaseUser } from 'testUtils';
 import { LogIn, SignUp, LogOut, IsLogIn } from './actions';
@@ -8,12 +6,8 @@ import {
   mockCreateUserWithEmailAndPassword,
   mockSignOut,
   mockOnAuthStateChanged,
-  resetFirebaseMock,
+  mockUpdateProfile,
 } from 'store/firebaseTestMocks';
-
-beforeEach(() => {
-  resetFirebaseMock();
-});
 
 test('LogIn signs the user in and stores the resolved user on success', async () => {
   const fakeUser = fakeFirebaseUser();
@@ -23,6 +17,7 @@ test('LogIn signs the user in and stores the resolved user on success', async ()
   store.dispatch(LogIn('jane@example.com', 'secret1') as any);
 
   expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
+    expect.anything(),
     'jane@example.com',
     'secret1',
   );
@@ -45,16 +40,18 @@ test('LogIn records the Firebase error on failure without logging the user in', 
 test('SignUp creates the account, sets the display name, and logs the user in', async () => {
   const fakeUser = fakeFirebaseUser({ displayName: null });
   mockCreateUserWithEmailAndPassword.mockResolvedValue({ user: fakeUser });
+  mockUpdateProfile.mockResolvedValue(undefined);
   const store = createTestStore();
 
   store.dispatch(SignUp('jane@example.com', 'secret1', 'jane') as any);
 
   expect(mockCreateUserWithEmailAndPassword).toHaveBeenCalledWith(
+    expect.anything(),
     'jane@example.com',
     'secret1',
   );
   await waitFor(() =>
-    expect(fakeUser.updateProfile).toHaveBeenCalledWith({
+    expect(mockUpdateProfile).toHaveBeenCalledWith(fakeUser, {
       displayName: 'jane',
     }),
   );
@@ -91,7 +88,9 @@ test('LogOut signs the user out and clears the session', async () => {
 
 test('IsLogIn restores a persisted session when Firebase reports a signed-in user', async () => {
   const fakeUser = fakeFirebaseUser();
-  mockOnAuthStateChanged.mockImplementation(callback => callback(fakeUser));
+  mockOnAuthStateChanged.mockImplementation((_auth, callback) =>
+    callback(fakeUser),
+  );
   const store = createTestStore();
 
   store.dispatch(IsLogIn() as any);
@@ -101,7 +100,9 @@ test('IsLogIn restores a persisted session when Firebase reports a signed-in use
 });
 
 test('IsLogIn reports no session when Firebase has no signed-in user', async () => {
-  mockOnAuthStateChanged.mockImplementation(callback => callback(null));
+  mockOnAuthStateChanged.mockImplementation((_auth, callback) =>
+    callback(null),
+  );
   const store = createTestStore();
 
   store.dispatch(IsLogIn() as any);

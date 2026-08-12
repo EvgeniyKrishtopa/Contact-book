@@ -1,5 +1,3 @@
-jest.mock('store/firebase');
-
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
@@ -12,11 +10,9 @@ import {
   mockUpdate,
   mockOnSnapshot,
   mockSignOut,
-  resetFirebaseMock,
 } from 'store/firebaseTestMocks';
 
 beforeEach(() => {
-  resetFirebaseMock();
   mockOnSnapshot.mockImplementation(() => undefined);
 });
 
@@ -75,7 +71,7 @@ test('submitting the add-contact form saves a new contact for the current user',
   });
   fireEvent.click(getByText('Submit Contact'));
 
-  expect(mockAdd).toHaveBeenCalledWith({
+  expect(mockAdd).toHaveBeenCalledWith(expect.anything(), {
     contactName: 'Jane',
     contactEmail: 'jane@example.com',
     contactPhone: '+380 (11)-111-11-11',
@@ -102,7 +98,9 @@ test('toggling a contact status updates it via Firestore', () => {
   const [, statusButton] = getAllByRole('button');
   fireEvent.click(statusButton);
 
-  expect(mockUpdate).toHaveBeenCalledWith({ activeStatus: false });
+  expect(mockUpdate).toHaveBeenCalledWith(expect.anything(), {
+    activeStatus: false,
+  });
 });
 
 // Visibility is CSS-driven (a hiddenContact/visibleContact class swap, see

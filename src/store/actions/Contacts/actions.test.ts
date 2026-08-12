@@ -1,5 +1,3 @@
-jest.mock('store/firebase');
-
 import { waitFor } from '@testing-library/react';
 import { createTestStore } from 'testUtils';
 import {
@@ -13,12 +11,7 @@ import {
   mockAdd,
   mockDelete,
   mockUpdate,
-  resetFirebaseMock,
 } from 'store/firebaseTestMocks';
-
-beforeEach(() => {
-  resetFirebaseMock();
-});
 
 const snapshotDoc = (id: string, data: Record<string, any>) => ({
   id,
@@ -26,7 +19,7 @@ const snapshotDoc = (id: string, data: Record<string, any>) => ({
 });
 
 test('FetchCurrentUserContacts subscribes to the user contact collection and stores each snapshot', () => {
-  mockOnSnapshot.mockImplementation(callback => {
+  mockOnSnapshot.mockImplementation((_ref, callback) => {
     callback({
       docs: [
         snapshotDoc('1', {
@@ -68,7 +61,7 @@ test('SendContact writes a new contact document and clears the loading flag on s
     ) as any,
   );
 
-  expect(mockAdd).toHaveBeenCalledWith({
+  expect(mockAdd).toHaveBeenCalledWith(expect.anything(), {
     contactName: 'Jane',
     contactEmail: 'jane@example.com',
     contactPhone: '+380 (11)-111-11-11',
@@ -111,5 +104,7 @@ test('changeContactStatus flips the contact activeStatus', async () => {
 
   await store.dispatch(changeContactStatus('1', 'user-1', true) as any);
 
-  expect(mockUpdate).toHaveBeenCalledWith({ activeStatus: false });
+  expect(mockUpdate).toHaveBeenCalledWith(expect.anything(), {
+    activeStatus: false,
+  });
 });

@@ -47,6 +47,5 @@ export const fakeFirebaseUser = (
   uid: 'user-1',
   email: 'jane@example.com',
   displayName: 'Jane',
-  updateProfile: jest.fn().mockResolvedValue(undefined),
   ...overrides,
 });

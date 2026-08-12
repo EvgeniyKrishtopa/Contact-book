@@ -16,7 +16,7 @@
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-form": "^8.2.3",
-    "firebase": "^7.21.1",
+    "firebase": "^12.17.1",
     "next": "^16.3.0",
     "normalize.css": "^8.0.1",
     "prettier": "^3.9.6",
