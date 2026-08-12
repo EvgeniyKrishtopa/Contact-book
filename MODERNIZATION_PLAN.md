@@ -1,0 +1,222 @@
+# Contact-Book 2026 Modernization Plan
+
+## Context
+
+The project is a Create React App (react-scripts 4.0.0-next) SPA last touched with 2019–2020-era
+dependencies: React 16, react-router-dom 5, Redux 4 with hand-written action-type constants,
+redux-form 8 (unmaintained since 2020), Firebase 7 (deprecated namespaced/compat API), node-sass
+(deprecated, unmaintained), and TypeScript 4.0. CRA itself was archived by Meta in Feb 2025 and no
+longer receives updates. There are currently **zero tests** in the repo despite
+`@testing-library/*` being listed as dependencies.
+
+The goal is to bring every layer up to a 2026-current baseline. Per the project owner's own
+stack/learning goals (Next.js is the primary framework and a stated learning focus), the migration
+target is **Next.js (App Router)** rather than a same-shape Vite swap — this is a larger rewrite
+than a pure version bump, but it's an intentional, justified one, not a premature abstraction.
+Deployment stays on GitHub Pages via Next's static export, so the app's actual runtime behavior
+(all client-side: Firebase auth/Firestore, Redux, forms) doesn't change — only how it's built and
+routed.
+
+Decisions locked in:
+- **Build tool:** Next.js, App Router
+- **Deployment:** static export (`output: 'export'`), keep GitHub Pages
+- **State management:** upgrade Redux/react-redux and adopt `@reduxjs/toolkit` (RTK), replacing
+  the hand-rolled action-type constants and plain reducers/thunks
+- **Forms:** redux-form is unmaintained with no newer major — replace with `react-hook-form`
+- **Firebase:** move from v7 namespaced/compat API to the modular v9+ SDK
+- **Styling:** node-sass + CSS Modules (9 `.scss`/`.module.scss` files) → **Tailwind CSS**; the
+  color/spacing tokens in `styles/variables.scss` become Tailwind theme config, and each
+  component's `.module.scss` classes are converted to utility classes inline
+- **Icons:** `material-icons-react` is an abandoned 2019 package — swap to a maintained
+  alternative (`react-icons`), used in only 3 files
+
+The Firebase Auth migration is a **high-risk** change (touches auth) and gets extra scrutiny: a
+pre-migration safety net of smoke tests, and manual validation of the real login/register flow
+post-migration — not just green typecheck/lint.
+
+This plan is scoped as a **modernization**, not a feature change: no new product behavior, no
+acceptance criteria beyond "the app does exactly what it does today, on current dependencies."
+
+---
+
+## Process & git workflow
+
+- **One phase = one branch = one commit = one MR, then stop.** For each phase below:
+  1. Branch off `feature/modernize-2026`: `feature/modernize-2026-phase-N-<short-name>` (e.g.
+     `feature/modernize-2026-phase-2-firebase-modular`).
+  2. Implement only that phase's scope.
+  3. Commit (single focused commit, or a few if the phase naturally splits — but no
+     phase-straddling commits).
+  4. Open a PR/MR from the phase branch **into `feature/modernize-2026`** (not into `master`).
+  5. **Stop and wait for explicit approval of that PR before starting the next phase's branch.**
+     No phase N+1 branch gets created until phase N's PR is reviewed and approved.
+- This means the 10 phases (0–9) become 10 sequential PRs, each independently revertable, each
+  gated on review before proceeding.
+
+---
+
+## Current → Target versions
+
+| Package | Current | Target (2026) | Why |
+|---|---|---|---|
+| react-scripts | ^4.0.0-next.98 | *removed* | replaced by `next` |
+| react, react-dom | ^16.13.1 | ^19.x | required by Next 15+ |
+| next | — | ^15.x (latest stable) | new build framework |
+| react-router-dom | ^5.2.0 | *removed* | replaced by Next App Router file-based routing |
+| redux | ^4.0.5 | ^5.x | current major |
+| react-redux | ^7.2.1 | ^9.x | current major, React 19-compatible |
+| @reduxjs/toolkit | — | ^2.x | new — replaces hand-written action types/reducers |
+| redux-thunk | ^2.3.0 | *removed* | bundled inside RTK's default middleware |
+| reselect | ^4.0.0 | *removed* | use RTK's re-exported `createSelector` |
+| redux-form | ^8.3.6 | *removed* | unmaintained since 2020 |
+| react-hook-form | — | ^7.x | new — replaces redux-form |
+| firebase | ^7.21.1 | ^12.x (or latest v12+) | v7 compat API deprecated; move to modular SDK |
+| node-sass | ^4.14.1 | *removed* | unmaintained, breaks on modern Node |
+| (7 `.module.scss` + 2 global `.scss` files) | — | *removed* | replaced by Tailwind utility classes |
+| tailwindcss | — | ^4.x (or latest) | new — replaces Sass/CSS Modules styling |
+| postcss, autoprefixer | — | latest | Tailwind's build dependencies |
+| react-select | ^3.1.0 | ^5.x | current major |
+| material-icons-react | ^1.0.4 | *removed* | abandoned; replace with `react-icons` |
+| typescript | ^4.0.3 | ^5.x | current major |
+| eslint-config-react-app | ^5.2.1 | *removed* | CRA-specific |
+| (new) eslint-config-next | — | latest | official Next.js lint config |
+| eslint / typescript-eslint | ^4.x | ^9.x / ^8.x | flat config |
+| prettier | 2.1.2 | ^3.x | current major |
+| @testing-library/react, jest-dom, user-event | 2019–2020 versions | latest (16.x / 6.x / 14.x) | current + actually used going forward |
+| gh-pages | ^3.1.0 | ^6.x | routine bump |
+| normalize.css | ^8.0.1 | latest 8.x | routine bump |
+| @types/* (node, react, react-dom, react-redux) | old | matched to new majors | routine |
+| @types/react-router, @types/react-router-dom, @types/redux-form | present | *removed* | dependencies removed |
+
+Treat the exact patch/minor numbers above as directional — resolve actual `latest` at
+implementation time (`npm view <pkg> version`).
+
+---
+
+## Phased implementation order
+
+Phases run in this order, each as its own branch/commit/PR per the *Process & git workflow* section
+above — later phases depend on earlier ones having already merged into `feature/modernize-2026`:
+
+**Phase 0 — Safety net before touching anything**
+Add minimal smoke tests against the *current* CRA app for the flows that matter most: register,
+login, add/edit/delete a contact, toggle status, filter by email/status. This is the only way to
+verify "no behavior changed" once Next.js + Firebase modular + RHF migrations land. Use the
+existing (currently-unused) `@testing-library/react` setup.
+
+**Phase 1 — Next.js scaffold + tooling**
+Set up `next.config` (`output: 'export'`, `basePath`/`assetPrefix: '/Contact-book'` to match the
+current GitHub Pages path, `images: { unoptimized: true }` since export mode has no image server).
+Bring TypeScript to 5.x with Next's recommended `tsconfig` (`moduleResolution: "bundler"`, JSX
+`preserve`). Install and initialize Tailwind CSS (`tailwindcss`, `postcss`, `autoprefixer`), wire
+it into `app/globals.css` and `tailwind.config`, and port the tokens in `styles/variables.scss`
+(colors, etc.) into the Tailwind theme (`theme.extend.colors`) so the rest of the migration has a
+named palette to use instead of hardcoded utility values. Set up ESLint 9 flat config with
+`eslint-config-next` + Prettier 3. Migrate `public/` assets. Update `package.json` scripts to
+`next dev`/`next build` and point the existing `deploy`/`predeploy` (`gh-pages`) scripts at Next's
+`out/` directory instead of CRA's `build/`.
+
+**Phase 2 — Firebase modular SDK (high-risk: auth)**
+Rewrite `src/store/firebase.js` from `firebase/app` compat imports to modular
+`initializeApp`/`getAuth`/`getFirestore`. Move the hardcoded config into `NEXT_PUBLIC_FIREBASE_*`
+env vars (`.env.local`, add `.env.example`, keep `.env.local` gitignored). Update the Firestore
+calls in `store/actions/Contacts/actions.ts` (collection/doc/get/add/update patterns) and the Auth
+calls in `store/actions/Users/actions.ts` to the modular functional API
+(`signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, etc.). Re-run Phase 0's smoke
+tests against this change specifically; do a manual login/register check before moving on.
+
+**Phase 3 — Routing**
+Replace `routes.tsx` (`Switch`/`Route`/`component=`) with Next App Router files: `app/layout.tsx`
+(root layout hosting the Redux `Provider` + `CurrentUserProvider`, marked `'use client'`),
+`app/page.tsx` (StartPage), and route segments for Authentication and the logged-in Homepage tree.
+Replace `useHistory()` (`pages/Homepage/isLoggedUser/index.tsx`) with `useRouter()` from
+`next/navigation`, and `<Redirect>` (`pages/Authentication/index.tsx`) with `router.replace()`/
+`redirect()`.
+
+**Phase 4 — State management: Redux → RTK**
+Bump `redux`/`react-redux`, add `@reduxjs/toolkit`. Convert `store/reducers/{contacts,user}.ts` +
+`store/actions/{Contacts,Users}/actions.ts` into `createSlice` + `createAsyncThunk`. Replace
+`store/state/index.ts`'s `createStore(reducer, applyMiddleware(thunk))` with `configureStore`.
+Delete `store/constants.js` (RTK generates action types). Re-source `selectors/` from
+`@reduxjs/toolkit`'s `createSelector` instead of `reselect`, then remove `reselect` and
+`redux-thunk` as direct deps.
+
+**Phase 5 — Forms: redux-form → react-hook-form**
+Rewrite `ContactForm/index.tsx` and `AuthForm/index.tsx` off `reduxForm`/`<Field>` onto RHF's
+`useForm`/`register`. Convert `Input/index.tsx` from consuming `WrappedFieldProps`
+(`input`/`meta.{touched,error,warning}`) to RHF's `register` return + `formState.errors` — it's
+already presentational, so this is a props-shape change, not a rewrite. Reuse the existing
+framework-agnostic `validate()` in `utils/index.tsx` as a manual validation resolver. Remove the
+`form` key from `combineReducers` (Phase 4 will have already replaced `combineReducers` with RTK's
+reducer map, so this just means not including it there). Remove `redux-form` and
+`@types/redux-form`.
+
+**Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS**
+Convert the two global stylesheets and 7 `.module.scss` files (`components/{Footer,Loader,Topbar}`,
+`pages/{Authentication,StartPage,Homepage/isLoggedUser,Homepage/isLoggedUser/contactItem}`) one
+component at a time: replace each `import styles from './index.module.scss'` +
+`className={styles.x}` usage with inline Tailwind utility classes, using the Phase 1 theme tokens
+for colors instead of arbitrary values. Delete the `.scss`/`.module.scss` files and `node-sass`/
+`sass` deps once nothing imports them. Visually diff each converted component against the current
+build before moving to the next (this phase is pure presentation — no behavior should change, but
+it's the phase most likely to introduce visual regressions since it touches every component).
+
+**Phase 7 — Remaining dependency bumps**
+`react-select` → v5 (verify `onChange`/styling API in `selectContact/index.tsx`, one usage site).
+`material-icons-react` → `react-icons` in the 3 usage sites (`Topbar`, `contactItem`, and the
+`react-app-env.d.ts` type reference). `normalize.css`, `@types/*` bumps. Remove
+`@types/react-router`, `@types/react-router-dom`.
+
+**Phase 8 — Testing modernization**
+Bump `@testing-library/*` to current majors. Set up a test runner compatible with Next.js (Jest via
+`next/jest`, the officially documented path — avoids introducing a second new tool alongside the
+Next.js migration itself). Port Phase 0's baseline tests into the new structure, plus targeted
+tests for the Phase 2 (Firebase) and Phase 5 (forms) migrations specifically, since those are the
+two behavior-preserving rewrites with the most surface for regressions.
+
+**Phase 9 — Cleanup & deploy verification**
+Remove leftover CRA artifacts (`react-app-env.d.ts` if no longer needed, any CRA-only tsconfig
+options). Update `README.md`'s tech list. Bump `gh-pages`. Run `next build` (static export) and
+verify the `out/` output serves correctly under the `/Contact-book/` basePath. Manually walk every
+user flow (register, login, add/edit/delete/filter/toggle-status contact, logout) against the real
+static export build — typecheck/lint/tests verify correctness, not feature correctness, so this
+manual pass is required before calling the migration done.
+
+---
+
+## Risks
+
+- **Auth behavior drift** (Phase 2): modular Firebase Auth's error-handling/session-persistence
+  defaults differ subtly from the v7 compat API — covered by Phase 0 tests + manual validation.
+- **App Router client/server boundary**: since virtually everything here is Firebase-client-driven
+  and Redux-driven, most components will need `'use client'`. There's no server-rendering upside
+  to chase here — don't try to convert data-fetching to Server Components/Server Actions, that
+  would be scope creep against "modernize versions," not a requirement of this plan.
+- **GitHub Pages basePath**: static export under a non-root path is easy to get subtly wrong
+  (asset 404s). Verify with an actual deployed/served `out/` build, not just `next build` succeeding.
+- **RTK + react-hook-form landing in the same area** (`ContactForm` dispatches `reset('contactForm')`
+  today, which is redux-form-specific): confirm the Phase 4/5 ordering above — RTK lands first so
+  Phase 5 has a stable action layer to call into, not the reverse.
+
+## Verification
+
+- `next build` succeeds with no type errors (`tsc --noEmit` clean) after each phase.
+- ESLint clean under the new flat config.
+- Phase 0 smoke tests (and their Phase 8 successors) pass after every phase that could affect them.
+- Manual walkthrough of the full user flow against the real static export build (Phase 9), not just
+  `next dev`.
+- No remaining references to `react-scripts`, `react-router-dom`, `redux-form`, `node-sass`,
+  `material-icons-react`, or the Firebase compat API anywhere in `src/` (`grep -r` clean).
+
+## Progress log
+
+- [x] Phase 0 — Safety net tests
+- [ ] Phase 1 — Next.js scaffold + tooling
+- [ ] Phase 2 — Firebase modular SDK
+- [ ] Phase 3 — Routing
+- [ ] Phase 4 — State management: Redux → RTK
+- [ ] Phase 5 — Forms: redux-form → react-hook-form
+- [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS
+- [ ] Phase 7 — Remaining dependency bumps
+- [ ] Phase 8 — Testing modernization
+- [ ] Phase 9 — Cleanup & deploy verification

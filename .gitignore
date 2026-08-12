@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# tsc incremental build cache
+tsconfig.tsbuildinfo
+
 # production
 /build
 
