@@ -54,7 +54,7 @@ test('renders the signed-in user greeting and their visible contacts', () => {
   expect(getByText('John')).toBeInTheDocument();
 });
 
-test('submitting the add-contact form saves a new contact for the current user', () => {
+test('submitting the add-contact form saves a new contact for the current user', async () => {
   mockAdd.mockResolvedValue(undefined);
   const { getByPlaceholderText, getByText } = renderHomepage([]);
 
@@ -69,13 +69,15 @@ test('submitting the add-contact form saves a new contact for the current user',
   });
   fireEvent.click(getByText('Submit Contact'));
 
-  expect(mockAdd).toHaveBeenCalledWith(expect.anything(), {
-    contactName: 'Jane',
-    contactEmail: 'jane@example.com',
-    contactPhone: '+380 (11)-111-11-11',
-    activeStatus: true,
-    visibility: true,
-  });
+  await waitFor(() =>
+    expect(mockAdd).toHaveBeenCalledWith(expect.anything(), {
+      contactName: 'Jane',
+      contactEmail: 'jane@example.com',
+      contactPhone: '+380 (11)-111-11-11',
+      activeStatus: true,
+      visibility: true,
+    }),
+  );
 });
 
 // Button order on the page: [Submit Contact, status-toggle, delete, Log Out].

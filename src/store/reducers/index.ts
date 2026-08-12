@@ -1,9 +1,8 @@
 import { combineReducers, Action, ThunkAction } from '@reduxjs/toolkit';
-import { reducer as formReducer } from 'redux-form';
 import contacts from './contacts';
 import user from './user';
 
-const rootReducer = combineReducers({ user, contacts, form: formReducer });
+const rootReducer = combineReducers({ user, contacts });
 
 export default rootReducer;
 export type RootState = ReturnType<typeof rootReducer>;

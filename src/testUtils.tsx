@@ -4,7 +4,6 @@ import React from 'react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { render, RenderResult } from '@testing-library/react';
-import { reducer as formReducer } from 'redux-form';
 import contacts from 'store/reducers/contacts';
 import user from 'store/reducers/user';
 import { RootState } from 'store/reducers';
@@ -20,7 +19,7 @@ export const defaultCurrentUser: IUser = {
 
 export const createTestStore = (preloadedState?: Partial<RootState>) =>
   configureStore({
-    reducer: { user, contacts, form: formReducer },
+    reducer: { user, contacts },
     preloadedState: preloadedState as RootState,
   });
 
