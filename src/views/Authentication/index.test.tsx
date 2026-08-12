@@ -2,7 +2,7 @@ jest.mock('store/firebase');
 
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
-import { fireEvent, wait } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { renderWithStore, createTestStore, fakeFirebaseUser } from 'testUtils';
 import Authentication from './index';
 import {
@@ -46,18 +46,22 @@ test('logging in with valid credentials calls Firebase sign-in with the entered 
   );
 });
 
-test('submitting the login form with an invalid email shows a validation error and does not call Firebase', () => {
+test('submitting the login form with an invalid email shows a validation error and does not call Firebase', async () => {
   const { getByPlaceholderText, getByText } = renderAuthPage('/login');
 
-  fireEvent.change(getByPlaceholderText('Email'), {
+  const emailInput = getByPlaceholderText('Email');
+  fireEvent.change(emailInput, {
     target: { value: 'not-an-email' },
   });
+  fireEvent.blur(emailInput);
   fireEvent.change(getByPlaceholderText('Password'), {
     target: { value: 'secret1' },
   });
   fireEvent.click(getByText('Login'));
 
-  expect(getByText('Invalid email address!')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(getByText('Invalid email address!')).toBeInTheDocument(),
+  );
   expect(mockSignInWithEmailAndPassword).not.toHaveBeenCalled();
 });
 
@@ -81,7 +85,7 @@ test('registering with valid details calls Firebase sign-up and sets the display
     'jane@example.com',
     'secret1',
   );
-  await wait(() =>
+  await waitFor(() =>
     expect(fakeUser.updateProfile).toHaveBeenCalledWith({
       displayName: 'jane',
     }),

@@ -116,6 +116,35 @@ named palette to use instead of hardcoded utility values. Set up ESLint 9 flat c
 `next dev`/`next build` and point the existing `deploy`/`predeploy` (`gh-pages`) scripts at Next's
 `out/` directory instead of CRA's `build/`.
 
+*Implementation notes (discovered during Phase 1, not anticipated above):*
+- *`src/pages/` was renamed to `src/views/` — Next.js reserves any directory literally named
+  `pages` for its legacy Pages Router, and this repo already had an unrelated `pages/` naming
+  convention that collided with it, breaking file discovery for `next dev`/`build`/Jest alike.*
+- *Next 16 requires React 18.2+; bumped straight to React 19 (this phase's own version table
+  target). That forced three things not originally scoped here, each because Next's own tooling
+  (not app code) broke otherwise: `@testing-library/react`/`jest-dom`/`user-event` bumped to
+  current majors (RTL v9's `render()` calls `ReactDOM.render`, removed in React 19 — this is
+  effectively Phase 8's runner swap, pulled forward); `material-icons-react` swapped for
+  `react-icons` (bundles its own nested React 15, which any two-React-copies-in-one-tree check
+  rejects on re-render, regardless of React major — effectively pulling forward the one Phase 7
+  item this collides with); and `react-scripts`' own test runner was dropped for Jest via
+  `next/jest`, since `react-scripts test` crashes outright on Next's required `tsconfig.json`
+  shape (not a version mismatch — a real crash in its tsconfig auto-verifier).*
+- *`node-sass` swapped for `sass` (dart-sass) — Next's built-in Sass support needs it, and
+  node-sass cannot build node-gyp bindings on modern Node regardless.*
+- *`app/page.tsx` renders the existing `App` tree via `next/dynamic(..., { ssr: false })`.
+  Necessary for two independent reasons: this app has no server-rendering upside to chase (see
+  Risks below), and Turbopack (Next 16's default bundler) breaks `store/firebase.js`'s Firebase v7
+  compat SDK even in the browser bundle, not just during prerender — `firebase.auth is not a
+  function` at runtime. Classic webpack (Next's fully-supported `--webpack` flag) bundles the same
+  compat SDK correctly, matching CRA's original webpack-based build. `dev`/`start`/`build` all pass
+  `--webpack` accordingly. This may become removable once Phase 2 replaces the compat SDK with the
+  modular one — worth a quick check when that phase lands.*
+- *Tailwind CSS 4 uses CSS-first configuration (`@theme` in `app/globals.css`), not
+  `tailwind.config.js` — v4 dropped `autoprefixer` as a separate dependency too
+  (`@tailwindcss/postcss` handles vendor prefixing itself). Only the color tokens were ported this
+  phase; `common.scss`/`.module.scss` files are untouched until Phase 6.*
+
 **Phase 2 — Firebase modular SDK (high-risk: auth)**
 Rewrite `src/store/firebase.js` from `firebase/app` compat imports to modular
 `initializeApp`/`getAuth`/`getFirestore`. Move the hardcoded config into `NEXT_PUBLIC_FIREBASE_*`

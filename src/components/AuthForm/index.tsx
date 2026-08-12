@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
 import Input from 'components/Input';
-import { IUserAuthData } from 'pages/Authentication';
+import { IUserAuthData } from 'views/Authentication';
 import { validate } from 'utils';
 
 interface IProps {

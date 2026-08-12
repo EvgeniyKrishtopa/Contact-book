@@ -10,7 +10,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const CurrentUserProvider = ({ children }: Props): JSX.Element => {
+const CurrentUserProvider = ({ children }: Props): React.JSX.Element => {
   const dispatch = useDispatch();
 
   useEffect(() => {

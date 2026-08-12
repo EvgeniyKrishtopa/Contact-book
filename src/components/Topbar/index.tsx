@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import MaterialIcon from 'material-icons-react';
+import { MdViewList } from 'react-icons/md';
 import styles from './styles.module.scss';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -25,7 +25,7 @@ const TopBar: React.FC = () => {
         <div className="row">
           <strong className={styles.logo}>
             <NavLink to="/">
-              <MaterialIcon icon="view_list" size="large" /> Y C B
+              <MdViewList size={24} /> Y C B
             </NavLink>
           </strong>
           <nav className={styles.nav}>

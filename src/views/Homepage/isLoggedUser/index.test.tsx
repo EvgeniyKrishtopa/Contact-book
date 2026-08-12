@@ -2,7 +2,7 @@ jest.mock('store/firebase');
 
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { fireEvent, wait } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { renderWithStore, createTestStore } from 'testUtils';
 import IsLogginedUserPage from './index';
 import { IContact } from 'typings/interfaces';
@@ -122,7 +122,7 @@ test('filtering contacts by status marks non-matching contacts as hidden', async
 
   fireEvent.click(getByText('Inactive'));
 
-  await wait(() => expect(janeItem()).toHaveClass('hiddenContact'));
+  await waitFor(() => expect(janeItem()).toHaveClass('hiddenContact'));
   expect(johnItem()).toHaveClass('visibleContact');
 });
 

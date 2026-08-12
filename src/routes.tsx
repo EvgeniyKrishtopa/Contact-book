@@ -1,9 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Loader from 'components/Loader';
-const Authentication = lazy(() => import('pages/Authentication'));
-const HomePage = lazy(() => import('pages/Homepage'));
-const StartPage = lazy(() => import('pages/StartPage'));
+const Authentication = lazy(() => import('views/Authentication'));
+const HomePage = lazy(() => import('views/Homepage'));
+const StartPage = lazy(() => import('views/StartPage'));
 
 const Routes: React.FC = () => {
   return (

@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/*
+ * Color tokens ported from src/styles/variables.scss so Phase 6 (Sass/CSS
+ * Modules -> Tailwind) has named utilities (bg-red, text-blue, etc.) instead
+ * of arbitrary values. black/white are omitted: Tailwind's own defaults
+ * already match (#000/#fff). The existing .scss/.module.scss files are
+ * untouched here and keep compiling via `sass` until Phase 6 removes them.
+ */
+@theme {
+  --color-red: #d73038;
+  --color-gray: #6c757d;
+  --color-gray-light: #ced4da;
+  --color-gray-bold: #495057;
+  --color-blue: #0d6efd;
+  --color-green: #28a745;
+  --color-yellow: #ffe484;
+  --color-fiolet: #7952b3;
+}

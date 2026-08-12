@@ -1,6 +1,6 @@
 jest.mock('store/firebase');
 
-import { wait } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { createTestStore } from 'testUtils';
 import {
   FetchCurrentUserContacts,
@@ -75,7 +75,7 @@ test('SendContact writes a new contact document and clears the loading flag on s
     activeStatus: true,
     visibility: true,
   });
-  await wait(() => expect(store.getState().contacts.loading).toBe(false));
+  await waitFor(() => expect(store.getState().contacts.loading).toBe(false));
   expect(store.getState().contacts.error).toBeNull();
 });
 
@@ -93,7 +93,7 @@ test('SendContact records the Firebase error on failure', async () => {
     ) as any,
   );
 
-  await wait(() => expect(store.getState().contacts.error).toEqual(error));
+  await waitFor(() => expect(store.getState().contacts.error).toEqual(error));
 });
 
 test('deleteContactFromBook deletes the contact document', async () => {
