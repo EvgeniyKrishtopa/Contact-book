@@ -308,6 +308,52 @@ it's the phase most likely to introduce visual regressions since it touches ever
 `react-app-env.d.ts` type reference). `normalize.css`, `@types/*` bumps. Remove
 `@types/react-router`, `@types/react-router-dom`.
 
+*Implementation notes (discovered during Phase 7, not anticipated above):*
+- *The `material-icons-react` → `react-icons` swap and the `normalize.css` bump were both already
+  fully handled by earlier phases, so there was nothing left to do for either: Phase 1's notes
+  record `react-icons` being pulled forward in all 3 sites for an unrelated two-React-copies build
+  break, and Phase 6 removed `normalize.css` outright (rather than bumping it) since Tailwind's
+  Preflight, wired in properly as part of that phase's own regression fix, already fully supersedes
+  it — re-adding it on top would just be a redundant second reset.*
+- *`react-select@3.1.0`'s `peerDependencies` capped `react` at `^16.8.0`, which is why Phase 4 needed
+  `--legacy-peer-deps` to install anything at all. `react-select@5` peers on `^16.8.0 || ^17 || ^18`
+  — still technically short of React 19 — but resolved via plain `npm install` with no flag needed,
+  since npm treats an unlisted-but-compatible major as a warning rather than a hard conflict once
+  the specific `^16.8.0`-only constraint is gone. `--legacy-peer-deps` is no longer needed anywhere
+  in this repo as of this phase.*
+- *`selectContact/index.tsx`'s `handleChange` and `options` were both effectively untyped under v3
+  (no shipped `.d.ts`, no `@types/react-select`, and `noImplicitAny: false` in `tsconfig.json` was
+  masking it). `react-select@5` ships its own types, which surfaced two real, pre-existing issues
+  once real types were in play: `onChange`'s argument can be `null` (e.g. on clear), which broke the
+  `({ value }) => ...` destructuring; and `defaultValue={selectedOption}` passed a raw `string` where
+  `react-select` expects the full `{ label, value }` option shape. The `defaultValue` prop (and the
+  `selectedOption` state that only ever fed it) was dead code even under v3 — `Select` tracks its own
+  selection internally once you're not passing a controlling `value` prop, so the dropdown already
+  visually reflected the current selection independent of this prop. Removed both rather than
+  reshaping `defaultValue` to the correct type, since keeping it would add real behavior (a
+  server-driven initial selection) that was never actually there. `handleChange` is now typed
+  `(option: SingleValue<IContactOption>) => void` with an `option?.value ?? null` guard.*
+- *`@types/node` bumped to `^24.13.3` (matching the Node 24 major actually running in this
+  environment) rather than the absolute-latest `^26.x` on the registry — the plan's own version
+  table says "matched to new majors," and there's no `.nvmrc`/`engines` field pinning a specific
+  runtime, so "the major already in use" is the only concrete signal available. `@types/react`,
+  `@types/react-dom`, and `@types/jest` were already at current majors from earlier phases; no
+  `@types/react-redux` exists to remove since `react-redux@9` (Phase 4) ships its own types.*
+- *`react-router-dom` itself (not just its `@types` package) was also removed here, though the phase
+  bullet above only names the two `@types/react-router*` packages: Phase 3's routing migration to
+  Next's App Router left the runtime dependency listed in `package.json` with zero remaining imports
+  anywhere in `src`/`app` (confirmed by grep) — an oversight from that phase, not an intentional
+  keep. Leaving an entirely unused runtime dependency installed contradicts both the plan's own
+  version table (`react-router-dom | ... | *removed*`) and its Verification section's own
+  `grep -r` check, so it's cleaned up as part of this phase's dependency sweep rather than filed
+  separately.*
+- *`yarn.lock` needed a real Yarn run to correctly add `react-select@5`'s new dependency tree (unlike
+  Phase 6's pure removals, which could be edited by hand) — but this machine's global `yarn` is v4
+  (Berry), and running it against this repo's Classic-format (`yarn lockfile v1`) `yarn.lock` tries
+  to silently migrate the whole file to Berry's format on install (confirmed the hard way during
+  Phase 6, then reverted). `npx yarn@1.22.22 install` runs a real Classic Yarn without touching the
+  system's global install, and reproduces a minimal, correctly-scoped diff.*
+
 **Phase 8 — Testing modernization**
 Bump `@testing-library/*` to current majors. Set up a test runner compatible with Next.js (Jest via
 `next/jest`, the officially documented path — avoids introducing a second new tool alongside the
@@ -357,7 +403,7 @@ manual pass is required before calling the migration done.
 - [x] Phase 3 — Routing (PR #46, merged)
 - [x] Phase 4 — State management: Redux → RTK (PR #47, merged)
 - [x] Phase 5 — Forms: redux-form → react-hook-form (PR #48, merged)
-- [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS (open — awaiting review/approval)
-- [ ] Phase 7 — Remaining dependency bumps
+- [x] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS (PR #49, merged)
+- [ ] Phase 7 — Remaining dependency bumps (open — awaiting review/approval)
 - [ ] Phase 8 — Testing modernization
 - [ ] Phase 9 — Cleanup & deploy verification
