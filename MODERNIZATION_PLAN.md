@@ -162,6 +162,33 @@ Replace `useHistory()` (`pages/Homepage/isLoggedUser/index.tsx`) with `useRouter
 `next/navigation`, and `<Redirect>` (`pages/Authentication/index.tsx`) with `router.replace()`/
 `redirect()`.
 
+*Implementation notes (discovered during Phase 3, not anticipated above):*
+- *`app/layout.tsx` cannot itself be marked `'use client'` — it exports `metadata`/`viewport`,
+  which the App Router only allows from a Server Component. Split the responsibility instead: a
+  new `app/providers.tsx` (`'use client'`) hosts the Redux `Provider` + `CurrentUserProvider` +
+  `TopBar` + `Footer`, and the still-Server-Component `app/layout.tsx` renders
+  `<Providers>{children}</Providers>` inside `<body>`. The root layout still "hosts" the providers
+  in the sense the plan meant — just one component boundary lower.*
+- *Phase 1's `next/dynamic(..., { ssr: false })` wrapper around the whole app (needed because
+  Turbopack broke the Firebase v7 **compat** SDK) turned out to be droppable now that Phase 2
+  replaced it with the modular SDK — confirmed by actually running `next build --webpack` with no
+  `ssr: false` anywhere: it prerendered all four routes (`/`, `/home`, `/login`, `/register`) to
+  static HTML with no Firebase-under-Node errors. Each route segment (`app/page.tsx`,
+  `app/home/page.tsx`, `app/login/page.tsx`, `app/register/page.tsx`) is a plain `'use client'`
+  page rendering its view directly — no dynamic-import indirection needed.*
+- *`views/Authentication/index.tsx` and `views/Homepage/isLoggedUser/index.tsx` (and the components
+  they render, like `Topbar`) don't carry their own `'use client'` directive — same pattern Phase 1
+  used for `App.tsx`/`routes.tsx`. They're only ever reached through the `'use client'` `app/*/page.tsx`
+  boundaries, so they're pulled into the client bundle transitively.*
+- *`Authentication`'s `isLogin` used to come from matching `match.path` against `/login` at
+  render time (one shared route, two paths); now `/login` and `/register` are genuinely separate
+  route segments, so `isLogin` is passed in directly as a prop by each `page.tsx` instead.*
+- *`next/navigation`'s `useRouter`/`usePathname` aren't available outside a real Next.js request
+  context, so component tests need them mocked — added `__mocks__/next/navigation.js` (the same
+  root-level manual-mock convention Phase 2 established for `firebase/{app,auth,firestore}` in
+  `__mocks__/firebase/`) plus `src/routerTestMocks.ts` (mirrors `store/firebaseTestMocks.ts`) for
+  typed `mockPush`/`mockReplace` access in tests.*
+
 **Phase 4 — State management: Redux → RTK**
 Bump `redux`/`react-redux`, add `@reduxjs/toolkit`. Convert `store/reducers/{contacts,user}.ts` +
 `store/actions/{Contacts,Users}/actions.ts` into `createSlice` + `createAsyncThunk`. Replace
@@ -239,10 +266,10 @@ manual pass is required before calling the migration done.
 
 ## Progress log
 
-- [x] Phase 0 — Safety net tests
-- [ ] Phase 1 — Next.js scaffold + tooling
-- [ ] Phase 2 — Firebase modular SDK
-- [ ] Phase 3 — Routing
+- [x] Phase 0 — Safety net tests (PR #43, merged)
+- [x] Phase 1 — Next.js scaffold + tooling (PR #44, merged)
+- [x] Phase 2 — Firebase modular SDK (PR #45, merged)
+- [ ] Phase 3 — Routing (open — awaiting review/approval)
 - [ ] Phase 4 — State management: Redux → RTK
 - [ ] Phase 5 — Forms: redux-form → react-hook-form
 - [ ] Phase 6 — Styling: Sass/CSS Modules → Tailwind CSS

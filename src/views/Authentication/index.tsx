@@ -1,16 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { CurrentUserContext } from 'context';
-import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LogIn, SignUp } from 'store/actions/Users/actions';
 import AuthForm from 'components/AuthForm';
 import styles from './styles.module.scss';
-import { RouteComponentProps } from 'react-router-dom';
 import { IError } from 'typings/interfaces';
-
-type RouteParams = {
-  match?: string | undefined;
-};
 
 export interface IUserAuthData {
   userEmail: string;
@@ -18,12 +13,14 @@ export interface IUserAuthData {
   userLogin: string;
 }
 
-const Authentication: React.FC<RouteComponentProps<RouteParams>> = ({
-  match,
-}) => {
+type Props = {
+  isLogin: boolean;
+};
+
+const Authentication: React.FC<Props> = ({ isLogin }) => {
   const { userData, error } = useContext(CurrentUserContext);
   const dispatch = useDispatch();
-  const isLogin = match.path === '/login';
+  const router = useRouter();
   const pageTitle = isLogin ? 'Log In' : 'Sign Up';
   const buttonText = isLogin ? 'Login' : 'Register';
 
@@ -40,6 +37,12 @@ const Authentication: React.FC<RouteComponentProps<RouteParams>> = ({
     setErrorNotification(error);
   }, [error]);
 
+  useEffect(() => {
+    if (currentUserData) {
+      router.replace('/home');
+    }
+  }, [currentUserData, router]);
+
   const formSubmit = ({
     userEmail,
     userPassword,
@@ -52,10 +55,6 @@ const Authentication: React.FC<RouteComponentProps<RouteParams>> = ({
       dispatch(SignUp(userEmail, userPassword, userLogin));
     }
   };
-
-  if (currentUserData) {
-    return <Redirect to="/home" />;
-  }
 
   return (
     <div className="page-center">

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import basePath from '../basePath';
+import Providers from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -36,7 +37,9 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({
         crossOrigin="anonymous"
       />
     </head>
-    <body>{children}</body>
+    <body>
+      <Providers>{children}</Providers>
+    </body>
   </html>
 );
 
