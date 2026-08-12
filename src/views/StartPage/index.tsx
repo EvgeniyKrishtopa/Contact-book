@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './styles.module.scss';
 import { CurrentUserContext } from 'context';
 import MainPageImg from 'images/mainpage_bg.jpg';
@@ -28,17 +28,17 @@ const StartPage: React.FC = () => {
         </p>
         {!isLoginnedUserState && (
           <>
-            <Link to="/register" className="btn btn-primary">
+            <Link href="/register" className="btn btn-primary">
               Need an Account?
             </Link>
-            <Link to="/login" className="btn btn-primary">
+            <Link href="/login" className="btn btn-primary">
               Have an Account?
             </Link>
           </>
         )}
 
         {isLoginnedUserState && (
-          <Link className="btn btn-primary" to="/home">
+          <Link className="btn btn-primary" href="/home">
             Go To Homepage
           </Link>
         )}

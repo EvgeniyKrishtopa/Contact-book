@@ -10,7 +10,7 @@ import ContactForm from 'components/ContactForm';
 import ContactList from './contactsList';
 import SelectContact from './selectContact';
 import StatusToggler from './statusToggler';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { getCurrentUserContacts } from 'selectors';
 import { RootState } from 'store/reducers';
 import { IContacts, IContact } from 'typings/interfaces';
@@ -39,7 +39,7 @@ const ContactsWidgets: React.FC<{ contactList: Array<IContact> }> = ({
 
 const IsLogginedUserPage: React.FC<any> = ({ user }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const router = useRouter();
 
   const userContacts = useSelector<RootState, IContacts>(state =>
     getCurrentUserContacts(state),
@@ -53,7 +53,7 @@ const IsLogginedUserPage: React.FC<any> = ({ user }) => {
     async function logOutHandler() {
       await dispatch(LogOut());
     }
-    logOutHandler().then(() => history.push('/'));
+    logOutHandler().then(() => router.push('/'));
   };
 
   const formSubmit = ({

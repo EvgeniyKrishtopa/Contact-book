@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import { MdViewList } from 'react-icons/md';
 import styles from './styles.module.scss';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { CurrentUserContext } from 'context';
 import { changeAuthPage } from 'store/actions/Users/actions';
 
@@ -10,6 +11,7 @@ const TopBar: React.FC = () => {
   const { userData } = useContext(CurrentUserContext);
   const [currentUserData, setCurrentUserData] = useState<any | null>(null);
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const handleAuthPages = () => {
     dispatch(changeAuthPage());
@@ -24,33 +26,35 @@ const TopBar: React.FC = () => {
       <div className="container">
         <div className="row">
           <strong className={styles.logo}>
-            <NavLink to="/">
+            <Link href="/">
               <MdViewList size={24} /> Y C B
-            </NavLink>
+            </Link>
           </strong>
           <nav className={styles.nav}>
             <ul>
               {!currentUserData && (
                 <>
                   <li>
-                    <NavLink
-                      to="/login"
-                      className={styles.underlineClosing}
-                      activeClassName={styles.active}
+                    <Link
+                      href="/login"
+                      className={`${styles.underlineClosing} ${
+                        pathname === '/login' ? styles.active : ''
+                      }`}
                       onClick={handleAuthPages}
                     >
                       Log In
-                    </NavLink>
+                    </Link>
                   </li>
                   <li>
-                    <NavLink
-                      to="/register"
-                      className={styles.underlineClosing}
-                      activeClassName={styles.active}
+                    <Link
+                      href="/register"
+                      className={`${styles.underlineClosing} ${
+                        pathname === '/register' ? styles.active : ''
+                      }`}
                       onClick={handleAuthPages}
                     >
                       Sign Up
-                    </NavLink>
+                    </Link>
                   </li>
                 </>
               )}

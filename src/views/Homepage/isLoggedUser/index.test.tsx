@@ -1,5 +1,4 @@
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { renderWithStore, createTestStore } from 'testUtils';
 import IsLogginedUserPage from './index';
@@ -11,6 +10,7 @@ import {
   mockOnSnapshot,
   mockSignOut,
 } from 'store/firebaseTestMocks';
+import { mockPush } from 'routerTestMocks';
 
 beforeEach(() => {
   mockOnSnapshot.mockImplementation(() => undefined);
@@ -38,9 +38,7 @@ const renderHomepage = (contactsData: Array<IContact>) => {
     contacts: { loading: false, contactsData, error: null },
   } as any);
   return renderWithStore(
-    <MemoryRouter>
-      <IsLogginedUserPage user={currentUser.userData} />
-    </MemoryRouter>,
+    <IsLogginedUserPage user={currentUser.userData} />,
     { store, currentUser },
   );
 };
@@ -124,11 +122,12 @@ test('filtering contacts by status marks non-matching contacts as hidden', async
   expect(johnItem()).toHaveClass('visibleContact');
 });
 
-test('signing out logs the user out via Firebase', () => {
+test('signing out logs the user out via Firebase and navigates to the start page', async () => {
   mockSignOut.mockResolvedValue(undefined);
   const { getByText } = renderHomepage([]);
 
   fireEvent.click(getByText('Log Out'));
 
   expect(mockSignOut).toHaveBeenCalledTimes(1);
+  await waitFor(() => expect(mockPush).toHaveBeenCalledWith('/'));
 });
