@@ -8,8 +8,18 @@
 # testing
 /coverage
 
+# tsc incremental build cache
+tsconfig.tsbuildinfo
+
 # production
 /build
+
+# next.js
+/.next/
+/out/
+
+# Playwright MCP browser-testing artifacts
+/.playwright-mcp/
 
 # misc
 .DS_Store

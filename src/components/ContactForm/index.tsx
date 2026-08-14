@@ -1,68 +1,79 @@
 import React from 'react';
-import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
-import { IContactSendData } from 'pages/Homepage/isLoggedUser/';
+import { useForm } from 'react-hook-form';
+import { IContactSendData } from 'views/Homepage/isLoggedUser/';
 import Input from 'components/Input';
-import { validate } from 'utils';
+import { createValidationResolver } from 'utils';
 
-const Form: React.FC<InjectedFormProps<IContactSendData>> = ({
-  handleSubmit,
-  submitting,
-  pristine,
-}) => {
+interface IProps {
+  onSubmit: (data: IContactSendData) => void;
+}
+
+const ContactForm: React.FC<IProps> = ({ onSubmit }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty, isSubmitting },
+  } = useForm<IContactSendData>({
+    resolver: createValidationResolver<IContactSendData>(),
+  });
+
+  const submitHandler = (data: IContactSendData) => {
+    onSubmit(data);
+    reset();
+  };
+
   return (
-    <form className="form-styles" onSubmit={handleSubmit}>
+    <form
+      className="form-styles"
+      noValidate
+      onSubmit={handleSubmit(submitHandler)}
+    >
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Name
-          <Field
+          <Input
             type="text"
-            name="contactName"
             className="form-control"
             placeholder="Contact Name"
-            component={Input}
+            error={errors.contactName}
+            {...register('contactName')}
           />
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Email
-          <Field
+          <Input
             type="email"
-            name="contactEmail"
             className="form-control"
             placeholder="ContactEmail"
-            component={Input}
+            error={errors.contactEmail}
+            {...register('contactEmail')}
           />
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Contact Phone
-          <Field
+          <Input
             type="tel"
-            name="contactPhone"
             className="form-control"
             placeholder="+380 (XX)-XXX-XX-XX"
-            component={Input}
+            error={errors.contactPhone}
+            {...register('contactPhone')}
           />
         </label>
       </div>
       <button
         type="submit"
-        disabled={pristine || submitting}
-        className="btn btn-primary"
+        disabled={!isDirty || isSubmitting}
+        className="btn btn-primary self-center min-w-[150px] disabled:bg-blue/70 disabled:border-blue/70"
       >
         Submit Contact
       </button>
     </form>
   );
 };
-
-const ContactForm = reduxForm<IContactSendData>({
-  form: 'contactForm',
-  validate,
-  onSubmitSuccess: (_result, dispatch, _props) =>
-    dispatch(reset('contactForm')),
-})(Form);
 
 export default ContactForm;

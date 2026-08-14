@@ -1,3 +1,5 @@
+import type { FieldValues, FieldErrors, Resolver } from 'react-hook-form';
+
 interface Values {
   contactName?: string | null;
   contactEmail?: string | null;
@@ -59,3 +61,29 @@ export const validate = (values: Values): Errors => {
   }
   return errors;
 };
+
+// Wraps the framework-agnostic `validate` above as a react-hook-form
+// resolver. Only registered fields (present as keys in `values`) are kept,
+// so a shared validator can cover multiple forms without an unregistered
+// field (e.g. userLogin on the login form) blocking submission.
+export const createValidationResolver =
+  <TFieldValues extends FieldValues>(): Resolver<TFieldValues> =>
+  async values => {
+    const validationErrors = validate(values) as Record<string, string>;
+    const errors = Object.keys(validationErrors).reduce<
+      FieldErrors<TFieldValues>
+    >((acc, key) => {
+      if (key in values) {
+        acc[key as keyof TFieldValues] = {
+          type: 'validate',
+          message: validationErrors[key],
+        } as FieldErrors<TFieldValues>[keyof TFieldValues];
+      }
+      return acc;
+    }, {});
+
+    if (Object.keys(errors).length) {
+      return { values: {}, errors };
+    }
+    return { values: values as TFieldValues, errors: {} };
+  };

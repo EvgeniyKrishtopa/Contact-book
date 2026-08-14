@@ -1,37 +1,33 @@
 import React from 'react';
-import { WrappedFieldProps } from 'redux-form';
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 interface IInputProps {
   type: string;
   className: string;
   placeholder: string;
+  error?: FieldError;
 }
 
-const Input: React.FC<WrappedFieldProps & IInputProps> = ({
-  input,
-  type,
-  placeholder,
-  className,
-  meta: { touched, error, warning },
-}) => {
-  const classNameHandler =
-    (touched && error) || warning ? `${className} error` : className;
+const Input = React.forwardRef<
+  HTMLInputElement,
+  IInputProps & Omit<UseFormRegisterReturn, 'ref'>
+>(({ type, placeholder, className, error, ...registerProps }, ref) => {
+  const classNameHandler = error ? `${className} error` : className;
 
   return (
     <>
       <input
-        {...input}
+        {...registerProps}
+        ref={ref}
         type={type}
         placeholder={placeholder}
         className={classNameHandler}
       />
-      {touched &&
-        ((error && <span className="error-field-message">{error}</span>) ||
-          (warning && (
-            <span className="warning-error-message">{warning}</span>
-          )))}
+      {error && <span className="error-field-message">{error.message}</span>}
     </>
   );
-};
+});
+
+Input.displayName = 'Input';
 
 export default Input;

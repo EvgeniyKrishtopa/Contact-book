@@ -1,23 +1,21 @@
 import React, { useEffect } from 'react';
 import { CurrentUserContext } from 'context';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IsLogIn } from 'store/actions/Users/actions';
 import { getCurrentUser } from 'selectors';
-import { IUser } from 'typings/interfaces';
-import { RootState } from 'store/reducers';
 
 type Props = {
   children: React.ReactNode;
 };
 
-const CurrentUserProvider = ({ children }: Props): JSX.Element => {
-  const dispatch = useDispatch();
+const CurrentUserProvider = ({ children }: Props): React.JSX.Element => {
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(IsLogIn());
   }, [dispatch]);
 
-  const user = useSelector<RootState, IUser>(state => getCurrentUser(state));
+  const user = useAppSelector(getCurrentUser);
 
   return (
     <CurrentUserContext.Provider value={user}>

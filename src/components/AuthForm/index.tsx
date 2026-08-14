@@ -1,77 +1,84 @@
 import React from 'react';
-import { Field, reduxForm, InjectedFormProps, reset } from 'redux-form';
+import { useForm } from 'react-hook-form';
 import Input from 'components/Input';
-import { IUserAuthData } from 'pages/Authentication';
-import { validate } from 'utils';
+import { IUserAuthData } from 'views/Authentication';
+import { createValidationResolver } from 'utils';
 
 interface IProps {
   isLogin: boolean;
   buttonText: string;
+  onSubmit: (data: IUserAuthData) => void;
 }
 
-const Form: React.FC<InjectedFormProps<IUserAuthData, IProps> & IProps> = ({
-  isLogin,
-  buttonText,
-  ...props
-}) => {
-  const { handleSubmit, submitting, pristine } = props;
+const AuthForm: React.FC<IProps> = ({ isLogin, buttonText, onSubmit }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty, isSubmitting },
+  } = useForm<IUserAuthData>({
+    resolver: createValidationResolver<IUserAuthData>(),
+  });
+
+  const submitHandler = (data: IUserAuthData) => {
+    onSubmit(data);
+    reset();
+  };
 
   return (
-    <form className="form-styles" onSubmit={handleSubmit}>
+    <form
+      className="form-styles"
+      noValidate
+      onSubmit={handleSubmit(submitHandler)}
+    >
       {!isLogin && (
         <div className="input-holder">
-          <label className="form-label">
+          <label>
             Your Login
-            <Field
+            <Input
               type="text"
-              name="userLogin"
               className="form-control"
               placeholder="Login"
-              component={Input}
+              error={errors.userLogin}
+              {...register('userLogin')}
             />
           </label>
         </div>
       )}
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Your Email
-          <Field
+          <Input
             type="email"
-            name="userEmail"
             className="form-control"
             placeholder="Email"
-            component={Input}
+            error={errors.userEmail}
+            {...register('userEmail')}
           />
         </label>
       </div>
       <div className="input-holder">
-        <label className="form-label">
+        <label>
           Your Password
-          <Field
+          <Input
             type="password"
-            name="userPassword"
             className="form-control"
             placeholder="Password"
-            component={Input}
+            error={errors.userPassword}
+            {...register('userPassword')}
           />
         </label>
       </div>
 
       <button
         type="submit"
-        disabled={pristine || submitting}
-        className="btn btn-primary"
+        disabled={!isDirty || isSubmitting}
+        className="btn btn-primary self-center min-w-[150px] disabled:bg-blue/70 disabled:border-blue/70"
       >
         {buttonText}
       </button>
     </form>
   );
 };
-
-const AuthForm = reduxForm<IUserAuthData, IProps>({
-  form: 'Authform',
-  onSubmitSuccess: (_result, dispatch, _props) => dispatch(reset('Authform')),
-  validate,
-})(Form);
 
 export default React.memo(AuthForm);

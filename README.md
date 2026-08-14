@@ -1,12 +1,13 @@
 ## For this application I've used such technologies as:
 
-React, react-hooks, react-router,
-css modules,
-redux-forms,
+Next.js (App Router, static export),
+React, react-hooks,
+Tailwind CSS,
+Redux Toolkit,
+react-hook-form,
 react-select,
-typescript,
-redux (thunk middleware),
-firebase.
+TypeScript,
+Firebase.
 
 After registration You can create your contacts and manage them: add new contact, remove, filter by email, change contact status, filter contact by status.
 
